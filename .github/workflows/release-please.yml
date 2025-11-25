@@ -16,9 +16,6 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    outputs:
-      release_created: ${{ steps.release.outputs.release_created }}
-      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
       - name: Run release-please
         id: release
@@ -27,33 +24,4 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  # When release-please creates a tag, trigger goreleaser
-  goreleaser:
-    name: GoReleaser
-    needs: release-please
-    if: ${{ needs.release-please.outputs.release_created }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: "1.23"
-          cache: true
-
-      - name: Run tests
-        run: make go.test
-
-      - name: Run goreleaser
-        uses: goreleaser/goreleaser-action@v6
-        with:
-          version: latest
-          args: release --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # GoReleaser is triggered separately via release event (see goreleaser.yml)
