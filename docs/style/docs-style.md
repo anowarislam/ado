@@ -141,7 +141,7 @@ When you change behavior:
 - Present tense: "The CLI provides" not "The CLI will provide"
 - Be concise: Remove words that don't add meaning
 - Use code blocks for CLI commands and file paths
-- Link to detailed docs: "See `docs/01-project-structure.md` for details"
+- Link to detailed docs: "See `docs/architecture.md` for details"
 
 ## Markdown Conventions
 
@@ -162,7 +162,7 @@ When you change behavior:
 
 ### Links
 
-- Use relative paths for internal docs: `[structure](../01-project-structure.md)`
+- Use relative paths for internal docs: `[structure](../architecture.md)`
 - Use descriptive link text: "See the [command spec guide](commands/README.md)" not "click here"
 - Link to code with line numbers when helpful: `cmd/ado/root/root.go:14-38`
 
@@ -210,8 +210,8 @@ Align pipes for readability in source; rendering will normalize.
 ### Purpose
 
 Design docs capture architectural decisions and specifications before implementation:
-- `docs/01-project-structure.md` - Directory layout and organization
-- `docs/02-commands.md` - Global CLI conventions and behavior
+- `docs/architecture.md` - Directory layout and organization
+- `docs/commands-overview.md` - Global CLI conventions and behavior
 - `docs/style/*.md` - Code and workflow style guides
 
 ### Structure
@@ -259,7 +259,7 @@ When making changes, update docs in this order:
 
 ### Changing Architecture
 
-1. ✅ Update `docs/01-project-structure.md` or create new design doc
+1. ✅ Update `docs/architecture.md` or create new design doc
 2. ✅ Update `README.md` "Architecture" section if user-visible
 3. ✅ Update `CLAUDE.md` if structure changes affect future development
 4. ✅ Update code
@@ -279,7 +279,7 @@ When making changes, update docs in this order:
 See `docs/commands/03-meta.md` for `ado meta` command specification with examples.
 
 ### Design Doc
-See `docs/01-project-structure.md` for directory layout specification.
+See `docs/architecture.md` for directory layout specification.
 
 ### Style Guide
 See `docs/style/go-style.md` for code style documentation format.

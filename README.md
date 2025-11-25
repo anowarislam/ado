@@ -161,10 +161,10 @@ We welcome contributions! Please see:
 
 | Document | Description |
 |----------|-------------|
-| [Project Structure](docs/01-project-structure.md) | Repository layout |
-| [Commands](docs/02-commands.md) | Command specifications |
+| [Architecture](docs/architecture.md) | Repository layout |
+| [Commands](docs/commands-overview.md) | Command specifications |
 | [Contributing](docs/contributing.md) | Detailed contribution guide |
-| [Release Guide](docs/RELEASE.md) | Release automation |
+| [Release Guide](docs/release.md) | Release automation |
 | [Go Style](docs/style/go-style.md) | Go code patterns |
 | [Python Style](docs/style/python-style.md) | Python code patterns |
 
