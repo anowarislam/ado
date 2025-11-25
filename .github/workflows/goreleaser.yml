@@ -10,14 +10,18 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: write
-
 jobs:
   goreleaser:
     name: Build and Release
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Checkout code
         uses: actions/checkout@v6
         with:
@@ -39,4 +43,4 @@ jobs:
           version: latest
           args: release --clean
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
