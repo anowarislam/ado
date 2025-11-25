@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/anowarislam/ado/compare/v1.0.1...v1.0.2) (2025-11-25)
+
+
+### Bug Fixes
+
+* **ci:** use GitHub App token for release creation ([2bde573](https://github.com/anowarislam/ado/commit/2bde573e4f3dd98b48d5d54b6725e2f45fdbbf5b))
+
 ## [1.0.1](https://github.com/anowarislam/ado/compare/v1.0.0...v1.0.1) (2025-11-25)
 
 
