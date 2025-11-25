@@ -7,13 +7,16 @@ This document describes the fully automated release pipeline for this project. T
 - [Overview](#overview)
 - [Architecture](#architecture)
 - [Components](#components)
+- [Branch Protection](#branch-protection)
 - [Prerequisites](#prerequisites)
 - [Setup Guide](#setup-guide)
   - [Step 1: Create GitHub App](#step-1-create-github-app)
   - [Step 2: Configure Repository Secrets](#step-2-configure-repository-secrets)
   - [Step 3: Create Workflow Files](#step-3-create-workflow-files)
   - [Step 4: Create Configuration Files](#step-4-create-configuration-files)
+  - [Step 5: Enable Branch Protection](#step-5-enable-branch-protection)
 - [How It Works](#how-it-works)
+- [Batching Multiple PRs](#batching-multiple-prs)
 - [Conventional Commits](#conventional-commits)
 - [Version Bumping Rules](#version-bumping-rules)
 - [Changelog Sections](#changelog-sections)
@@ -39,11 +42,13 @@ This release automation system provides:
 │                         RELEASE AUTOMATION FLOW                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│   Developer pushes    →   Release PR    →   Merge PR   →   GitHub Release   │
-│   to main branch          created           approved       + Binaries        │
+│   Developer merges   →   Release PR    →   Merge Release  →  GitHub Release │
+│   feature PR to main     auto-created      PR when ready      + Binaries    │
 │                                                                              │
-│   feat: add feature       v1.2.0            Automatic      ado_1.2.0_*      │
-│   fix: bug fix            CHANGELOG.md      tag + release  checksums.txt    │
+│   PR: feat(api): ...     v1.2.0            Automatic         ado_1.2.0_*    │
+│   PR: fix(cli): ...      CHANGELOG.md      tag + release     checksums.txt  │
+│                                                                              │
+│   ⚠️  Direct pushes to main are blocked by branch protection                 │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -57,7 +62,11 @@ This release automation system provides:
 ```mermaid
 flowchart TB
     subgraph Developer["Developer Workflow"]
-        A[Push commits to main] --> B{Commit types?}
+        A0[Create feature branch] --> A1[Make commits]
+        A1 --> A2[Open Pull Request]
+        A2 --> A3[PR review & CI checks]
+        A3 --> A[Merge PR to main]
+        A --> B{Commit types?}
         B -->|feat/fix/etc| C[Triggers Release Please]
         B -->|chore without scope| D[No release action]
     end
@@ -108,7 +117,12 @@ sequenceDiagram
     participant GR as GoReleaser
     participant App as GitHub App
 
-    Dev->>GH: Push commit to main
+    Note over Dev,GH: Feature Development (PR-based workflow)
+    Dev->>GH: Create feature branch
+    Dev->>GH: Open Pull Request
+    GH->>GH: Run CI checks (Go, Python, Conventional Commits)
+    Dev->>GH: Merge PR to main (direct push blocked)
+
     GH->>RP: Trigger workflow (push event)
     RP->>App: Request token
     App->>RP: Return short-lived token
@@ -116,9 +130,10 @@ sequenceDiagram
 
     alt New releasable commits exist
         RP->>GH: Create/Update Release PR
-        Note over GH: PR includes version bump<br/>and changelog updates
+        Note over GH: PR includes version bump<br/>and changelog updates<br/>(batches multiple merged PRs)
     end
 
+    Note over Dev,GH: Release (when ready)
     Dev->>GH: Merge Release PR
     GH->>RP: Trigger workflow (push event)
     RP->>App: Request token
@@ -235,6 +250,69 @@ A GitHub App provides secure, scoped authentication for the release workflows.
 | **GitHub App** | 1 hour (auto) | **None** | **Best** | **Works** |
 
 > **Note:** There is a [known GitHub platform bug](https://github.com/orgs/community/discussions/180369) where `GITHUB_TOKEN` cannot create releases on newer repositories. Using a GitHub App is the recommended workaround.
+
+---
+
+## Branch Protection
+
+The `main` branch is protected to ensure code quality and prevent accidental direct pushes. All changes must go through pull requests.
+
+### Why Branch Protection?
+
+```mermaid
+flowchart LR
+    subgraph Blocked["❌ Blocked"]
+        B1[Direct push to main]
+        B2[Force push]
+        B3[Branch deletion]
+    end
+
+    subgraph Allowed["✅ Allowed"]
+        A1[Merge via PR]
+        A2[Squash merge]
+        A3[Release Please commits]
+    end
+
+    B1 -.->|Rejected| Main[(main branch)]
+    B2 -.->|Rejected| Main
+    A1 -->|Allowed| Main
+    A2 -->|Allowed| Main
+    A3 -->|Allowed| Main
+
+    style B1 fill:#ffcdd2
+    style B2 fill:#ffcdd2
+    style B3 fill:#ffcdd2
+    style A1 fill:#c8e6c9
+    style A2 fill:#c8e6c9
+    style A3 fill:#c8e6c9
+```
+
+### Protection Rules
+
+| Rule | Setting | Purpose |
+|------|---------|---------|
+| **Require PR before merging** | Enabled | All changes must be reviewed |
+| **Required status checks** | Go, Python Lab, Conventional Commits | CI must pass before merge |
+| **Require branches to be up to date** | Enabled | PR must be current with main |
+| **Allow force pushes** | Disabled | Prevents history rewriting |
+| **Allow deletions** | Disabled | Prevents accidental deletion |
+
+### Developer Workflow
+
+```bash
+# ❌ WRONG: Direct push (will be rejected)
+git checkout main
+git commit -m "feat: new feature"
+git push origin main  # ERROR: Protected branch
+
+# ✅ CORRECT: PR-based workflow
+git checkout -b feature/new-feature
+git commit -m "feat: new feature"
+git push origin feature/new-feature
+gh pr create --title "feat: add new feature" --body "Description"
+# Wait for CI, then merge via GitHub UI or CLI
+gh pr merge --squash
+```
 
 ---
 
@@ -538,6 +616,43 @@ release:
 - `release.github.owner`: Your GitHub username
 - `release.github.name`: Your repository name
 
+### Step 5: Enable Branch Protection
+
+Protect the `main` branch to enforce PR-based workflow:
+
+#### Via GitHub CLI
+
+```bash
+gh api repos/OWNER/REPO/branches/main/protection -X PUT --input - <<'EOF'
+{
+  "required_status_checks": {
+    "strict": true,
+    "contexts": ["Go", "Python Lab", "Conventional Commits"]
+  },
+  "enforce_admins": false,
+  "required_pull_request_reviews": {
+    "required_approving_review_count": 0,
+    "dismiss_stale_reviews": false
+  },
+  "restrictions": null,
+  "allow_force_pushes": false,
+  "allow_deletions": false
+}
+EOF
+```
+
+#### Via GitHub UI
+
+1. Go to **Settings → Branches**
+2. Click **Add branch protection rule**
+3. Set **Branch name pattern** to `main`
+4. Enable:
+   - ✅ Require a pull request before merging
+   - ✅ Require status checks to pass before merging
+   - ✅ Require branches to be up to date before merging
+5. Add required status checks: `Go`, `Python Lab`, `Conventional Commits`
+6. Click **Create**
+
 ---
 
 ## How It Works
@@ -547,19 +662,22 @@ release:
 ```mermaid
 stateDiagram-v2
     [*] --> Development: Start
-    Development --> CommitPushed: Push to main
-    CommitPushed --> AnalyzeCommits: Release Please triggers
+    Development --> FeatureBranch: Create branch
+    FeatureBranch --> OpenPR: Open Pull Request
+    OpenPR --> CIChecks: Run CI
+    CIChecks --> PRMerged: Merge PR to main
+    PRMerged --> AnalyzeCommits: Release Please triggers
 
     AnalyzeCommits --> NoRelease: No releasable commits
-    AnalyzeCommits --> CreatePR: Has feat/fix/etc
+    AnalyzeCommits --> CreateReleasePR: Has feat/fix/etc
 
     NoRelease --> Development: Continue development
 
-    CreatePR --> PROpen: Release PR created/updated
-    PROpen --> PRMerged: Developer merges PR
-    PROpen --> PROpen: More commits pushed
+    CreateReleasePR --> ReleasePROpen: Release PR created/updated
+    ReleasePROpen --> ReleasePRMerged: Merge when ready
+    ReleasePROpen --> ReleasePROpen: More PRs merged to main
 
-    PRMerged --> TagCreated: Git tag created
+    ReleasePRMerged --> TagCreated: Git tag created
     TagCreated --> ReleaseCreated: GitHub Release created
     ReleaseCreated --> GoReleaserTriggers: release event fires
 
@@ -572,12 +690,14 @@ stateDiagram-v2
 
 #### Phase 1: Commit Analysis
 
-When you push to `main`:
+When a PR is merged to `main`:
 
 1. Release Please workflow triggers
 2. GitHub App token is generated (valid for 1 hour)
 3. Release Please fetches all commits since the last release tag
 4. Commits are parsed for conventional commit prefixes
+
+> **Note:** Direct pushes to `main` are blocked by branch protection. All changes must go through pull requests.
 
 #### Phase 2: Release PR Management
 
@@ -611,6 +731,77 @@ When the GitHub Release is published:
 5. Creates archives (tar.gz for Unix, zip for Windows)
 6. Generates checksums
 7. Uploads all assets to the GitHub Release
+
+---
+
+## Batching Multiple PRs
+
+One of the key features of this release system is the ability to **batch multiple PRs into a single release**. You don't need to release after every PR merge.
+
+### How It Works
+
+```mermaid
+flowchart TB
+    subgraph Week1["Monday - Wednesday"]
+        PR1[PR #1: feat: add auth] --> M1[Merge to main]
+        PR2[PR #2: fix: login bug] --> M2[Merge to main]
+        PR3[PR #3: docs: update API] --> M3[Merge to main]
+    end
+
+    subgraph ReleasePR["Release PR (auto-updated)"]
+        M1 --> RP[Release PR v1.2.0]
+        M2 --> RP
+        M3 --> RP
+        RP --> |Contains all 3 PRs| CL[CHANGELOG with all changes]
+    end
+
+    subgraph Release["Thursday (when ready)"]
+        CL --> MR[Merge Release PR]
+        MR --> TAG[Tag v1.2.0]
+        TAG --> BIN[Build binaries]
+    end
+
+    style PR1 fill:#e1f5fe
+    style PR2 fill:#e1f5fe
+    style PR3 fill:#e1f5fe
+    style RP fill:#fff9c4
+    style TAG fill:#c8e6c9
+```
+
+### Example Scenario
+
+1. **Monday**: Merge `feat(api): add batch endpoint` → Release PR created for v1.2.0
+2. **Tuesday**: Merge `fix(cli): handle unicode` → Release PR updated (now includes both)
+3. **Wednesday**: Merge `build(deps): update go modules` → Release PR updated (now includes all 3)
+4. **Thursday**: Merge Release PR → v1.2.0 released with all 3 changes
+
+### Resulting Changelog
+
+```markdown
+## [1.2.0](https://github.com/user/repo/compare/v1.1.0...v1.2.0) (2024-01-15)
+
+### Features
+
+* **api:** add batch endpoint ([#101](https://github.com/user/repo/pull/101))
+
+### Bug Fixes
+
+* **cli:** handle unicode ([#102](https://github.com/user/repo/pull/102))
+
+### Dependencies
+
+* **deps:** update go modules ([#103](https://github.com/user/repo/pull/103))
+```
+
+### When to Merge the Release PR
+
+You control when releases happen by choosing when to merge the Release PR:
+
+| Strategy | When to Merge Release PR | Best For |
+|----------|-------------------------|----------|
+| **Continuous** | After every feature PR | Rapid iteration, hotfixes |
+| **Batched** | End of sprint/week | Planned releases |
+| **Milestone** | When feature complete | Major versions |
 
 ---
 
@@ -780,25 +971,30 @@ gh workflow run goreleaser.yml -f tag=v1.2.0
 # Go to Actions → GoReleaser → Run workflow → Enter tag
 ```
 
-### Creating a Release Without New Commits
+### Creating a Release Without New Code Changes
 
-If you need to create a release PR manually:
+If you need to create a release PR manually (e.g., to release accumulated non-bumping changes):
 
-1. Create an empty commit with a releasable type:
-   ```bash
-   git commit --allow-empty -m "fix: trigger release"
-   git push origin main
-   ```
+```bash
+# Create a branch with an empty commit
+git checkout -b trigger-release
+git commit --allow-empty -m "fix: trigger release"
+git push origin trigger-release
 
-2. Or manually create the release via GitHub UI
+# Create and merge a PR
+gh pr create --title "fix: trigger release" --body "Trigger a new release"
+gh pr merge --squash
+```
 
 ### Skipping CI for a Commit
 
-Add `[skip ci]` to your commit message:
+Add `[skip ci]` to your PR title or commit message:
 
 ```bash
 git commit -m "docs: update README [skip ci]"
 ```
+
+> **Note:** Even with `[skip ci]`, branch protection rules still apply. The PR must pass required status checks.
 
 ---
 
