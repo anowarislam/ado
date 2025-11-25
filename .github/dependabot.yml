@@ -1,20 +1,35 @@
 version: 2
+
 updates:
   - package-ecosystem: gomod
     directory: "/"
     schedule:
       interval: weekly
+      day: monday
     labels:
       - dependencies
       - go
+    commit-message:
+      prefix: "build(deps)"
+    groups:
+      go-dependencies:
+        patterns:
+          - "*"
 
   - package-ecosystem: pip
     directory: "/lab/py"
     schedule:
       interval: weekly
+      day: monday
     labels:
       - dependencies
       - python
+    commit-message:
+      prefix: "build(deps)"
+    groups:
+      python-dependencies:
+        patterns:
+          - "*"
 
   - package-ecosystem: github-actions
     directory: "/"
@@ -23,3 +38,9 @@ updates:
     labels:
       - dependencies
       - ci
+    commit-message:
+      prefix: "build(deps)"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
