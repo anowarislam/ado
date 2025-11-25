@@ -1,0 +1,34 @@
+# Go
+ado
+*.exe
+.gocache/
+coverage.out
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+bin/
+dist/
+
+# Local config (keep templates)
+config.yaml
+!config/*.yaml

@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+#
+# Git commit-msg hook to enforce Conventional Commits format.
+# Install: make hooks.install (or: git config core.hooksPath .githooks)
+#
+# Format: <type>[(scope)][!]: <description>
+#
+# Types:
+#   feat     - New feature (bumps minor version)
+#   fix      - Bug fix (bumps patch version)
+#   docs     - Documentation only
+#   style    - Code style (formatting, whitespace)
+#   refactor - Code refactoring (no feature/fix)
+#   perf     - Performance improvement
+#   test     - Adding/updating tests
+#   build    - Build system or dependencies
+#   ci       - CI configuration
+#   chore    - Other changes (no version bump)
+#
+# Breaking changes:
+#   Add ! after type/scope: feat!: or feat(api)!:
+#   This bumps major version (or minor if < v1.0.0)
+#
+# Examples:
+#   feat: add export command
+#   fix(config): resolve path resolution on Windows
+#   feat!: change CLI flag syntax
+#   docs: update README with examples
+
+set -euo pipefail
+
+COMMIT_MSG_FILE="$1"
+COMMIT_MSG=$(head -1 "$COMMIT_MSG_FILE")
+
+# Skip merge commits and fixup/squash commits
+if [[ "$COMMIT_MSG" =~ ^Merge|^fixup!|^squash!|^amend! ]]; then
+    exit 0
+fi
+
+# Conventional commit pattern:
+# type(optional-scope)optional-!: description
+PATTERN="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore)(\([a-zA-Z0-9_-]+\))?\!?: .{1,}"
+
+if ! [[ "$COMMIT_MSG" =~ $PATTERN ]]; then
+    echo ""
+    echo "ERROR: Invalid commit message format"
+    echo ""
+    echo "Your message:"
+    echo "  $COMMIT_MSG"
+    echo ""
+    echo "Expected format:"
+    echo "  <type>[(scope)][!]: <description>"
+    echo ""
+    echo "Valid types: feat, fix, docs, style, refactor, perf, test, build, ci, chore"
+    echo ""
+    echo "Examples:"
+    echo "  feat: add new export command"
+    echo "  fix(config): resolve Windows path issue"
+    echo "  feat!: breaking change to CLI flags"
+    echo ""
+    exit 1
+fi
+
+# Check minimum description length (at least 10 chars after the colon)
+DESCRIPTION="${COMMIT_MSG#*: }"
+if [[ ${#DESCRIPTION} -lt 10 ]]; then
+    echo ""
+    echo "ERROR: Commit description too short (minimum 10 characters)"
+    echo ""
+    echo "Your description: '$DESCRIPTION'"
+    echo ""
+    exit 1
+fi
+
+exit 0
