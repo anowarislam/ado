@@ -8,6 +8,7 @@ This document describes the fully automated release pipeline for this project. T
 - [Architecture](#architecture)
 - [Components](#components)
 - [Branch Protection](#branch-protection)
+- [Container Images](#container-images)
 - [Prerequisites](#prerequisites)
 - [Setup Guide](#setup-guide)
   - [Step 1: Create GitHub App](#step-1-create-github-app)
@@ -34,6 +35,7 @@ This release automation system provides:
 - **Automated changelog generation** organized by commit type
 - **Automated GitHub Release creation** with release notes
 - **Cross-platform binary builds** (Linux, macOS, Windows × amd64, arm64)
+- **Multi-architecture container images** published to GitHub Container Registry
 - **Checksum generation** for release verification
 - **Zero manual intervention** after initial setup
 
@@ -313,6 +315,114 @@ gh pr create --title "feat: add new feature" --body "Description"
 # Wait for CI, then merge via GitHub UI or CLI
 gh pr merge --squash
 ```
+
+---
+
+## Container Images
+
+In addition to binary releases, this project automatically builds and publishes multi-architecture Docker images to GitHub Container Registry (ghcr.io).
+
+### Container Architecture
+
+```mermaid
+flowchart TB
+    subgraph Release["GitHub Release Published"]
+        R1[v1.2.0 released]
+    end
+
+    subgraph GoReleaser["GoReleaser Workflow"]
+        R1 --> G1[Build linux/amd64 binary]
+        R1 --> G2[Build linux/arm64 binary]
+        G1 --> D1[Build amd64 image]
+        G2 --> D2[Build arm64 image]
+        D1 --> M1[Create multi-arch manifest]
+        D2 --> M1
+    end
+
+    subgraph Registry["GitHub Container Registry"]
+        M1 --> I1["ghcr.io/anowarislam/ado:1.2.0"]
+        M1 --> I2["ghcr.io/anowarislam/ado:latest"]
+        D1 --> I3["ghcr.io/anowarislam/ado:1.2.0-amd64"]
+        D2 --> I4["ghcr.io/anowarislam/ado:1.2.0-arm64"]
+    end
+
+    style R1 fill:#fff9c4
+    style M1 fill:#e1f5fe
+    style I1 fill:#c8e6c9
+    style I2 fill:#c8e6c9
+```
+
+### Available Images
+
+| Tag | Description | Architectures |
+|-----|-------------|---------------|
+| `ghcr.io/anowarislam/ado:latest` | Latest stable release | amd64, arm64 |
+| `ghcr.io/anowarislam/ado:X.Y.Z` | Specific version | amd64, arm64 |
+| `ghcr.io/anowarislam/ado:X.Y.Z-amd64` | Version for amd64 only | amd64 |
+| `ghcr.io/anowarislam/ado:X.Y.Z-arm64` | Version for arm64 only | arm64 |
+
+### Usage
+
+```bash
+# Pull the latest image (auto-selects architecture)
+docker pull ghcr.io/anowarislam/ado:latest
+
+# Run a command
+docker run --rm ghcr.io/anowarislam/ado:latest meta info
+
+# Run with a specific version
+docker run --rm ghcr.io/anowarislam/ado:1.0.0 echo "Hello from container"
+
+# Mount a config directory
+docker run --rm -v ~/.config/ado:/home/ado/.config/ado ghcr.io/anowarislam/ado:latest meta env
+```
+
+### Image Details
+
+| Property | Value |
+|----------|-------|
+| Base image | `scratch` (empty) |
+| Size | ~5-10 MB |
+| User | Non-root (65534:65534) |
+| Entrypoint | `/ado` |
+| Certificates | CA certificates included |
+
+### Container Configuration
+
+The container build is configured in `.goreleaser.yaml`:
+
+```yaml
+dockers:
+  - id: ado-amd64
+    goos: linux
+    goarch: amd64
+    dockerfile: goreleaser.Dockerfile
+    use: buildx
+    image_templates:
+      - "ghcr.io/anowarislam/ado:{{ .Version }}-amd64"
+      - "ghcr.io/anowarislam/ado:latest-amd64"
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+
+docker_manifests:
+  - name_template: "ghcr.io/anowarislam/ado:{{ .Version }}"
+    image_templates:
+      - "ghcr.io/anowarislam/ado:{{ .Version }}-amd64"
+      - "ghcr.io/anowarislam/ado:{{ .Version }}-arm64"
+```
+
+### Dockerfile Options
+
+Two Dockerfiles are provided:
+
+1. **`Dockerfile`** - Full multi-stage build for standalone use
+   ```bash
+   docker build -t ado:local .
+   ```
+
+2. **`goreleaser.Dockerfile`** - Minimal image using pre-built binaries (used by GoReleaser)
 
 ---
 

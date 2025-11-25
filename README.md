@@ -176,6 +176,57 @@ Examples:
 
 ---
 
+## Installation
+
+### Binary Download
+
+Download pre-built binaries from the [GitHub Releases](https://github.com/anowarislam/ado/releases) page.
+
+Available platforms:
+- Linux (amd64, arm64)
+- macOS (amd64, arm64)
+- Windows (amd64, arm64)
+
+```bash
+# Example: Download and install on Linux/macOS
+curl -LO https://github.com/anowarislam/ado/releases/latest/download/ado_<version>_<os>_<arch>.tar.gz
+tar xzf ado_*.tar.gz
+sudo mv ado /usr/local/bin/
+```
+
+### Docker
+
+Multi-architecture container images are available on GitHub Container Registry:
+
+```bash
+# Pull the latest image (auto-selects your architecture)
+docker pull ghcr.io/anowarislam/ado:latest
+
+# Run a command
+docker run --rm ghcr.io/anowarislam/ado:latest meta info
+
+# Run with a specific version
+docker run --rm ghcr.io/anowarislam/ado:1.0.0 echo "Hello"
+
+# Create an alias for convenience
+alias ado='docker run --rm -v ~/.config/ado:/root/.config/ado ghcr.io/anowarislam/ado:latest'
+```
+
+Available image tags:
+- `ghcr.io/anowarislam/ado:latest` - Latest stable release
+- `ghcr.io/anowarislam/ado:X.Y.Z` - Specific version
+
+### Build from Source
+
+```bash
+git clone https://github.com/anowarislam/ado.git
+cd ado
+make go.build
+./ado meta info
+```
+
+---
+
 ## Getting Started (Developer Perspective)
 
 1. Clone the repository.

@@ -1,0 +1,36 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Build artifacts
+dist/
+ado
+*.exe
+
+# Documentation
+docs/
+*.md
+!go.mod
+!go.sum
+
+# CI/CD
+.github/
+
+# Python lab (not needed for Go binary)
+lab/
+
+# Test files
+*_test.go
+.coverage
+
+# Misc
+.DS_Store
+Makefile
+.goreleaser.yaml
+goreleaser.Dockerfile
