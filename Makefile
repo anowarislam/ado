@@ -55,6 +55,31 @@ precommit.run: ## Run pre-commit on all files
 	@pre-commit run --all-files
 
 # =============================================================================
+# Documentation
+# =============================================================================
+
+.PHONY: docs.install
+docs.install: ## Install MkDocs and dependencies
+	@pip install mkdocs-material mkdocs-minify-plugin pillow cairosvg
+
+.PHONY: docs.build
+docs.build: ## Build documentation site
+	@cp CHANGELOG.md docs/changelog.md
+	@mkdocs build --strict
+	@echo "Documentation built in site/"
+
+.PHONY: docs.serve
+docs.serve: ## Serve documentation locally (http://localhost:8000)
+	@cp CHANGELOG.md docs/changelog.md
+	@mkdocs serve
+
+.PHONY: docs.clean
+docs.clean: ## Clean built documentation
+	@rm -rf site/
+	@rm -f docs/changelog.md
+	@echo "Cleaned documentation build artifacts"
+
+# =============================================================================
 # Help
 # =============================================================================
 

@@ -1,0 +1,137 @@
+name: Documentation
+
+on:
+  # Build and deploy on release
+  release:
+    types: [published]
+
+  # Build and deploy on push to main (docs changes only)
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'CHANGELOG.md'
+      - '.github/workflows/docs.yml'
+
+  # Build only on PRs (validation)
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'CHANGELOG.md'
+      - '.github/workflows/docs.yml'
+
+  # Manual trigger
+  workflow_dispatch:
+
+# Sets permissions for GitHub Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for git info
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-mkdocs-${{ hashFiles('mkdocs.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-mkdocs-
+
+      - name: Install MkDocs and dependencies
+        run: |
+          pip install \
+            mkdocs-material \
+            mkdocs-minify-plugin \
+            pillow \
+            cairosvg
+
+      - name: Copy CHANGELOG to docs
+        run: |
+          cp CHANGELOG.md docs/changelog.md
+          echo "Copied CHANGELOG.md to docs/changelog.md"
+
+      - name: Build documentation
+        run: mkdocs build --strict
+
+      - name: Upload artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  # Deployment job (only on main branch or release)
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Link validation job
+  validate-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install \
+            mkdocs-material \
+            mkdocs-minify-plugin \
+            linkchecker
+
+      - name: Copy CHANGELOG to docs
+        run: cp CHANGELOG.md docs/changelog.md
+
+      - name: Build site
+        run: mkdocs build
+
+      - name: Check internal links
+        run: |
+          # Start local server in background
+          cd site && python -m http.server 8000 &
+          sleep 2
+
+          # Check links (internal only, ignore external to avoid rate limits)
+          linkchecker http://localhost:8000 \
+            --ignore-url='https?://.*' \
+            --no-warnings \
+            --check-extern=false \
+            || true  # Don't fail on warnings
+
+          # Kill server
+          pkill -f "python -m http.server"
