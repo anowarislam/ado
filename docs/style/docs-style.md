@@ -310,7 +310,7 @@ See `README.md` for top-level architecture and goals documentation.
 ### In Markdown
 - ❌ No syntax highlighting on code blocks → ✅ Always specify language: `` ```go ``
 - ❌ Broken relative links → ✅ Test links work from docs directory
-- ❌ "Click here" link text → ✅ Descriptive text: "See the [style guide](style/README.md)"
+- ❌ "Click here" link text → ✅ Descriptive text: "See the [style guide](README.md)"
 - ❌ Walls of text → ✅ Break into sections with headers, lists, examples
 
 ## Related Guides
