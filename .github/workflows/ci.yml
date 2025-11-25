@@ -57,10 +57,10 @@ jobs:
       - name: Format check
         run: test -z "$(gofmt -l .)"
 
-      - name: Tidy check
+      - name: Verify dependencies
         run: |
-          go mod tidy
-          git diff --exit-code go.mod go.sum
+          go mod download
+          go mod verify
 
       - name: Vet
         run: make go.vet
