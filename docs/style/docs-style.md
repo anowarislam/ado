@@ -1,12 +1,24 @@
 # Documentation Style Guide
 
-Guidelines for writing and maintaining project documentation: command specs, README, and design docs.
+Guidelines for writing and maintaining project documentation: ADRs, specs, README, and design docs.
 
 ## Philosophy
 - Documentation is the specification; code implements the spec.
 - Examples beat prose; show concrete CLI invocations with expected output.
 - Keep docs synchronized with code; outdated docs are worse than no docs.
 - Write for future maintainers; assume no prior context.
+
+## Documentation Types
+
+This project uses three types of specification documents:
+
+| Type | Location | Purpose | Template |
+|------|----------|---------|----------|
+| **ADR** | `docs/adr/` | Why decisions were made | [TEMPLATE.md](../adr/TEMPLATE.md) |
+| **Feature Spec** | `docs/features/` | What internal features do | [TEMPLATE.md](../features/TEMPLATE.md) |
+| **Command Spec** | `docs/commands/` | What CLI commands do | [TEMPLATE.md](../commands/TEMPLATE.md) |
+
+See [workflow.md](../workflow.md) for when to create each type.
 
 ## Command Specifications (`docs/commands/*.md`)
 
@@ -112,6 +124,69 @@ Document:
 - Empty/malformed config files
 - Permission errors
 - Network failures (if applicable)
+
+## Architecture Decision Records (`docs/adr/*.md`)
+
+ADRs document significant architectural decisions with context, consequences, and alternatives.
+
+### When to Write an ADR
+
+Required for:
+- New architectural patterns
+- Breaking changes to existing patterns
+- Adding new dependencies or tools
+- Security-related decisions
+- Changes affecting multiple components
+
+Not required for bug fixes, single commands following existing patterns, or documentation.
+
+### Structure
+
+Copy [TEMPLATE.md](../adr/TEMPLATE.md) to `NNNN-title.md`. Key sections:
+
+1. **Context** - Why is this decision needed now?
+2. **Decision** - What is the decision? Be specific.
+3. **Consequences** - What are the trade-offs (positive and negative)?
+4. **Alternatives Considered** - What else was evaluated?
+
+### Content Guidelines
+
+- Be specific about the problem being solved
+- Include concrete examples where helpful
+- Link to related ADRs when decisions interact
+- Update status promptly (Proposed → Accepted)
+
+See [docs/adr/README.md](../adr/README.md) for complete process.
+
+## Feature Specifications (`docs/features/*.md`)
+
+Feature specs document non-command functionality: configuration systems, logging, plugins, internal libraries.
+
+### When to Write a Feature Spec
+
+Use for internal capabilities that aren't direct CLI commands:
+- Configuration validation and loading
+- Plugin discovery and loading
+- Logging and telemetry infrastructure
+- Shared utilities consumed by multiple commands
+
+### Structure
+
+Copy [TEMPLATE.md](../features/TEMPLATE.md) to `NN-feature-name.md`. Key sections:
+
+1. **Motivation** - What problem does this solve? Who benefits?
+2. **Specification** - Behavior, configuration, API/interfaces
+3. **Examples** - Concrete usage examples
+4. **Testing Strategy** - Unit tests, integration tests, manual checklist
+
+### Content Guidelines
+
+- Focus on behavior, not implementation details
+- Include code snippets for API examples
+- Document error cases and edge cases
+- Link to ADR if architectural decision preceded this
+
+See [docs/features/README.md](../features/README.md) for complete process.
 
 ## README Maintenance
 
@@ -238,16 +313,26 @@ Design docs capture architectural decisions and specifications before implementa
 
 ## Synchronization Checklist
 
-When making changes, update docs in this order:
+When making changes, update docs in this order. See [workflow.md](../workflow.md) for the complete process.
 
 ### Adding a New Command
 
-1. ✅ Create `docs/commands/<NN>-<command>.md` with full spec
-2. ✅ Update `README.md` "Initial Commands" section if it's user-facing
-3. ✅ Update `CLAUDE.md` "Current Command Set" if implementation is complete
-4. ✅ Implement in `cmd/ado/<command>/<command>.go`
-5. ✅ Add tests; ensure examples in spec work
-6. ✅ Update `AGENTS.md` if workflow changes (new Make targets, etc.)
+1. ✅ Create issue with `command_proposal.md` template
+2. ✅ (If architectural) Create ADR in `docs/adr/NNNN-title.md`
+3. ✅ Create spec in `docs/commands/<NN>-<command>.md` using template
+4. ✅ Update `README.md` "Usage" section if user-facing
+5. ✅ Implement in `cmd/ado/<command>/<command>.go`
+6. ✅ Add tests; ensure examples in spec work
+7. ✅ Update `CLAUDE.md` if patterns change
+
+### Adding a New Feature (non-command)
+
+1. ✅ Create issue with `feature_proposal.md` template
+2. ✅ (If architectural) Create ADR in `docs/adr/NNNN-title.md`
+3. ✅ Create spec in `docs/features/<NN>-<feature>.md` using template
+4. ✅ Implement in `internal/<package>/`
+5. ✅ Add tests matching spec's testing strategy
+6. ✅ Update `CLAUDE.md` if patterns change
 
 ### Changing Command Behavior
 

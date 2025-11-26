@@ -2,6 +2,24 @@
 
 This document covers conventions for contributing to the `ado` project.
 
+## Development Workflow
+
+This project uses a three-phase development process: **Issue → ADR → Spec → Implementation**
+
+| Change Type | Path |
+|-------------|------|
+| Architectural change | ADR first (`docs/adr/`) |
+| New command | Spec first (`docs/commands/`) |
+| New internal feature | Spec first (`docs/features/`) |
+| Bug fix | Direct to implementation |
+
+**PR sequence for significant features:**
+1. **PR 1 (ADR)**: `docs(adr): NNNN - title` (if architectural)
+2. **PR 2 (Spec)**: `docs(spec): [command\|feature] name`
+3. **PR 3 (Code)**: `feat(scope): description`
+
+See [workflow.md](workflow.md) for the complete guide with examples.
+
 ## Commit Conventions
 
 This project uses [Conventional Commits](https://www.conventionalcommits.org/) enforced by git hooks and CI.
@@ -95,14 +113,17 @@ func TestResolveConfigPath(t *testing.T) {
 
 ## Adding New Commands
 
-This project is **spec-driven**:
+This project is **spec-driven** with a structured workflow:
 
-1. Create spec in `docs/commands/<command>.md` first
-2. Prototype in `lab/py/` if logic is complex
-3. Implement in Go under `cmd/ado/<command>/`
-4. Export `NewCommand() *cobra.Command`
-5. Wire into `cmd/ado/root/root.go`
-6. Write table-driven tests
+1. **Create issue** using the command proposal template (`.github/ISSUE_TEMPLATE/command_proposal.md`)
+2. **Create spec** in `docs/commands/<command>.md` using [TEMPLATE.md](commands/TEMPLATE.md)
+3. Prototype in `lab/py/` if logic is complex (optional)
+4. Implement in Go under `cmd/ado/<command>/`
+5. Export `NewCommand() *cobra.Command`
+6. Wire into `cmd/ado/root/root.go`
+7. Write table-driven tests
+
+For commands requiring architectural changes (new patterns, new dependencies), create an ADR first. See [workflow.md](workflow.md) for decision criteria.
 
 ## Code Constraints
 
