@@ -100,9 +100,10 @@ See `docs/workflow.md` for complete guide.
 
 - `docs/workflow.md` - Development workflow (ADR → Spec → Implementation)
 - `docs/adr/` - Architecture Decision Records
+- `docs/features/` - Non-command feature specifications
+- `docs/commands/*.md` - Command specifications
 - `docs/contributing.md` - Commit/test/release conventions
 - `docs/style/go-style.md` - Go code patterns with examples
-- `docs/commands/*.md` - Command specifications
 - `docs/release.md` - Release automation and supply chain security
 - `.goreleaser.yaml` - Build config, ldflags, Docker images
 - `SECURITY.md` - Artifact/container verification instructions

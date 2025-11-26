@@ -108,12 +108,15 @@ nav:
       - commands/02-help.md
       - commands/03-meta.md
   - Development:
+      - Workflow: workflow.md
       - Makefile Reference: make.md
       - Architecture: architecture.md
       - Release Automation: release.md
       - ADRs:
           - Overview: adr/README.md
           - "0001: Development Workflow": adr/0001-development-workflow.md
+      - Feature Specs:
+          - Overview: features/README.md
   - Contributing:
       - Guide: contributing.md
       - Style Guides:
