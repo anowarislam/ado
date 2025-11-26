@@ -63,6 +63,9 @@ dockers:
     image_templates:
       - "ghcr.io/anowarislam/ado:{{ .Version }}-amd64"
       - "ghcr.io/anowarislam/ado:latest-amd64"
+    extra_files:
+      - LICENSE
+      - README.md
     build_flag_templates:
       - "--platform=linux/amd64"
       - "--label=org.opencontainers.image.title={{ .ProjectName }}"
@@ -82,6 +85,9 @@ dockers:
     image_templates:
       - "ghcr.io/anowarislam/ado:{{ .Version }}-arm64"
       - "ghcr.io/anowarislam/ado:latest-arm64"
+    extra_files:
+      - LICENSE
+      - README.md
     build_flag_templates:
       - "--platform=linux/arm64"
       - "--label=org.opencontainers.image.title={{ .ProjectName }}"
