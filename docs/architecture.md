@@ -50,7 +50,7 @@ ado/
     ado.example.yaml     # Example config, used by README/docs
   docs/
     01-design-cli-structure.md
-    02-commands.md
+    commands-overview.md
     commands/
       01-echo.md
       02-help.md

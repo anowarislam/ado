@@ -29,6 +29,10 @@ Thumbs.db
 bin/
 dist/
 
+# Documentation build
+site/
+docs/changelog.md
+
 # Local config (keep templates)
 config.yaml
 !config/*.yaml
