@@ -4,6 +4,7 @@ Thank you for your interest in contributing to `ado`! This document provides gui
 
 ## Quick Links
 
+- [Development Workflow](docs/workflow.md) - Issue → ADR → Spec → Implementation
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Security Policy](SECURITY.md)
 - [Detailed Contributing Guide](docs/contributing.md)
@@ -35,10 +36,25 @@ make test
 
 ## Development Workflow
 
+This project uses a **three-phase workflow** for significant changes:
+
+1. **Decision (ADR)** - For architectural changes, create an ADR first
+2. **Specification** - Write spec before implementation (command or feature)
+3. **Implementation** - Code, tests, docs
+
+See [workflow.md](docs/workflow.md) for the complete guide with examples.
+
 ### 1. Create a Branch
 
 ```bash
-git checkout -b feature/your-feature-name
+# For ADRs
+git checkout -b adr/NNNN-short-title
+
+# For specs
+git checkout -b spec/feature-name
+
+# For implementation
+git checkout -b feat/your-feature-name
 # or
 git checkout -b fix/your-bug-fix
 ```
@@ -48,6 +64,7 @@ git checkout -b fix/your-bug-fix
 - Follow the [Go Style Guide](docs/style/go-style.md)
 - Write tests for new functionality
 - Update documentation if needed
+- For new commands: create spec first ([template](docs/commands/TEMPLATE.md))
 
 ### 3. Validate Locally
 
