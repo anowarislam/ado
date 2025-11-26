@@ -81,12 +81,13 @@ echo ""
 # 4. Validate documentation (if mkdocs available)
 if command -v mkdocs &> /dev/null && [ -f "mkdocs.yml" ]; then
     echo -e "▸ Validating documentation..."
-    if ! mkdocs build --strict > /tmp/mkdocs-build.log 2>&1; then
+    MKDOCS_LOG=$(mktemp)
+    if ! mkdocs build --strict > "$MKDOCS_LOG" 2>&1; then
         # Check if it's a configuration/dependency error (not a content error)
-        if grep -q "cannot find module\|No module named\|ModuleNotFoundError" /tmp/mkdocs-build.log; then
+        if grep -q "cannot find module\|No module named\|ModuleNotFoundError" "$MKDOCS_LOG"; then
             echo -e "${YELLOW}⚠ Skipping: MkDocs dependencies not fully installed${NC}"
             echo "  Run: pip install mkdocs-material mkdocs-minify-plugin"
-            rm -f /tmp/mkdocs-build.log
+            rm -f "$MKDOCS_LOG"
             echo ""
         else
             # This is a real content error (broken links, etc.)
@@ -94,17 +95,17 @@ if command -v mkdocs &> /dev/null && [ -f "mkdocs.yml" ]; then
             echo -e "${RED}ERROR: Documentation build failed${NC}"
             echo "Run 'mkdocs build --strict' to see detailed errors:"
             echo ""
-            tail -20 /tmp/mkdocs-build.log
+            tail -20 "$MKDOCS_LOG"
             echo ""
             echo "Common issues:"
             echo "  - Broken internal links"
             echo "  - Missing anchor targets"
             echo "  - Invalid markdown syntax"
-            rm -f /tmp/mkdocs-build.log
+            rm -f "$MKDOCS_LOG"
             exit 1
         fi
     else
-        rm -f /tmp/mkdocs-build.log
+        rm -f "$MKDOCS_LOG"
         # Clean up built site
         rm -rf site/
         echo -e "${GREEN}✓ Documentation validated${NC}"
@@ -113,7 +114,8 @@ if command -v mkdocs &> /dev/null && [ -f "mkdocs.yml" ]; then
 fi
 
 # 5. Python lab tests (if Python files changed)
-if git diff --name-only @{push}..HEAD 2>/dev/null | grep -q "^lab/py/"; then
+# Check if any Python lab files have changed compared to origin/main
+if git diff --name-only origin/main...HEAD 2>/dev/null | grep -q "^lab/py/"; then
     if command -v python3 &> /dev/null && [ -f "lab/py/pyproject.toml" ]; then
         echo -e "▸ Running Python lab tests..."
         if ! make py.test > /dev/null 2>&1; then

@@ -4,11 +4,12 @@
 
 ## 📊 Recipe Statistics
 
-**Total Documentation**: 75,865 words across 11 comprehensive guides
+**Total Documentation**: 84,823 words across 13 comprehensive guides
 
 | Chapter | Topic | Words | Mermaid Diagrams | Code Examples |
 |---------|-------|-------|------------------|---------------|
-| [README](README.md) | Introduction & Navigation | 713 | 1 | - |
+| [README](README.md) | Introduction & Navigation | 600 | 1 | - |
+| [00](00-overview.md) | Navigation & Learning Paths | 3,200 | 2 | - |
 | [01](01-philosophy.md) | Philosophy & Principles | 2,978 | 6 | 15+ |
 | [02](02-ci-components.md) | Essential CI Components | 8,313 | 10+ | 25+ |
 | [03](03-security-features.md) | Security Implementation | 4,544 | 8 | 20+ |
@@ -19,8 +20,9 @@
 | [08](08-troubleshooting.md) | Troubleshooting & Pitfalls | 8,035 | 5+ | 25+ |
 | [09](09-implementation-guide.md) | Step-by-Step Implementation | 4,203 | 2+ | 50+ |
 | [10](10-python-adaptation.md) | Python-Specific Patterns | 7,753 | 6+ | 45+ |
+| [11](11-goals.md) | Principles & Standards | 5,871 | 3+ | 20+ |
 
-**Total**: 75,865 words | 75+ diagrams | 300+ code examples
+**Total**: 84,823 words | 80+ diagrams | 300+ code examples
 
 ---
 
