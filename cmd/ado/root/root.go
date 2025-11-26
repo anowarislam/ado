@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/anowarislam/ado/cmd/ado/config"
 	"github.com/anowarislam/ado/cmd/ado/echo"
 	"github.com/anowarislam/ado/cmd/ado/meta"
 	internalmeta "github.com/anowarislam/ado/internal/meta"
@@ -30,6 +31,7 @@ func NewRootCommand() *cobra.Command {
 	cmd.PersistentFlags().String("log-level", "info", "Log level for output")
 
 	cmd.AddCommand(
+		config.NewCommand(),
 		echo.NewCommand(),
 		meta.NewCommand(buildInfo),
 	)
