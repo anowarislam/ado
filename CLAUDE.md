@@ -24,9 +24,15 @@ make py.install          # Install lab package
 make py.test             # Run pytest
 make py.lint             # Run ruff
 
-# All
+# Validation (mirrors CI)
 make test                # Go + Python tests
+make validate            # Lint + test + docs build
+make ci                  # Full CI pipeline locally
+make docker.test         # Test GoReleaser Dockerfile (catches release issues)
+
+# Setup
 make hooks.install       # Install commit hooks
+make help                # Show all available targets
 ```
 
 ## Architecture
@@ -35,11 +41,12 @@ make hooks.install       # Install commit hooks
 cmd/ado/<command>/    → Cobra commands, each exports NewCommand()
 internal/             → Shared packages (meta, config, ui)
 lab/py/               → Python prototypes (promote to Go when stable)
+make/                 → Makefile modules (go.mk, python.mk, docker.mk, etc.)
 ```
 
-**Command wiring**: `cmd/ado/root/root.go` registers all subcommands.
+**Command wiring**: `cmd/ado/root/root.go` registers all subcommands via `AddCommand()`.
 
-**Build metadata**: `internal/meta/info.go` - Version/Commit/BuildTime set via ldflags.
+**Build metadata**: `internal/meta/info.go` - Version/Commit/BuildTime set via ldflags in `.goreleaser.yaml`.
 
 **Config resolution**: `internal/config/paths.go` - XDG_CONFIG_HOME → ~/.config/ado → ~/.ado
 
@@ -58,9 +65,44 @@ Breaking changes: add `!` (e.g., `feat!:`)
 - **Error wrapping**: `fmt.Errorf("context: %w", err)`
 - **Spec-driven**: Check `docs/commands/*.md` before implementing
 
+## Release System
+
+Fully automated via release-please + GoReleaser. PRs with conventional commits → Release PR created → merge triggers build + Docker + signing.
+
+## Development Workflow
+
+Three-phase workflow: **Issue → ADR (if needed) → Spec → Implementation**
+
+### Quick Decision Tree
+
+- **Architectural change?** → ADR first (`docs/adr/`)
+- **New command?** → Spec first (`docs/commands/`)
+- **New internal feature?** → Spec first (`docs/features/`)
+- **Bug fix?** → Direct to implementation
+
+### Key Directories
+
+```
+docs/adr/       → Architecture Decision Records (why)
+docs/features/  → Non-command feature specs (what)
+docs/commands/  → CLI command specs (what)
+```
+
+### PR Sequence for New Features
+
+1. **PR 1 (ADR)**: `docs(adr): NNNN - title` (if architectural)
+2. **PR 2 (Spec)**: `docs(spec): [command|feature] name`
+3. **PR 3 (Code)**: `feat(scope): description`
+
+See `docs/workflow.md` for complete guide.
+
 ## References
 
-- `docs/contributing.md` - Full commit/test/release conventions
+- `docs/workflow.md` - Development workflow (ADR → Spec → Implementation)
+- `docs/adr/` - Architecture Decision Records
+- `docs/contributing.md` - Commit/test/release conventions
 - `docs/style/go-style.md` - Go code patterns with examples
 - `docs/commands/*.md` - Command specifications
-- `.goreleaser.yaml` - Build config and ldflags
+- `docs/release.md` - Release automation and supply chain security
+- `.goreleaser.yaml` - Build config, ldflags, Docker images
+- `SECURITY.md` - Artifact/container verification instructions
