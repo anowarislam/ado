@@ -81,8 +81,9 @@ jobs:
       - name: Sign container images
         env:
           REGISTRY: ghcr.io/anowarislam/ado
-          TAG: ${{ github.event.inputs.tag || github.ref_name }}
+          GIT_TAG: ${{ github.event.inputs.tag || github.ref_name }}
         run: |
-          # Sign by tag (multiple tags point to same manifest)
-          cosign sign --yes "${REGISTRY}:${TAG}"
+          # Strip 'v' prefix - GoReleaser tags images as 1.2.3, not v1.2.3
+          VERSION="${GIT_TAG#v}"
+          cosign sign --yes "${REGISTRY}:${VERSION}"
           cosign sign --yes "${REGISTRY}:latest"
