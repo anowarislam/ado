@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.3](https://github.com/anowarislam/ado/compare/v1.1.2...v1.1.3) (2025-11-26)
+
+
+### Bug Fixes
+
+* **ci:** use GITHUB_TOKEN for Docker registry login ([#26](https://github.com/anowarislam/ado/issues/26)) ([619be65](https://github.com/anowarislam/ado/commit/619be6505106cb668518bafcad1ccce87046dcce))
+* **ci:** use input tag for cosign signing in workflow_dispatch ([#28](https://github.com/anowarislam/ado/issues/28)) ([6357385](https://github.com/anowarislam/ado/commit/63573857c6b8cb991ef4f6f47921fbca3e6b1925))
+
 ## [1.1.2](https://github.com/anowarislam/ado/compare/v1.1.1...v1.1.2) (2025-11-26)
 
 
