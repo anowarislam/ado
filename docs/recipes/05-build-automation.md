@@ -1167,6 +1167,8 @@ Location: `.githooks/pre-push`
 #   1. Go tests with race detector
 #   2. Coverage threshold check (80% minimum)
 #   3. Build verification
+#   4. Documentation validation (if mkdocs available)
+#   5. Python lab tests (if Python files changed)
 #
 # Skip with: git push --no-verify (use sparingly!)
 
@@ -1235,16 +1237,58 @@ fi
 echo -e "${GREEN}✓ Build successful${NC}"
 echo ""
 
+# 4. Validate documentation (if mkdocs available)
+if command -v mkdocs &> /dev/null && [ -f "mkdocs.yml" ]; then
+    echo -e "▸ Validating documentation..."
+    if ! mkdocs build --strict > /tmp/mkdocs-build.log 2>&1; then
+        echo ""
+        echo -e "${RED}ERROR: Documentation build failed${NC}"
+        echo "Run 'mkdocs build --strict' to see detailed errors:"
+        echo ""
+        tail -20 /tmp/mkdocs-build.log
+        echo ""
+        echo "Common issues:"
+        echo "  - Broken internal links"
+        echo "  - Missing anchor targets"
+        echo "  - Invalid markdown syntax"
+        rm -f /tmp/mkdocs-build.log
+        exit 1
+    fi
+    rm -f /tmp/mkdocs-build.log
+    # Clean up built site
+    rm -rf site/
+    echo -e "${GREEN}✓ Documentation validated${NC}"
+    echo ""
+fi
+
+# 5. Python lab tests (if Python files changed)
+if git diff --name-only @{push}..HEAD 2>/dev/null | grep -q "^lab/py/"; then
+    if command -v python3 &> /dev/null && [ -f "lab/py/pyproject.toml" ]; then
+        echo -e "▸ Running Python lab tests..."
+        if ! make py.test > /dev/null 2>&1; then
+            echo ""
+            echo -e "${RED}ERROR: Python lab tests failed${NC}"
+            echo "Run 'make py.test' to see detailed errors."
+            exit 1
+        fi
+        echo -e "${GREEN}✓ Python lab tests passed${NC}"
+        echo ""
+    fi
+fi
+
 echo -e "${GREEN}All pre-push checks passed!${NC}"
 exit 0
 ```
 
 **Key Features**:
-1. **Three-Phase Validation**: Tests → Coverage → Build
+1. **Five-Phase Validation**: Tests → Coverage → Build → Docs → Python
 2. **Race Detector**: Catches concurrency bugs
 3. **Coverage Enforcement**: 80% minimum threshold
-4. **Clear Progress**: Shows which check is running
-5. **Helpful Errors**: Explains what failed and how to fix
+4. **Documentation Validation**: Catches broken links early (if mkdocs installed)
+5. **Python Lab Testing**: Validates Python changes (if applicable)
+6. **Graceful Degradation**: Skips checks if tools unavailable
+7. **Clear Progress**: Shows which check is running
+8. **Helpful Errors**: Explains what failed and how to fix
 
 **Example Output (Success)**:
 
