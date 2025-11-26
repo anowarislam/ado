@@ -82,24 +82,34 @@ echo ""
 if command -v mkdocs &> /dev/null && [ -f "mkdocs.yml" ]; then
     echo -e "▸ Validating documentation..."
     if ! mkdocs build --strict > /tmp/mkdocs-build.log 2>&1; then
-        echo ""
-        echo -e "${RED}ERROR: Documentation build failed${NC}"
-        echo "Run 'mkdocs build --strict' to see detailed errors:"
-        echo ""
-        tail -20 /tmp/mkdocs-build.log
-        echo ""
-        echo "Common issues:"
-        echo "  - Broken internal links"
-        echo "  - Missing anchor targets"
-        echo "  - Invalid markdown syntax"
+        # Check if it's a configuration/dependency error (not a content error)
+        if grep -q "cannot find module\|No module named\|ModuleNotFoundError" /tmp/mkdocs-build.log; then
+            echo -e "${YELLOW}⚠ Skipping: MkDocs dependencies not fully installed${NC}"
+            echo "  Run: pip install mkdocs-material mkdocs-minify-plugin"
+            rm -f /tmp/mkdocs-build.log
+            echo ""
+        else
+            # This is a real content error (broken links, etc.)
+            echo ""
+            echo -e "${RED}ERROR: Documentation build failed${NC}"
+            echo "Run 'mkdocs build --strict' to see detailed errors:"
+            echo ""
+            tail -20 /tmp/mkdocs-build.log
+            echo ""
+            echo "Common issues:"
+            echo "  - Broken internal links"
+            echo "  - Missing anchor targets"
+            echo "  - Invalid markdown syntax"
+            rm -f /tmp/mkdocs-build.log
+            exit 1
+        fi
+    else
         rm -f /tmp/mkdocs-build.log
-        exit 1
+        # Clean up built site
+        rm -rf site/
+        echo -e "${GREEN}✓ Documentation validated${NC}"
+        echo ""
     fi
-    rm -f /tmp/mkdocs-build.log
-    # Clean up built site
-    rm -rf site/
-    echo -e "${GREEN}✓ Documentation validated${NC}"
-    echo ""
 fi
 
 # 5. Python lab tests (if Python files changed)
