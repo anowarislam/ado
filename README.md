@@ -50,9 +50,12 @@ ado meta info
 docker pull ghcr.io/anowarislam/ado:latest
 docker run --rm ghcr.io/anowarislam/ado:latest meta info
 
-# Create an alias
-alias ado='docker run --rm -v ~/.config/ado:/root/.config/ado ghcr.io/anowarislam/ado:latest'
+# Create an alias for convenience
+alias ado='docker run --rm ghcr.io/anowarislam/ado:latest'
 ```
+
+> **Note:** The container runs as a non-root user (UID 65534) for security.
+> Config file mounting is not supported in the containerized version.
 
 ### Build from Source
 

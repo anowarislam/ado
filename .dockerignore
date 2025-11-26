@@ -13,11 +13,11 @@ dist/
 ado
 *.exe
 
-# Documentation
+# Documentation (keep README.md and LICENSE for container)
 docs/
 *.md
-!go.mod
-!go.sum
+!README.md
+!LICENSE
 
 # CI/CD
 .github/

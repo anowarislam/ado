@@ -3,8 +3,15 @@
 
 FROM scratch
 
-# Copy CA certificates for HTTPS support
-COPY --from=alpine:latest /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+# Copy CA certificates for HTTPS support (pinned version for reproducibility)
+COPY --from=alpine:3.21 /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+
+# Copy timezone data for proper time handling
+COPY --from=alpine:3.21 /usr/share/zoneinfo /usr/share/zoneinfo
+
+# Copy license and documentation
+COPY LICENSE /LICENSE
+COPY README.md /README.md
 
 # Copy the pre-built binary (GoReleaser provides this)
 COPY ado /ado

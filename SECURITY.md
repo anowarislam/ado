@@ -17,16 +17,13 @@ We take security vulnerabilities seriously. We appreciate your efforts to respon
 
 **Please do NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please report them via one of the following methods:
+Instead, please use **GitHub Security Advisories**:
 
-1. **GitHub Security Advisories** (Preferred)
-   - Go to the [Security tab](https://github.com/anowarislam/ado/security/advisories) of this repository
-   - Click "Report a vulnerability"
-   - Fill out the form with details about the vulnerability
+1. Go to the [Security tab](https://github.com/anowarislam/ado/security/advisories) of this repository
+2. Click "Report a vulnerability"
+3. Fill out the form with details about the vulnerability
 
-2. **Email**
-   - Send an email to: **anowarislam@users.noreply.github.com**
-   - Use the subject line: `[SECURITY] ado vulnerability report`
+This is the fastest way to reach us and allows for secure, private communication about the issue.
 
 ### What to Include
 
