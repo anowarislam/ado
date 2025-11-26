@@ -5,6 +5,7 @@ Thank you for your interest in contributing to `ado`! This document provides gui
 ## Quick Links
 
 - [Development Workflow](docs/workflow.md) - Issue → ADR → Spec → Implementation
+- [Code Ownership](docs/code-ownership.md) - Review process and approvals
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Security Policy](SECURITY.md)
 - [Detailed Contributing Guide](docs/contributing.md)
@@ -44,6 +45,20 @@ Run `make hooks.install` to enable local validation:
 | `pre-push` | Before push | Tests, coverage (80%), build |
 
 **Skip hooks** (use sparingly): `git push --no-verify`
+
+## Code Review Process
+
+All PRs require review and approval from code owners before merging.
+
+**How it works**:
+1. When you open a PR, GitHub automatically requests reviews from code owners based on files changed
+2. Code owners are defined in `.github/CODEOWNERS`
+3. Branch protection requires approval from code owners before merge
+4. Code owners aim to review within 48 business hours
+
+**Current code owner**: @anowarislam reviews all changes
+
+**Learn more**: See [code-ownership.md](docs/code-ownership.md) for detailed review process and FAQ.
 
 ## Development Workflow
 
@@ -136,6 +151,9 @@ Look for issues labeled [`good first issue`](https://github.com/anowarislam/ado/
 3. **Update docs** - Keep documentation current
 4. **Follow style** - Use existing patterns
 5. **Sign commits** - DCO sign-off appreciated
+6. **Wait for code owner approval** - PRs require approval from code owners before merging
+
+**Note**: All PRs must pass CI checks (tests, linting, coverage) AND receive code owner approval before merging to main.
 
 ## Questions?
 
