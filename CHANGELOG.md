@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.0](https://github.com/anowarislam/ado/compare/v1.2.0...v1.3.0) (2025-11-26)
+
+
+### Features
+
+* **ownership:** implement code ownership system with CODEOWNERS ([#48](https://github.com/anowarislam/ado/issues/48)) ([10f0719](https://github.com/anowarislam/ado/commit/10f0719486815a75b178e0723357603d36671432))
+
+
+### Documentation
+
+* **recipe:** add comprehensive CI/CD framework guide ([#45](https://github.com/anowarislam/ado/issues/45)) ([c3041c1](https://github.com/anowarislam/ado/commit/c3041c13ee0cadc1974b414362f63d2a933fd48b))
+
 ## [1.2.0](https://github.com/anowarislam/ado/compare/v1.1.4...v1.2.0) (2025-11-26)
 
 
