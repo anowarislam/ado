@@ -72,7 +72,9 @@ jobs:
         run: |
           COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | tr -d '%')
           echo "Total coverage: ${COVERAGE}%"
-          if [ "${COVERAGE%.*}" -lt 80 ]; then
+          # Use awk for robust floating-point to integer conversion
+          COVERAGE_INT=$(echo "$COVERAGE" | awk '{printf "%d", $1}')
+          if [ "$COVERAGE_INT" -lt 80 ]; then
             echo "::error::Coverage ${COVERAGE}% is below 80% threshold"
             exit 1
           fi

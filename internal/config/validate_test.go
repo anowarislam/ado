@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 )
 
@@ -149,7 +150,7 @@ func TestValidationResult_HasWarnings(t *testing.T) {
 
 func TestValidate_PermissionDenied(t *testing.T) {
 	// Skip on Windows where permission handling is different
-	if os.Getenv("GOOS") == "windows" {
+	if runtime.GOOS == "windows" {
 		t.Skip("Skipping permission test on Windows")
 	}
 

@@ -143,8 +143,9 @@ func TestPrintOutput_JSON_MarshalError(t *testing.T) {
 	if err == nil {
 		t.Error("PrintOutput() expected error for unmarshalable payload")
 	}
-	if !errors.Is(err, err) || buf.Len() != 0 {
-		// Should not write partial output
+	// Verify no partial output was written on error
+	if buf.Len() != 0 {
+		t.Error("PrintOutput() should not write partial output on marshal error")
 	}
 }
 
@@ -190,9 +191,9 @@ func TestPrintOutput_YAML_WriteError(t *testing.T) {
 	}
 }
 
-func TestPrintOutput_YAML_NoTrailingNewline(t *testing.T) {
+func TestPrintOutput_YAML_EnsuresTrailingNewline(t *testing.T) {
 	var buf bytes.Buffer
-	// Empty map serializes to "{}\n" in YAML
+	// Empty struct serializes to "{}\n" in YAML - tests the newline handling
 	payload := struct{}{}
 
 	err := PrintOutput(&buf, OutputYAML, payload, nil)
@@ -201,7 +202,7 @@ func TestPrintOutput_YAML_NoTrailingNewline(t *testing.T) {
 	}
 
 	output := buf.String()
-	if output[len(output)-1] != '\n' {
+	if len(output) == 0 || output[len(output)-1] != '\n' {
 		t.Error("YAML output should end with newline")
 	}
 }
