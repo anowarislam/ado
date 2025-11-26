@@ -19,7 +19,7 @@ For CLI command specifications, see [`docs/commands/`](../commands/).
 
 | ID | Title | Status | ADR |
 |----|-------|--------|-----|
-| *(none yet)* | | | |
+| [01](01-structured-logging.md) | Structured Logging | Draft | [ADR-0002](../adr/0002-structured-logging.md) |
 
 ## Creating a Feature Spec
 
