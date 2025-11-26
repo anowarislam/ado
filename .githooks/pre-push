@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+#
+# Git pre-push hook to validate code before pushing.
+# Install: make hooks.install (or: git config core.hooksPath .githooks)
+#
+# This hook runs slower checks that shouldn't block every commit
+# but must pass before pushing to remote:
+#   1. Go tests with race detector
+#   2. Coverage threshold check (80% minimum)
+#   3. Build verification
+#
+# Skip with: git push --no-verify (use sparingly!)
+
+set -euo pipefail
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+echo -e "${YELLOW}Running pre-push checks...${NC}"
+echo ""
+
+# Change to repository root
+cd "$(git rev-parse --show-toplevel)"
+
+# Check if Go is available
+if ! command -v go &> /dev/null; then
+    echo -e "${RED}ERROR: Go is not installed${NC}"
+    exit 1
+fi
+
+# 1. Run tests with race detector
+echo -e "▸ Running tests with race detector..."
+if ! go test -race -timeout 60s ./cmd/ado/... ./internal/... 2>&1; then
+    echo ""
+    echo -e "${RED}ERROR: Tests failed${NC}"
+    echo "Fix the failing tests before pushing."
+    exit 1
+fi
+echo -e "${GREEN}✓ All tests passed${NC}"
+echo ""
+
+# 2. Check coverage threshold (80%)
+echo -e "▸ Checking coverage threshold (80%)..."
+COVERAGE_FILE=$(mktemp)
+go test -coverprofile="$COVERAGE_FILE" -covermode=atomic ./cmd/ado/... ./internal/... > /dev/null 2>&1
+
+COVERAGE=$(go tool cover -func="$COVERAGE_FILE" | grep total | awk '{print $3}' | tr -d '%')
+rm -f "$COVERAGE_FILE"
+
+if [ -z "$COVERAGE" ]; then
+    echo -e "${RED}ERROR: Could not determine coverage${NC}"
+    exit 1
+fi
+
+# Compare coverage (handle floating point)
+COVERAGE_INT=${COVERAGE%.*}
+if [ "$COVERAGE_INT" -lt 80 ]; then
+    echo -e "${RED}ERROR: Coverage ${COVERAGE}% is below 80% threshold${NC}"
+    echo "Add tests to improve coverage before pushing."
+    exit 1
+fi
+echo -e "${GREEN}✓ Coverage: ${COVERAGE}% (threshold: 80%)${NC}"
+echo ""
+
+# 3. Verify build
+echo -e "▸ Verifying build..."
+if ! go build -o /dev/null ./cmd/ado 2>&1; then
+    echo ""
+    echo -e "${RED}ERROR: Build failed${NC}"
+    echo "Fix build errors before pushing."
+    exit 1
+fi
+echo -e "${GREEN}✓ Build successful${NC}"
+echo ""
+
+echo -e "${GREEN}All pre-push checks passed!${NC}"
+exit 0

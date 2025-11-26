@@ -26,13 +26,24 @@ Thank you for your interest in contributing to `ado`! This document provides gui
 git clone https://github.com/anowarislam/ado.git
 cd ado
 
-# Install git hooks (enforces conventional commits)
+# Install git hooks (recommended)
 make hooks.install
 
 # Build and test
 make go.build
 make test
 ```
+
+### Git Hooks
+
+Run `make hooks.install` to enable local validation:
+
+| Hook | When | What it Checks |
+|------|------|----------------|
+| `commit-msg` | Every commit | Conventional commit format |
+| `pre-push` | Before push | Tests, coverage (80%), build |
+
+**Skip hooks** (use sparingly): `git push --no-verify`
 
 ## Development Workflow
 
@@ -74,7 +85,17 @@ make test          # Run Go + Python tests
 make go.vet        # Lint Go code
 make go.fmt        # Check formatting
 make py.lint       # Lint Python (if changed)
+
+# Check test coverage (80% minimum required)
+make go.test.cover.check
 ```
+
+#### Test Coverage Policy
+
+- **Minimum threshold: 80%** - CI enforces this for all PRs
+- Check coverage locally: `make go.test.cover`
+- View HTML report: `make go.test.cover.html`
+- New code should include tests that maintain or improve coverage
 
 ### 4. Commit with Conventional Commits
 

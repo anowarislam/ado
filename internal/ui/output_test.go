@@ -121,3 +121,88 @@ func TestPrintOutput_UnknownFormat(t *testing.T) {
 		t.Error("PrintOutput() expected error for unknown format")
 	}
 }
+
+func TestPrintOutput_EmptyFormat(t *testing.T) {
+	var buf bytes.Buffer
+	err := PrintOutput(&buf, "", nil, func() (string, error) { return "hello", nil })
+	if err != nil {
+		t.Fatalf("PrintOutput() error = %v", err)
+	}
+	// Empty format should default to text
+	if got := buf.String(); got != "hello\n" {
+		t.Errorf("PrintOutput() = %q, want %q", got, "hello\n")
+	}
+}
+
+func TestPrintOutput_JSON_MarshalError(t *testing.T) {
+	var buf bytes.Buffer
+	// Functions cannot be marshaled to JSON
+	payload := map[string]any{"fn": func() {}}
+
+	err := PrintOutput(&buf, OutputJSON, payload, nil)
+	if err == nil {
+		t.Error("PrintOutput() expected error for unmarshalable payload")
+	}
+	// Verify no partial output was written on error
+	if buf.Len() != 0 {
+		t.Error("PrintOutput() should not write partial output on marshal error")
+	}
+}
+
+func TestPrintOutput_YAML_MarshalError(t *testing.T) {
+	// Note: yaml.Marshal panics on channels/functions rather than returning error
+	// Testing the error path requires a type that yaml.Marshal returns error for
+	// This is difficult to trigger - yaml tends to panic instead
+	// Skipping this test as yaml library behavior makes it impractical
+	t.Skip("yaml.Marshal panics on unsupported types instead of returning error")
+}
+
+type errorWriter struct{}
+
+func (e *errorWriter) Write(p []byte) (n int, err error) {
+	return 0, errors.New("write error")
+}
+
+func TestPrintOutput_Text_WriteError(t *testing.T) {
+	w := &errorWriter{}
+	err := PrintOutput(w, OutputText, nil, func() (string, error) { return "hello", nil })
+	if err == nil {
+		t.Error("PrintOutput() expected error for write failure")
+	}
+}
+
+func TestPrintOutput_JSON_WriteError(t *testing.T) {
+	w := &errorWriter{}
+	payload := map[string]string{"key": "value"}
+
+	err := PrintOutput(w, OutputJSON, payload, nil)
+	if err == nil {
+		t.Error("PrintOutput() expected error for write failure")
+	}
+}
+
+func TestPrintOutput_YAML_WriteError(t *testing.T) {
+	w := &errorWriter{}
+	payload := map[string]string{"key": "value"}
+
+	err := PrintOutput(w, OutputYAML, payload, nil)
+	if err == nil {
+		t.Error("PrintOutput() expected error for write failure")
+	}
+}
+
+func TestPrintOutput_YAML_EnsuresTrailingNewline(t *testing.T) {
+	var buf bytes.Buffer
+	// Empty struct serializes to "{}\n" in YAML - tests the newline handling
+	payload := struct{}{}
+
+	err := PrintOutput(&buf, OutputYAML, payload, nil)
+	if err != nil {
+		t.Fatalf("PrintOutput() error = %v", err)
+	}
+
+	output := buf.String()
+	if len(output) == 0 || output[len(output)-1] != '\n' {
+		t.Error("YAML output should end with newline")
+	}
+}
