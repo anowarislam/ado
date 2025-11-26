@@ -10,7 +10,7 @@ Instructions:
 
 | Metadata | Value |
 |----------|-------|
-| **ADR** | [ADR-NNNN](../adr/NNNN-title.md) or N/A |
+| **ADR** | ADR-NNNN or N/A |
 | **Status** | Draft |
 | **Issue** | #NNN |
 | **Author(s)** | @username |
