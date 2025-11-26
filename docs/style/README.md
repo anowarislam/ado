@@ -65,10 +65,11 @@ Writing and maintaining project documentation:
 ## When to Consult Multiple Guides
 
 ### Before Writing a New Command
-1. **Spec first**: [docs-style.md](docs-style.md) → Create `docs/commands/<command>.md`
-2. **Prototype**: [python-style.md](python-style.md) → Experiment in `lab/py/`
-3. **Implement**: [go-style.md](go-style.md) → Port to Go in `cmd/ado/`
-4. **CI integration**: [ci-style.md](ci-style.md) → Ensure tests run in workflows
+1. **Check workflow**: [workflow.md](../workflow.md) → Determine if ADR needed
+2. **Spec first**: [docs-style.md](docs-style.md) → Create `docs/commands/<command>.md`
+3. **Prototype**: [python-style.md](python-style.md) → Experiment in `lab/py/`
+4. **Implement**: [go-style.md](go-style.md) → Port to Go in `cmd/ado/`
+5. **CI integration**: [ci-style.md](ci-style.md) → Ensure tests run in workflows
 
 ### Before Submitting a PR
 1. **Code quality**: [go-style.md](go-style.md) or [python-style.md](python-style.md)

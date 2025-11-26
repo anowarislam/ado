@@ -75,7 +75,9 @@ ADRs are numbered sequentially (0001, 0002, ...). Numbers are never reused even 
 
 ## Related Documentation
 
+- [Development Workflow](../workflow.md) - Complete workflow guide
 - [Command Specs](../commands/) - CLI command specifications
+- [Feature Specs](../features/) - Non-command feature specifications
 - [Contributing Guide](../contributing.md) - Contribution guidelines
 
 ## References
