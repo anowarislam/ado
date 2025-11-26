@@ -14,11 +14,12 @@ PRECOMMIT ?= pre-commit
 # ------------------------------------------------------------------------------
 .PHONY: hooks.install hooks.uninstall hooks.status
 
-hooks.install: _check-git ## Install git hooks for conventional commits
+hooks.install: _check-git ## Install git hooks (commit-msg + pre-push)
 	$(call log_info,"Installing git hooks...")
 	@git config core.hooksPath $(HOOKS_DIR)
 	$(call log_success,"Git hooks installed from $(HOOKS_DIR)/")
-	@echo "  Commits will be validated for conventional commit format."
+	@echo "  • commit-msg: Validates conventional commit format"
+	@echo "  • pre-push:   Runs tests, coverage check, and build"
 
 hooks.uninstall: ## Uninstall git hooks
 	$(call log_info,"Uninstalling git hooks...")

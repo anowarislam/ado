@@ -26,13 +26,24 @@ Thank you for your interest in contributing to `ado`! This document provides gui
 git clone https://github.com/anowarislam/ado.git
 cd ado
 
-# Install git hooks (enforces conventional commits)
+# Install git hooks (recommended)
 make hooks.install
 
 # Build and test
 make go.build
 make test
 ```
+
+### Git Hooks
+
+Run `make hooks.install` to enable local validation:
+
+| Hook | When | What it Checks |
+|------|------|----------------|
+| `commit-msg` | Every commit | Conventional commit format |
+| `pre-push` | Before push | Tests, coverage (80%), build |
+
+**Skip hooks** (use sparingly): `git push --no-verify`
 
 ## Development Workflow
 

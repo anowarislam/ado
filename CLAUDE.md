@@ -36,8 +36,12 @@ make ci                  # Full CI pipeline locally
 make docker.test         # Test GoReleaser Dockerfile (catches release issues)
 
 # Setup
-make hooks.install       # Install commit hooks
+make hooks.install       # Install git hooks (commit-msg + pre-push)
 make help                # Show all available targets
+
+# Git Hooks (installed via make hooks.install)
+# commit-msg: Validates conventional commit format
+# pre-push:   Runs tests, coverage check (80%), and build verification
 ```
 
 ## Architecture
