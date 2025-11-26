@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4](https://github.com/anowarislam/ado/compare/v1.1.3...v1.1.4) (2025-11-26)
+
+
+### Bug Fixes
+
+* **ci:** strip v prefix from tag for cosign signing ([#29](https://github.com/anowarislam/ado/issues/29)) ([1a18c1d](https://github.com/anowarislam/ado/commit/1a18c1d292bd801924cfbc3f8e223b63703d703d))
+
 ## [1.1.3](https://github.com/anowarislam/ado/compare/v1.1.2...v1.1.3) (2025-11-26)
 
 
