@@ -65,6 +65,7 @@ ado help
 - [Installation](installation.md) - Detailed installation instructions
 - [Quick Start](quickstart.md) - Get up and running quickly
 - [Commands](commands-overview.md) - Available commands reference
+- [Makefile Reference](make.md) - Build, test, and development targets
 - [Contributing](contributing.md) - How to contribute
 
 ## License

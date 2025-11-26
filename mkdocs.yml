@@ -107,8 +107,9 @@ nav:
       - commands/01-echo.md
       - commands/02-help.md
       - commands/03-meta.md
-  - Architecture:
-      - Project Structure: architecture.md
+  - Development:
+      - Makefile Reference: make.md
+      - Architecture: architecture.md
       - Release Automation: release.md
   - Contributing:
       - Guide: contributing.md
