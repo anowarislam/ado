@@ -16,7 +16,7 @@ An ADR is a document that captures an important architectural decision along wit
 | ID | Title | Status | Date |
 |----|-------|--------|------|
 | [0001](0001-development-workflow.md) | ADR + Spec Development Workflow | Accepted | 2025-11-25 |
-| [0002](0002-structured-logging.md) | Structured Logging | Proposed | 2025-11-26 |
+| [0002](0002-structured-logging.md) | Structured Logging | Accepted | 2025-11-26 |
 
 ## ADR Lifecycle
 

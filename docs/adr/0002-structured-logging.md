@@ -2,8 +2,8 @@
 
 | Metadata | Value |
 |----------|-------|
-| **Status** | Proposed |
-| **Date** | 2024-11-26 |
+| **Status** | Accepted |
+| **Date** | 2025-11-26 |
 | **Author(s)** | @anowarislam |
 | **Issue** | #37 |
 | **Related ADRs** | N/A |

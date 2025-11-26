@@ -119,6 +119,7 @@ nav:
           - "0002: Structured Logging": adr/0002-structured-logging.md
       - Feature Specs:
           - Overview: features/README.md
+          - "01: Structured Logging": features/01-structured-logging.md
   - Contributing:
       - Guide: contributing.md
       - Style Guides:
