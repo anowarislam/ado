@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/anowarislam/ado/compare/v1.1.0...v1.1.1) (2025-11-26)
+
+
+### Bug Fixes
+
+* **docker:** add extra_files to goreleaser docker config ([#21](https://github.com/anowarislam/ado/issues/21)) ([09f05f5](https://github.com/anowarislam/ado/commit/09f05f5d73967f91d567e1f8c4dd4d414b6e6c6d))
+
 ## [1.1.0](https://github.com/anowarislam/ado/compare/v1.0.2...v1.1.0) (2025-11-26)
 
 
