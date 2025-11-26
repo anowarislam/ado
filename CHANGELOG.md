@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.2.0](https://github.com/anowarislam/ado/compare/v1.1.4...v1.2.0) (2025-11-26)
+
+
+### Features
+
+* **config:** add validate command ([#39](https://github.com/anowarislam/ado/issues/39)) ([8516448](https://github.com/anowarislam/ado/commit/8516448ba4a14c1031a6ab72983b76273b58ec4b))
+* **logging:** implement structured logging infrastructure ([#42](https://github.com/anowarislam/ado/issues/42)) ([dc87e08](https://github.com/anowarislam/ado/commit/dc87e08b5fde6287f4ce9bf4893e3caccb318e7c))
+
+
+### Documentation
+
+* **adr:** 0001 - establish ADR + spec development workflow ([#31](https://github.com/anowarislam/ado/issues/31)) ([465af49](https://github.com/anowarislam/ado/commit/465af494a6b1e75a13329e08425f7352c69ddc7b))
+* **adr:** 0002 - structured logging ([#40](https://github.com/anowarislam/ado/issues/40)) ([4c5d377](https://github.com/anowarislam/ado/commit/4c5d377c9434ae289f248828a1eaac04465f4e2d))
+* integrate three-phase workflow across documentation ([#34](https://github.com/anowarislam/ado/issues/34)) ([75c396e](https://github.com/anowarislam/ado/commit/75c396e75acec3c4653375d9b71798ad2f4268b8))
+* **spec:** command config validate ([#38](https://github.com/anowarislam/ado/issues/38)) ([968163c](https://github.com/anowarislam/ado/commit/968163cb2fe68bd38abc09b5426b40b0a0d71798))
+* **spec:** establish specification framework for features and commands ([#33](https://github.com/anowarislam/ado/issues/33)) ([acc6723](https://github.com/anowarislam/ado/commit/acc6723afab3449f252856a7fd507c5299cf3aa1))
+* **spec:** feature structured-logging ([#41](https://github.com/anowarislam/ado/issues/41)) ([334910f](https://github.com/anowarislam/ado/commit/334910f04adc3fa587914fb2b28620ec2c2c1511))
+
 ## [1.1.4](https://github.com/anowarislam/ado/compare/v1.1.3...v1.1.4) (2025-11-26)
 
 
