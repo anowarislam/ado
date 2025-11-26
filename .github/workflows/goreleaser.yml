@@ -13,6 +13,8 @@ on:
 permissions:
   contents: write
   packages: write
+  id-token: write      # For keyless signing (cosign/sigstore)
+  attestations: write  # For artifact attestations
 
 jobs:
   goreleaser:
@@ -55,9 +57,32 @@ jobs:
           password: ${{ steps.generate-token.outputs.token }}
 
       - name: Run goreleaser
+        id: goreleaser
         uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+      # Artifact attestations - cryptographic proof of build provenance
+      - name: Attest build provenance (binaries)
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            dist/*.tar.gz
+            dist/*.zip
+            dist/checksums.txt
+
+      # Container signing with cosign (keyless via Sigstore)
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign container images
+        env:
+          REGISTRY: ghcr.io/anowarislam/ado
+          TAG: ${{ github.ref_name }}
+        run: |
+          # Sign by tag (multiple tags point to same manifest)
+          cosign sign --yes "${REGISTRY}:${TAG}"
+          cosign sign --yes "${REGISTRY}:latest"

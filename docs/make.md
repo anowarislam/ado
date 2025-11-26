@@ -89,6 +89,7 @@ make/
 | `docker.push` | Push image to ghcr.io registry |
 | `docker.clean` | Remove local Docker images |
 | `docker.lint` | Lint Dockerfile with hadolint |
+| `docker.test` | Test GoReleaser Dockerfile (simulates release build) |
 
 ### Documentation
 

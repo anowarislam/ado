@@ -21,7 +21,7 @@ DOCKER_BUILD_ARGS := \
 # ------------------------------------------------------------------------------
 # Targets
 # ------------------------------------------------------------------------------
-.PHONY: docker.build docker.build.multi docker.run docker.push docker.clean docker.lint
+.PHONY: docker.build docker.build.multi docker.run docker.push docker.clean docker.lint docker.test
 
 docker.build: _check-docker ## Build Docker image for current platform
 	$(call log_info,"Building Docker image...")
@@ -68,3 +68,17 @@ docker.lint: _check-docker ## Lint Dockerfile with hadolint
 	}
 	@hadolint $(DOCKERFILE)
 	$(call log_success,"Dockerfile lint passed")
+
+docker.test: _check-docker ## Test GoReleaser Dockerfile build (simulates release)
+	$(call log_info,"Testing GoReleaser Dockerfile...")
+	$(call log_info,"Building Linux binary for container test...")
+	@mkdir -p dist/docker-test
+	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/docker-test/ado ./cmd/ado
+	@cp LICENSE dist/docker-test/
+	@cp README.md dist/docker-test/
+	@cp $(DOCKERFILE_GORELEASER) dist/docker-test/Dockerfile
+	@cd dist/docker-test && $(DOCKER) build -t $(DOCKER_IMAGE):test .
+	@$(DOCKER) run --rm $(DOCKER_IMAGE):test meta info
+	@$(DOCKER) rmi $(DOCKER_IMAGE):test
+	@rm -rf dist/docker-test
+	$(call log_success,"GoReleaser Dockerfile test passed")

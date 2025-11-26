@@ -6,9 +6,6 @@ FROM scratch
 # Copy CA certificates for HTTPS support (pinned version for reproducibility)
 COPY --from=alpine:3.21 /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
-# Copy timezone data for proper time handling
-COPY --from=alpine:3.21 /usr/share/zoneinfo /usr/share/zoneinfo
-
 # Copy license and documentation
 COPY LICENSE /LICENSE
 COPY README.md /README.md

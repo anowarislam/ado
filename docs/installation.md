@@ -42,7 +42,9 @@ ado meta info
 
 ### Verifying Downloads
 
-All releases include SHA256 checksums:
+All releases include SHA256 checksums and cryptographic attestations.
+
+#### Checksum Verification
 
 ```bash
 # Download checksums
@@ -51,6 +53,17 @@ curl -LO https://github.com/anowarislam/ado/releases/download/vX.Y.Z/checksums.t
 # Verify
 sha256sum -c checksums.txt --ignore-missing
 ```
+
+#### Attestation Verification (Recommended)
+
+Verify the binary was built by our CI pipeline:
+
+```bash
+# Requires GitHub CLI
+gh attestation verify ado_X.Y.Z_linux_amd64.tar.gz --owner anowarislam
+```
+
+See [Security Policy](https://github.com/anowarislam/ado/blob/main/SECURITY.md) for more details.
 
 ## Docker
 
@@ -84,7 +97,19 @@ For convenience, create an alias:
 
 ```bash
 # Add to ~/.bashrc or ~/.zshrc
-alias ado='docker run --rm -v ~/.config/ado:/root/.config/ado ghcr.io/anowarislam/ado:latest'
+alias ado='docker run --rm ghcr.io/anowarislam/ado:latest'
+```
+
+> **Note:** The container runs as a non-root user (UID 65534) for security.
+
+### Verifying Container Images
+
+Container images are signed and can be verified with [cosign](https://github.com/sigstore/cosign):
+
+```bash
+cosign verify ghcr.io/anowarislam/ado:latest \
+  --certificate-identity-regexp="https://github.com/anowarislam/ado/" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com"
 ```
 
 ## Build from Source

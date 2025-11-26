@@ -91,13 +91,38 @@ curl -LO https://github.com/anowarislam/ado/releases/download/vX.Y.Z/checksums.t
 sha256sum -c checksums.txt --ignore-missing
 ```
 
-### Container Image Verification
+### Verifying Build Provenance (Attestations)
 
-Container images are signed and can be verified:
+All release artifacts have cryptographic attestations proving they were built by our CI:
 
 ```bash
-# Pull with digest verification
-docker pull ghcr.io/anowarislam/ado:vX.Y.Z@sha256:...
+# Verify a release artifact (requires GitHub CLI)
+gh attestation verify ado_X.Y.Z_linux_amd64.tar.gz --owner anowarislam
+
+# Example output:
+# ✓ Verification succeeded!
+# Signer: https://github.com/anowarislam/ado/.github/workflows/goreleaser.yml@refs/tags/vX.Y.Z
+```
+
+### Container Image Verification
+
+Container images are signed with [Sigstore cosign](https://github.com/sigstore/cosign) and can be verified:
+
+```bash
+# Install cosign (if not already installed)
+# macOS: brew install cosign
+# Linux: See https://docs.sigstore.dev/cosign/installation
+
+# Verify container signature
+cosign verify ghcr.io/anowarislam/ado:vX.Y.Z \
+  --certificate-identity-regexp="https://github.com/anowarislam/ado/" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com"
+
+# Example output:
+# Verification for ghcr.io/anowarislam/ado:vX.Y.Z --
+# The following checks were performed on each of these signatures:
+#   - The cosign claims were validated
+#   - The signatures were verified against the specified public key
 ```
 
 ### Reporting Other Issues
