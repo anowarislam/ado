@@ -108,6 +108,24 @@ nav:
       - commands/02-help.md
       - commands/03-meta.md
       - commands/04-config-validate.md
+  - CI/CD Recipe:
+      - Overview: recipes/README.md
+      - Navigation: recipes/00-overview.md
+      - Foundation:
+          - Philosophy: recipes/01-philosophy.md
+          - CI Components: recipes/02-ci-components.md
+          - Security Features: recipes/03-security-features.md
+      - Process:
+          - Development Workflow: recipes/04-development-workflow.md
+          - Build Automation: recipes/05-build-automation.md
+          - Release Automation: recipes/06-release-automation.md
+      - Integration:
+          - GitHub Integrations: recipes/07-github-integrations.md
+          - Troubleshooting: recipes/08-troubleshooting.md
+      - Implementation:
+          - Implementation Guide: recipes/09-implementation-guide.md
+          - Python Adaptation: recipes/10-python-adaptation.md
+          - Principles & Standards: recipes/11-goals.md
   - Development:
       - Workflow: workflow.md
       - Makefile Reference: make.md
@@ -117,6 +135,7 @@ nav:
           - Overview: adr/README.md
           - "0001: Development Workflow": adr/0001-development-workflow.md
           - "0002: Structured Logging": adr/0002-structured-logging.md
+          - "0003: Recipe-Based Documentation": adr/0003-recipe-based-documentation.md
       - Feature Specs:
           - Overview: features/README.md
           - "01: Structured Logging": features/01-structured-logging.md
