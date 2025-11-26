@@ -56,6 +56,7 @@ alias ado='docker run --rm ghcr.io/anowarislam/ado:latest'
 
 > **Note:** The container runs as a non-root user (UID 65534) for security.
 > Config file mounting is not supported in the containerized version.
+> Container images are signed—see [Security Policy](SECURITY.md#container-image-verification) for verification.
 
 ### Build from Source
 

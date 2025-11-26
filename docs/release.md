@@ -1201,17 +1201,60 @@ gh run view <run-id> --log-failed
 2. **Rotate if compromised:** If the private key is exposed, regenerate it immediately in the app settings
 3. **Use environment-specific secrets:** For organizations, consider using environment-level secrets
 
-### Binary Verification
+### Supply Chain Security
 
-Users can verify downloaded binaries using the checksums:
+All releases include multiple layers of verification:
+
+#### 1. Checksums (SHA256)
+
+Basic integrity verification:
 
 ```bash
 # Download checksum file
-curl -LO https://github.com/user/repo/releases/download/v1.0.0/checksums.txt
+curl -LO https://github.com/anowarislam/ado/releases/download/v1.0.0/checksums.txt
 
 # Verify a specific file
 sha256sum -c checksums.txt --ignore-missing
 ```
+
+#### 2. Artifact Attestations (SLSA Provenance)
+
+Cryptographic proof that artifacts were built by our CI pipeline:
+
+```bash
+# Verify binary provenance (requires GitHub CLI)
+gh attestation verify ado_1.0.0_linux_amd64.tar.gz --owner anowarislam
+
+# Example output:
+# ✓ Verification succeeded!
+# Signer: https://github.com/anowarislam/ado/.github/workflows/goreleaser.yml@refs/tags/v1.0.0
+```
+
+This proves:
+- The binary was built by GitHub Actions (not a third party)
+- It was built from the tagged commit
+- The build environment was not tampered with
+
+#### 3. Container Image Signing (Sigstore/cosign)
+
+Container images are signed using keyless signing via Sigstore:
+
+```bash
+# Verify container signature
+cosign verify ghcr.io/anowarislam/ado:v1.0.0 \
+  --certificate-identity-regexp="https://github.com/anowarislam/ado/" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com"
+```
+
+### Verification Trust Model
+
+| Method | Verifies | Trust Anchor |
+|--------|----------|--------------|
+| Checksums | File integrity | Trust in GitHub (file hosting) |
+| Attestations | Build provenance | Trust in GitHub Actions + Sigstore |
+| Cosign signatures | Container authenticity | Trust in GitHub OIDC + Sigstore |
+
+For maximum security, verify both checksums AND attestations.
 
 ---
 
