@@ -80,8 +80,6 @@ jobs:
 
       - name: Sign container images
         env:
-          DIGEST_AMD64: ${{ steps.goreleaser.outputs.artifacts && fromJSON(steps.goreleaser.outputs.artifacts)[0].extra.Digest || '' }}
-          DIGEST_ARM64: ${{ steps.goreleaser.outputs.artifacts && fromJSON(steps.goreleaser.outputs.artifacts)[1].extra.Digest || '' }}
           REGISTRY: ghcr.io/anowarislam/ado
           TAG: ${{ github.ref_name }}
         run: |
