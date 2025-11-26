@@ -165,6 +165,8 @@ We welcome contributions! Please see:
 
 | Document | Description |
 |----------|-------------|
+| [Development Workflow](docs/workflow.md) | Issue → ADR → Spec → Implementation |
+| [ADRs](docs/adr/) | Architecture Decision Records |
 | [Architecture](docs/architecture.md) | Repository layout |
 | [Commands](docs/commands-overview.md) | Command specifications |
 | [Contributing](docs/contributing.md) | Detailed contribution guide |
