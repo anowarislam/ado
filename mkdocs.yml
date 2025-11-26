@@ -111,6 +111,9 @@ nav:
       - Makefile Reference: make.md
       - Architecture: architecture.md
       - Release Automation: release.md
+      - ADRs:
+          - Overview: adr/README.md
+          - "0001: Development Workflow": adr/0001-development-workflow.md
   - Contributing:
       - Guide: contributing.md
       - Style Guides:
