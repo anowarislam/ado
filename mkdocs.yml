@@ -107,6 +107,7 @@ nav:
       - commands/01-echo.md
       - commands/02-help.md
       - commands/03-meta.md
+      - commands/04-config-validate.md
   - Development:
       - Workflow: workflow.md
       - Makefile Reference: make.md
