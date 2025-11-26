@@ -160,12 +160,14 @@ We welcome contributions! Please see:
 3. Make changes following our [style guides](docs/style/)
 4. Commit with [conventional commits](https://www.conventionalcommits.org/) (`git commit -m "feat: add amazing feature"`)
 5. Push and open a Pull Request
+6. **Code owners will automatically be requested for review** (see [code-ownership.md](docs/code-ownership.md))
 
 ## Documentation
 
 | Document | Description |
 |----------|-------------|
 | [Development Workflow](docs/workflow.md) | Issue → ADR → Spec → Implementation |
+| [Code Ownership](docs/code-ownership.md) | Code review and approval process |
 | [ADRs](docs/adr/) | Architecture Decision Records |
 | [Feature Specs](docs/features/) | Non-command feature specifications |
 | [Architecture](docs/architecture.md) | Repository layout |

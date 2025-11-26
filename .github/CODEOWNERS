@@ -1,0 +1,105 @@
+# Code Owners for ado project
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# This file defines individuals or teams that are responsible for code in this repository.
+# Code owners are automatically requested for review when someone opens a pull request
+# that modifies code that they own.
+#
+# Syntax: [file-pattern] @username @org/team-name
+#
+# Order matters: Last matching pattern takes precedence.
+
+# =============================================================================
+# Default Owners
+# =============================================================================
+# These owners will be the default owners for everything in the repo.
+# Unless a later match takes precedence, these owners will be requested for
+# review when someone opens a pull request.
+
+* @anowarislam
+
+# =============================================================================
+# Build & Release Configuration
+# =============================================================================
+# Critical files that affect builds, releases, and CI/CD
+
+/.github/CODEOWNERS           @anowarislam
+/.github/workflows/           @anowarislam
+/.goreleaser.yaml             @anowarislam
+/Makefile                     @anowarislam
+/make/                        @anowarislam
+/.githooks/                   @anowarislam
+/.release-please-manifest.json @anowarislam
+/release-please-config.json   @anowarislam
+
+# =============================================================================
+# Go Source Code
+# =============================================================================
+# Main application code (CLI commands and internal packages)
+
+/cmd/                         @anowarislam
+/cmd/ado/                     @anowarislam
+/internal/                    @anowarislam
+/internal/config/             @anowarislam
+/internal/logging/            @anowarislam
+/internal/meta/               @anowarislam
+/internal/ui/                 @anowarislam
+
+# Go configuration
+go.mod                        @anowarislam
+go.sum                        @anowarislam
+
+# =============================================================================
+# Python Lab (R&D / Prototyping)
+# =============================================================================
+# Python lab for prototyping features before porting to Go
+
+/lab/py/                      @anowarislam
+lab/py/pyproject.toml         @anowarislam
+
+# =============================================================================
+# Documentation
+# =============================================================================
+# Documentation, guides, and architectural decision records
+
+/docs/                        @anowarislam
+/docs/adr/                    @anowarislam
+/docs/commands/               @anowarislam
+/docs/features/               @anowarislam
+/docs/recipes/                @anowarislam
+/docs/style/                  @anowarislam
+
+README.md                     @anowarislam
+CONTRIBUTING.md               @anowarislam
+CLAUDE.md                     @anowarislam
+CHANGELOG.md                  @anowarislam
+LICENSE                       @anowarislam
+SECURITY.md                   @anowarislam
+
+# Documentation build
+mkdocs.yml                    @anowarislam
+
+# =============================================================================
+# Configuration Files
+# =============================================================================
+# Project configuration and settings
+
+*.yaml                        @anowarislam
+*.yml                         @anowarislam
+*.toml                        @anowarislam
+.gitignore                    @anowarislam
+
+# =============================================================================
+# Docker & Containerization
+# =============================================================================
+
+Dockerfile                    @anowarislam
+.dockerignore                 @anowarislam
+
+# =============================================================================
+# Security-Critical Files
+# =============================================================================
+# Files that require extra scrutiny for security
+
+SECURITY.md                   @anowarislam
+/docs/recipes/03-security-features.md @anowarislam

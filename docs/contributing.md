@@ -20,6 +20,51 @@ This project uses a three-phase development process: **Issue → ADR → Spec �
 
 See [workflow.md](workflow.md) for the complete guide with examples.
 
+## Code Review & Approval
+
+All changes require review and approval from code owners before merging to `main`.
+
+### How Code Review Works
+
+1. **Automatic Assignment**: When you open a PR, GitHub automatically requests reviews from code owners based on the files you modified (defined in `.github/CODEOWNERS`)
+2. **Required Approval**: Branch protection requires code owner approval before merge
+3. **CI Checks**: All tests, linting, coverage (80%), and build checks must pass
+4. **Review Timeline**: Code owners aim to review within 48 business hours
+
+### Code Ownership Structure
+
+| Component | Owner | What They Review |
+|-----------|-------|------------------|
+| **All files (default)** | @anowarislam | General changes |
+| **Commands** (`/cmd/ado/`) | @anowarislam | CLI implementations |
+| **Internal packages** (`/internal/`) | @anowarislam | Core libraries |
+| **Documentation** (`/docs/`) | @anowarislam | Docs, ADRs, specs |
+| **CI/CD** (`/.github/workflows/`) | @anowarislam | Automation |
+| **Build system** (`/Makefile`, `/make/`) | @anowarislam | Build scripts |
+
+**Complete mapping**: See [`.github/CODEOWNERS`](../.github/CODEOWNERS)
+
+### Branch Protection Rules
+
+The `main` branch is protected and requires:
+- ✅ Code owner approval
+- ✅ All CI checks passing
+- ✅ All conversations resolved
+- ✅ Branch up to date with main
+- ✅ Signed commits
+- ✅ Conventional commit format
+
+**Important**: Even repository administrators must follow these rules (administrators are included in branch protection).
+
+### After Review
+
+If you push new commits after receiving approval:
+- Previous approvals are automatically dismissed
+- Code owner must re-review and re-approve
+- Use the circular arrow icon next to reviewer to re-request review
+
+**Complete guide**: See [code-ownership.md](code-ownership.md) for detailed review responsibilities, approval criteria, and FAQ.
+
 ## Commit Conventions
 
 This project uses [Conventional Commits](https://www.conventionalcommits.org/) enforced by git hooks and CI.
@@ -117,11 +162,14 @@ This project is **spec-driven** with a structured workflow:
 
 1. **Create issue** using the command proposal template (`.github/ISSUE_TEMPLATE/command_proposal.md`)
 2. **Create spec** in `docs/commands/<command>.md` using [TEMPLATE.md](commands/TEMPLATE.md)
+   - Submit as PR, request review from code owner (@anowarislam for `docs/commands/`)
+   - Wait for approval before implementing
 3. Prototype in `lab/py/` if logic is complex (optional)
 4. Implement in Go under `cmd/ado/<command>/`
 5. Export `NewCommand() *cobra.Command`
 6. Wire into `cmd/ado/root/root.go`
 7. Write table-driven tests
+8. **Submit PR, code owner will be automatically assigned for review**
 
 For commands requiring architectural changes (new patterns, new dependencies), create an ADR first. See [workflow.md](workflow.md) for decision criteria.
 

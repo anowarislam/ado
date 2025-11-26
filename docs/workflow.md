@@ -239,6 +239,366 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 | `needs-adr` | ADR required before proceeding |
 | `needs-spec` | Spec required before proceeding |
 
+## Code Ownership & Reviewer Assignment
+
+This project uses GitHub's CODEOWNERS file (`.github/CODEOWNERS`) to define who reviews and approves changes to different parts of the codebase.
+
+### How It Works
+
+When you open a PR, GitHub automatically:
+1. Analyzes which files you changed
+2. Looks up code owners from `.github/CODEOWNERS`
+3. Requests reviews from matching code owners
+4. Marks them as **required reviewers** (PR cannot merge without their approval)
+
+### Current Code Owners
+
+| Component | Owner | What They Review |
+|-----------|-------|------------------|
+| **Default (all files)** | @anowarislam | All changes unless more specific owner exists |
+| **Commands** (`/cmd/ado/`) | @anowarislam | CLI command implementations |
+| **Internal Packages** (`/internal/`) | @anowarislam | Core libraries and utilities |
+| **Documentation** (`/docs/`) | @anowarislam | All documentation |
+| **ADRs** (`/docs/adr/`) | @anowarislam | Architecture Decision Records |
+| **CI/CD** (`/.github/workflows/`) | @anowarislam | GitHub Actions workflows |
+| **Build System** (`/Makefile`, `/make/`) | @anowarislam | Build automation |
+| **Python Lab** (`/lab/py/`) | @anowarislam | Python prototyping |
+
+**Complete mapping**: See [`.github/CODEOWNERS`](../.github/CODEOWNERS)
+
+### Review Requirements by Phase
+
+Each phase has specific review requirements:
+
+**Phase 1 - ADR Review**:
+- **Reviewer**: Tech lead (@anowarislam)
+- **Approval Criteria**:
+  - Context clearly explains problem
+  - Decision is well-reasoned
+  - Alternatives documented with rationale
+  - Consequences realistic (no unverified claims)
+- **Timeline**: Within 48 business hours
+
+**Phase 2 - Spec Review**:
+- **Reviewer**: Package owner (from CODEOWNERS)
+- **Approval Criteria**:
+  - Examples are concrete and testable
+  - Error cases well-defined
+  - Implementation locations specified
+  - Testing strategy clear
+- **Timeline**: Within 48 business hours
+
+**Phase 3 - Implementation Review**:
+- **Reviewer**: Automatic based on modified files (CODEOWNERS)
+- **Approval Criteria**:
+  - Follows spec exactly
+  - All CI checks pass (tests, coverage, lint, build)
+  - 80%+ test coverage maintained
+  - No security vulnerabilities
+  - Code follows style guide
+- **Timeline**: Within 48 business hours
+
+### Branch Protection Rules
+
+The `main` branch requires:
+- ✅ Code owner approval
+- ✅ All CI checks pass
+- ✅ All conversations resolved
+- ✅ Branch up to date with main
+- ✅ Commits signed
+- ✅ Conventional commit format
+
+## CODEOWNERS & Automated Reviewer Assignment
+
+This project uses GitHub's **CODEOWNERS** file to automate code review assignments and enforce approval requirements. This ensures changes are reviewed by maintainers with expertise in the affected areas.
+
+### What is CODEOWNERS?
+
+The CODEOWNERS file (`.github/CODEOWNERS`) defines which GitHub users or teams are responsible for reviewing changes to specific parts of the codebase. It uses gitignore-style patterns to map file paths to owners.
+
+**Location**: `.github/CODEOWNERS`
+
+**Format**:
+```
+# Pattern         Owner(s)
+*                 @anowarislam           # Default owner
+/cmd/ado/         @anowarislam           # CLI commands
+/internal/config/ @anowarislam           # Config package
+/docs/adr/        @anowarislam           # Architecture decisions
+```
+
+**Key Principles**:
+- **Pattern-based**: Uses glob patterns like `.gitignore`
+- **Hierarchical**: More specific patterns override general ones
+- **Last match wins**: If multiple patterns match, the last one takes precedence
+- **Automatic**: GitHub requests reviews automatically when PRs are opened
+
+### How CODEOWNERS Integrates with Branch Protection
+
+CODEOWNERS works together with branch protection rules to enforce code review:
+
+**Without CODEOWNERS**:
+- PR can be approved by any collaborator
+- No automatic reviewer assignment
+- Manual effort to find right reviewers
+
+**With CODEOWNERS + Branch Protection**:
+- GitHub automatically assigns code owners as reviewers
+- Branch protection requires approval from code owners
+- PR cannot merge until code owner approves
+- Dismisses stale approvals when new commits are pushed
+
+**Branch Protection Setting**: "Require review from Code Owners" is **enabled** on the `main` branch.
+
+### Automatic Reviewer Assignment
+
+When you open a PR, GitHub automatically:
+
+1. **Analyzes Changed Files**: Scans all files modified in the PR
+2. **Matches Patterns**: Finds matching patterns in `.github/CODEOWNERS`
+3. **Requests Reviews**: Adds code owners as **required reviewers**
+4. **Blocks Merge**: PR cannot merge until code owners approve
+
+**Example**:
+
+You modify these files:
+```
+internal/config/loader.go
+internal/config/loader_test.go
+docs/features/01-config-validation.md
+```
+
+GitHub automatically requests review from:
+- `@anowarislam` (owns `/internal/config/`)
+- `@anowarislam` (owns `/docs/features/`)
+
+Result: One code owner covers all changes, so **1 approval required**.
+
+### Current CODEOWNERS Structure
+
+The `ado` project uses a comprehensive ownership model covering all major components:
+
+| Component | Path Pattern | Owner | Purpose |
+|-----------|--------------|-------|---------|
+| **Default (Catch-All)** | `*` | @anowarislam | All files unless more specific pattern matches |
+| **CLI Commands** | `/cmd/ado/` | @anowarislam | Command implementations and tests |
+| **Internal Packages** | `/internal/` | @anowarislam | Core libraries (config, logging, meta, ui) |
+| **Config System** | `/internal/config/` | @anowarislam | Configuration loading and validation |
+| **Logging System** | `/internal/logging/` | @anowarislam | Structured logging implementation |
+| **Python Lab** | `/lab/py/` | @anowarislam | Python prototyping environment |
+| **Documentation** | `/docs/` | @anowarislam | All documentation and guides |
+| **ADRs** | `/docs/adr/` | @anowarislam | Architecture Decision Records |
+| **Command Specs** | `/docs/commands/` | @anowarislam | CLI command specifications |
+| **Feature Specs** | `/docs/features/` | @anowarislam | Non-command feature specifications |
+| **CI/CD Workflows** | `/.github/workflows/` | @anowarislam | GitHub Actions automation |
+| **Build System** | `/Makefile`, `/make/` | @anowarislam | Build and task automation |
+| **Git Hooks** | `/.githooks/` | @anowarislam | Pre-commit and pre-push hooks |
+| **Release Config** | `/.goreleaser.yaml`, `/release-please-config.json` | @anowarislam | Release automation |
+| **Dependencies** | `go.mod`, `go.sum`, `lab/py/pyproject.toml` | @anowarislam | Dependency management |
+| **Security** | `/SECURITY.md`, `/docs/recipes/03-security-features.md` | @anowarislam | Security policies and features |
+
+**Complete mapping**: See [`.github/CODEOWNERS`](../.github/CODEOWNERS)
+
+### Configuring Branch Protection with CODEOWNERS
+
+To enforce code owner approvals, the following branch protection settings are enabled on `main`:
+
+**Required Settings**:
+1. **Require a pull request before merging** ✅
+   - Ensures all changes go through PR workflow
+2. **Require approvals** ✅
+   - Minimum: 1 approval
+3. **Require review from Code Owners** ✅
+   - **This is the critical setting that enforces CODEOWNERS**
+4. **Dismiss stale pull request approvals when new commits are pushed** ✅
+   - Ensures code owner re-reviews changes
+5. **Require approval of the most recent reviewable push** ✅
+   - Prevents merging with outdated approvals
+
+**GitHub Settings Path**:
+```
+Settings → Branches → main → Edit Branch Protection Rule
+  ↓
+[✓] Require a pull request before merging
+  [✓] Require approvals: 1
+  [✓] Dismiss stale pull request approvals when new commits are pushed
+  [✓] Require review from Code Owners  ← KEY SETTING
+  [✓] Require approval of the most recent reviewable push
+```
+
+### Benefits of Using CODEOWNERS
+
+**For Contributors**:
+- ✅ No guessing who should review your PR
+- ✅ Automatic reviewer assignment saves time
+- ✅ Clear ownership reduces back-and-forth
+- ✅ Faster review turnaround (right person notified immediately)
+
+**For Maintainers**:
+- ✅ Enforces review by subject-matter experts
+- ✅ Distributes review load across team (when multiple owners)
+- ✅ Prevents accidental merges without proper review
+- ✅ Tracks ownership as codebase grows
+- ✅ Reduces review bottlenecks
+
+**For the Project**:
+- ✅ Maintains architectural consistency
+- ✅ Ensures security-critical changes get extra scrutiny
+- ✅ Documents responsibility boundaries
+- ✅ Facilitates knowledge transfer through reviews
+- ✅ Scales as team grows (add more code owners easily)
+
+### Example: CODEOWNERS File for `ado` Project
+
+Here's a simplified example showing the key patterns used in this project:
+
+```bash
+# .github/CODEOWNERS
+#
+# Code owners are automatically requested for review when someone
+# opens a pull request that modifies code that they own.
+#
+# Syntax: [file-pattern] @username @org/team-name
+# Order matters: Last matching pattern takes precedence.
+
+# =============================================================================
+# Default Owner - catches all files unless overridden
+# =============================================================================
+* @anowarislam
+
+# =============================================================================
+# Build & Release Configuration - requires build system expertise
+# =============================================================================
+/.github/workflows/     @anowarislam
+/.goreleaser.yaml       @anowarislam
+/Makefile               @anowarislam
+/make/                  @anowarislam
+
+# =============================================================================
+# Go Source Code - requires Go expertise
+# =============================================================================
+/cmd/ado/               @anowarislam
+/internal/              @anowarislam
+
+# More specific package ownership
+/internal/config/       @anowarislam
+/internal/logging/      @anowarislam
+
+# =============================================================================
+# Documentation - requires technical writing skills
+# =============================================================================
+/docs/                  @anowarislam
+/docs/adr/              @anowarislam  # Architecture decisions need tech lead
+/docs/commands/         @anowarislam
+/docs/features/         @anowarislam
+
+# =============================================================================
+# Security-Critical Files - requires security review
+# =============================================================================
+SECURITY.md                           @anowarislam
+/docs/recipes/03-security-features.md @anowarislam
+```
+
+**Pattern Precedence Example**:
+
+If you modify `/internal/config/loader.go`:
+1. Matches `*` → `@anowarislam`
+2. Matches `/internal/` → `@anowarislam`
+3. Matches `/internal/config/` → `@anowarislam` (last match wins)
+
+Result: `@anowarislam` is the code owner.
+
+### Integration Architecture
+
+CODEOWNERS integrates with multiple GitHub features:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         GitHub PR Workflow                       │
+└─────────────────────────────────────────────────────────────────┘
+                                  │
+                    1. PR Opened (files modified)
+                                  │
+                                  ▼
+        ┌──────────────────────────────────────────────┐
+        │          .github/CODEOWNERS File             │
+        │  Pattern matching: files → owners            │
+        └──────────────────┬───────────────────────────┘
+                           │
+         2. Automatic reviewer assignment
+                           │
+                           ▼
+        ┌──────────────────────────────────────────────┐
+        │        Required Reviewers Added              │
+        │  (Code owners marked as required)            │
+        └──────────────────┬───────────────────────────┘
+                           │
+            3. Review process begins
+                           │
+          ┌────────────────┴────────────────┐
+          │                                 │
+          ▼                                 ▼
+┌────────────────────┐          ┌────────────────────┐
+│   CI/CD Checks     │          │  Code Owner Review │
+│  - Tests (80%)     │          │  - Architecture    │
+│  - Linting         │          │  - Code quality    │
+│  - Build           │          │  - Security        │
+│  - Coverage        │          │  - Design          │
+└────────┬───────────┘          └────────┬───────────┘
+         │                               │
+         └───────────┬───────────────────┘
+                     │
+      4. Both CI and code owner approval required
+                     │
+                     ▼
+        ┌──────────────────────────────────────────────┐
+        │       Branch Protection Rules Check          │
+        │  ✓ CI passed                                 │
+        │  ✓ Code owner approved                       │
+        │  ✓ Conversations resolved                    │
+        │  ✓ Branch up to date                         │
+        │  ✓ Commits signed                            │
+        └──────────────────┬───────────────────────────┘
+                           │
+              5. All requirements met
+                           │
+                           ▼
+        ┌──────────────────────────────────────────────┐
+        │           Merge Button Enabled               │
+        │      (Squash & Merge to main)                │
+        └──────────────────────────────────────────────┘
+```
+
+**Key Integration Points**:
+
+1. **CODEOWNERS → Reviewer Assignment**: Automatic when PR is opened
+2. **Branch Protection → CODEOWNERS**: "Require review from Code Owners" setting
+3. **CI/CD → Code Owner Review**: Both must pass (AND logic, not OR)
+4. **Stale Approval Dismissal**: New commits trigger re-review by code owners
+5. **Merge Blocking**: Cannot merge without code owner approval, even if CI passes
+
+### Re-requesting Review
+
+If you push new changes after review:
+1. Previous approvals are automatically dismissed
+2. Code owner must re-review
+3. Use the circular arrow icon next to reviewer name to re-request
+
+### Getting Help
+
+If you're unsure who should review your changes:
+1. Check `.github/CODEOWNERS` for the files you modified
+2. GitHub will auto-assign when you open the PR
+3. Ask in PR comments if unclear
+
+### Complete Documentation
+
+See [Code Ownership Guide](code-ownership.md) for:
+- Detailed review responsibilities
+- How to become a code owner
+- Emergency procedures
+- FAQ
+
 ## Examples
 
 ### Example 1: Adding a New Command (No ADR Needed)
@@ -347,6 +707,7 @@ This workflow is designed for LLM-assisted development:
 
 ## Related Documentation
 
+- [Code Ownership](code-ownership.md) - Code review and approval process
 - [ADRs](adr/) - Architecture Decision Records
 - [Command Specs](commands/) - CLI command specifications
 - [Feature Specs](features/) - Non-command feature specifications
