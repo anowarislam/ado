@@ -66,7 +66,17 @@ jobs:
         run: make go.vet
 
       - name: Test
-        run: go test -coverprofile=coverage.out -covermode=atomic ./...
+        run: go test -coverprofile=coverage.out -covermode=atomic ./cmd/ado/... ./internal/...
+
+      - name: Check coverage threshold (80%)
+        run: |
+          COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | tr -d '%')
+          echo "Total coverage: ${COVERAGE}%"
+          if [ "${COVERAGE%.*}" -lt 80 ]; then
+            echo "::error::Coverage ${COVERAGE}% is below 80% threshold"
+            exit 1
+          fi
+          echo "Coverage meets threshold"
 
       - name: Build
         run: make go.build

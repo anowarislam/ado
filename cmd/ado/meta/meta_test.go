@@ -5,6 +5,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/spf13/cobra"
+
 	internalmeta "github.com/anowarislam/ado/internal/meta"
 )
 
@@ -162,5 +164,171 @@ func TestFormatEnvInfo_Empty(t *testing.T) {
 	}
 	if !strings.Contains(output, "(none set)") {
 		t.Error("missing '(none set)' for empty env")
+	}
+}
+
+func TestMetaEnv(t *testing.T) {
+	buildInfo := internalmeta.BuildInfo{}
+	cmd := NewCommand(buildInfo)
+
+	// Set up root command context with config flag (required by env command)
+	root := &cobra.Command{Use: "ado"}
+	root.PersistentFlags().String("config", "", "Path to config file")
+	root.AddCommand(cmd)
+
+	var buf bytes.Buffer
+	root.SetOut(&buf)
+	root.SetArgs([]string{"meta", "env"})
+
+	if err := root.Execute(); err != nil {
+		t.Fatalf("Execute() error = %v", err)
+	}
+
+	output := buf.String()
+	expectedFields := []string{"ConfigPath:", "ConfigSources:", "HomeDir:", "CacheDir:", "EnvVariables:"}
+	for _, field := range expectedFields {
+		if !strings.Contains(output, field) {
+			t.Errorf("output missing %q", field)
+		}
+	}
+}
+
+func TestMetaEnv_JSON(t *testing.T) {
+	buildInfo := internalmeta.BuildInfo{}
+	cmd := NewCommand(buildInfo)
+
+	root := &cobra.Command{Use: "ado"}
+	root.PersistentFlags().String("config", "", "Path to config file")
+	root.AddCommand(cmd)
+
+	var buf bytes.Buffer
+	root.SetOut(&buf)
+	root.SetArgs([]string{"meta", "env", "--output", "json"})
+
+	if err := root.Execute(); err != nil {
+		t.Fatalf("Execute() error = %v", err)
+	}
+
+	output := buf.String()
+	if !strings.Contains(output, `"config_path"`) || !strings.Contains(output, `"home_dir"`) {
+		t.Errorf("JSON output missing expected fields: %s", output)
+	}
+}
+
+func TestMetaEnv_YAML(t *testing.T) {
+	buildInfo := internalmeta.BuildInfo{}
+	cmd := NewCommand(buildInfo)
+
+	root := &cobra.Command{Use: "ado"}
+	root.PersistentFlags().String("config", "", "Path to config file")
+	root.AddCommand(cmd)
+
+	var buf bytes.Buffer
+	root.SetOut(&buf)
+	root.SetArgs([]string{"meta", "env", "--output", "yaml"})
+
+	if err := root.Execute(); err != nil {
+		t.Fatalf("Execute() error = %v", err)
+	}
+
+	output := buf.String()
+	if !strings.Contains(output, "config_path:") || !strings.Contains(output, "home_dir:") {
+		t.Errorf("YAML output missing expected fields: %s", output)
+	}
+}
+
+func TestMetaEnv_InvalidOutput(t *testing.T) {
+	buildInfo := internalmeta.BuildInfo{}
+	cmd := NewCommand(buildInfo)
+
+	root := &cobra.Command{Use: "ado"}
+	root.PersistentFlags().String("config", "", "Path to config file")
+	root.AddCommand(cmd)
+
+	root.SetArgs([]string{"meta", "env", "--output", "invalid"})
+
+	err := root.Execute()
+	if err == nil {
+		t.Error("expected error for invalid output format")
+	}
+}
+
+func TestMetaInfo_InvalidOutput(t *testing.T) {
+	buildInfo := internalmeta.BuildInfo{}
+	cmd := NewCommand(buildInfo)
+
+	var buf bytes.Buffer
+	cmd.SetOut(&buf)
+	cmd.SetArgs([]string{"info", "--output", "invalid"})
+
+	err := cmd.Execute()
+	if err == nil {
+		t.Error("expected error for invalid output format")
+	}
+}
+
+func TestMetaInfo_YAML(t *testing.T) {
+	buildInfo := internalmeta.BuildInfo{
+		Name:    "ado",
+		Version: "1.0.0",
+	}
+
+	cmd := NewCommand(buildInfo)
+	var buf bytes.Buffer
+	cmd.SetOut(&buf)
+	cmd.SetArgs([]string{"info", "--output", "yaml"})
+
+	if err := cmd.Execute(); err != nil {
+		t.Fatalf("Execute() error = %v", err)
+	}
+
+	output := buf.String()
+	if !strings.Contains(output, "name:") || !strings.Contains(output, "version:") {
+		t.Errorf("YAML output missing expected fields: %s", output)
+	}
+}
+
+func TestMetaFeatures_JSON(t *testing.T) {
+	buildInfo := internalmeta.BuildInfo{}
+	cmd := NewCommand(buildInfo)
+	var buf bytes.Buffer
+	cmd.SetOut(&buf)
+	cmd.SetArgs([]string{"features", "--output", "json"})
+
+	if err := cmd.Execute(); err != nil {
+		t.Fatalf("Execute() error = %v", err)
+	}
+
+	output := buf.String()
+	if !strings.Contains(output, `"features"`) {
+		t.Errorf("JSON output missing 'features' field: %s", output)
+	}
+}
+
+func TestMetaFeatures_YAML(t *testing.T) {
+	buildInfo := internalmeta.BuildInfo{}
+	cmd := NewCommand(buildInfo)
+	var buf bytes.Buffer
+	cmd.SetOut(&buf)
+	cmd.SetArgs([]string{"features", "--output", "yaml"})
+
+	if err := cmd.Execute(); err != nil {
+		t.Fatalf("Execute() error = %v", err)
+	}
+
+	output := buf.String()
+	if !strings.Contains(output, "features:") {
+		t.Errorf("YAML output missing 'features' field: %s", output)
+	}
+}
+
+func TestMetaFeatures_InvalidOutput(t *testing.T) {
+	buildInfo := internalmeta.BuildInfo{}
+	cmd := NewCommand(buildInfo)
+	cmd.SetArgs([]string{"features", "--output", "invalid"})
+
+	err := cmd.Execute()
+	if err == nil {
+		t.Error("expected error for invalid output format")
 	}
 }

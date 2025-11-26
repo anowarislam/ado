@@ -147,6 +147,95 @@ func TestValidationResult_HasWarnings(t *testing.T) {
 	}
 }
 
+func TestValidate_PermissionDenied(t *testing.T) {
+	// Skip on Windows where permission handling is different
+	if os.Getenv("GOOS") == "windows" {
+		t.Skip("Skipping permission test on Windows")
+	}
+
+	tmpDir := t.TempDir()
+	path := filepath.Join(tmpDir, "config.yaml")
+
+	// Create file then remove read permissions
+	if err := os.WriteFile(path, []byte("version: 1\n"), 0644); err != nil {
+		t.Fatalf("write temp file: %v", err)
+	}
+	if err := os.Chmod(path, 0000); err != nil {
+		t.Fatalf("chmod: %v", err)
+	}
+	t.Cleanup(func() {
+		os.Chmod(path, 0644) // Restore for cleanup
+	})
+
+	result, err := Validate(path)
+	if err != nil {
+		t.Fatalf("Validate() error: %v", err)
+	}
+
+	if result.Valid {
+		t.Error("Expected Valid=false for permission denied")
+	}
+
+	if len(result.Errors) != 1 {
+		t.Errorf("Expected 1 error, got %d", len(result.Errors))
+	}
+
+	if !contains(result.Errors[0].Message, "permission denied") {
+		t.Errorf("Expected 'permission denied' error, got: %s", result.Errors[0].Message)
+	}
+}
+
+func TestValidate_MultipleWarnings(t *testing.T) {
+	tmpDir := t.TempDir()
+	path := filepath.Join(tmpDir, "config.yaml")
+	content := "version: 1\nunknown1: foo\nunknown2: bar\n"
+
+	if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+		t.Fatalf("write temp file: %v", err)
+	}
+
+	result, err := Validate(path)
+	if err != nil {
+		t.Fatalf("Validate() error: %v", err)
+	}
+
+	if !result.Valid {
+		t.Error("Expected Valid=true with only warnings")
+	}
+
+	if len(result.Warnings) != 2 {
+		t.Errorf("Expected 2 warnings, got %d: %+v", len(result.Warnings), result.Warnings)
+	}
+
+	// Verify line numbers are populated
+	for _, w := range result.Warnings {
+		if w.Line == 0 {
+			t.Errorf("Warning should have line number: %+v", w)
+		}
+	}
+}
+
+func TestValidate_ValidYAMLInvalidStructure(t *testing.T) {
+	tmpDir := t.TempDir()
+	path := filepath.Join(tmpDir, "config.yaml")
+	// Valid YAML but version is a string when int expected - yaml.Unmarshal handles this gracefully
+	// Instead, test a YAML that's valid as document but invalid as map
+	content := "- item1\n- item2\n"
+
+	if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+		t.Fatalf("write temp file: %v", err)
+	}
+
+	result, err := Validate(path)
+	if err != nil {
+		t.Fatalf("Validate() error: %v", err)
+	}
+
+	if result.Valid {
+		t.Error("Expected Valid=false for array instead of map")
+	}
+}
+
 func contains(s, substr string) bool {
 	return len(s) >= len(substr) && (s == substr || len(s) > 0 && containsSubstring(s, substr))
 }

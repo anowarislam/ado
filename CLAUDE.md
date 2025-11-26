@@ -19,6 +19,11 @@ make go.test             # Run tests
 make go.vet              # Run go vet
 go test -v -run TestName ./internal/config/...  # Single test
 
+# Test Coverage (80% minimum enforced by CI)
+make go.test.cover       # Run tests with coverage report
+make go.test.cover.check # Verify 80% threshold met
+make go.test.cover.html  # Generate HTML coverage report
+
 # Python Lab
 make py.install          # Install lab package
 make py.test             # Run pytest

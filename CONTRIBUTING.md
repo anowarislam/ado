@@ -74,7 +74,17 @@ make test          # Run Go + Python tests
 make go.vet        # Lint Go code
 make go.fmt        # Check formatting
 make py.lint       # Lint Python (if changed)
+
+# Check test coverage (80% minimum required)
+make go.test.cover.check
 ```
+
+#### Test Coverage Policy
+
+- **Minimum threshold: 80%** - CI enforces this for all PRs
+- Check coverage locally: `make go.test.cover`
+- View HTML report: `make go.test.cover.html`
+- New code should include tests that maintain or improve coverage
 
 ### 4. Commit with Conventional Commits
 
