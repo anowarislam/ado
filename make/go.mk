@@ -64,6 +64,21 @@ go.test.cover: _check-go ## Run Go tests with coverage report
 	@$(GO) tool cover -func=coverage.out | tail -1
 	$(call log_success,"Coverage report: coverage.out")
 
+go.test.cover.html: go.test.cover ## Generate HTML coverage report
+	$(call log_info,"Generating HTML coverage report...")
+	@$(GO) tool cover -html=coverage.out -o coverage.html
+	$(call log_success,"Coverage report: coverage.html")
+	@echo "Open coverage.html in a browser to view the report"
+
+go.test.cover.check: go.test.cover ## Check coverage meets threshold (80%)
+	$(call log_info,"Checking coverage threshold (80%)...")
+	@COVERAGE=$$($(GO) tool cover -func=coverage.out | grep total | awk '{print $$3}' | tr -d '%'); \
+	if [ "$${COVERAGE%.*}" -lt 80 ]; then \
+		echo "$(COLOR_RED)Coverage $${COVERAGE}% is below 80% threshold$(COLOR_RESET)"; \
+		exit 1; \
+	fi
+	$(call log_success,"Coverage meets threshold")
+
 go.test.verbose: _check-go ## Run Go tests with verbose output
 	$(call log_info,"Running Go tests (verbose)...")
 	@$(GO_ENV) $(GO) test -v $(GO_TEST_FLAGS) $(GO_TEST_PKGS)

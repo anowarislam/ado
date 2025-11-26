@@ -80,3 +80,52 @@ func TestRootCommand_GlobalFlags(t *testing.T) {
 		t.Error("--log-level flag not found")
 	}
 }
+
+func TestRootCommand_LogLevel_Invalid(t *testing.T) {
+	cmd := NewRootCommand()
+	var buf bytes.Buffer
+	cmd.SetErr(&buf)
+	// Use a subcommand to trigger PersistentPreRunE (--help bypasses it)
+	cmd.SetArgs([]string{"--log-level", "invalid", "echo", "test"})
+
+	err := cmd.Execute()
+	if err == nil {
+		t.Error("expected error for invalid log level")
+		return
+	}
+	if !strings.Contains(err.Error(), "invalid log level") {
+		t.Errorf("error = %q, expected to contain 'invalid log level'", err.Error())
+	}
+}
+
+func TestRootCommand_LogLevel_Valid(t *testing.T) {
+	levels := []string{"debug", "info", "warn", "error"}
+
+	for _, level := range levels {
+		t.Run(level, func(t *testing.T) {
+			cmd := NewRootCommand()
+			var buf bytes.Buffer
+			cmd.SetOut(&buf)
+			// Use echo command to trigger PersistentPreRunE
+			cmd.SetArgs([]string{"--log-level", level, "echo", "test"})
+
+			if err := cmd.Execute(); err != nil {
+				t.Errorf("Execute() with log level %q error = %v", level, err)
+			}
+		})
+	}
+}
+
+func TestRootCommand_ConfigSubcommand(t *testing.T) {
+	cmd := NewRootCommand()
+
+	// Verify config subcommand is registered
+	subcommands := make(map[string]bool)
+	for _, sub := range cmd.Commands() {
+		subcommands[sub.Name()] = true
+	}
+
+	if !subcommands["config"] {
+		t.Error("expected subcommand 'config' not found")
+	}
+}

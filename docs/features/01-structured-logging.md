@@ -3,7 +3,7 @@
 | Metadata | Value |
 |----------|-------|
 | **ADR** | [ADR-0002](../adr/0002-structured-logging.md) |
-| **Status** | Draft |
+| **Status** | Implemented |
 | **Issue** | #37 |
 | **Author(s)** | @anowarislam |
 
