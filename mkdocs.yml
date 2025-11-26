@@ -135,6 +135,7 @@ nav:
           - Overview: adr/README.md
           - "0001: Development Workflow": adr/0001-development-workflow.md
           - "0002: Structured Logging": adr/0002-structured-logging.md
+          - "0003: Recipe-Based Documentation": adr/0003-recipe-based-documentation.md
       - Feature Specs:
           - Overview: features/README.md
           - "01: Structured Logging": features/01-structured-logging.md
