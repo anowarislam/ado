@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.1.0](https://github.com/anowarislam/ado/compare/v1.0.2...v1.1.0) (2025-11-26)
+
+
+### Features
+
+* **ci:** add container pipeline for multi-arch Docker images ([#19](https://github.com/anowarislam/ado/issues/19)) ([a359a18](https://github.com/anowarislam/ado/commit/a359a18ab00808942c083d9c99471f4332a4c2f6))
+
+
+### CI/CD
+
+* add Claude Code GitHub workflows ([#17](https://github.com/anowarislam/ado/issues/17)) ([b5e445f](https://github.com/anowarislam/ado/commit/b5e445f907b3953243f565ed0d0fcabdc277f069))
+
+
+### Documentation
+
+* add comprehensive release automation guide ([00812f2](https://github.com/anowarislam/ado/commit/00812f24035b939dcfabeb3b3a1908c54c828b94))
+* update RELEASE.md with PR workflow and branch protection ([#18](https://github.com/anowarislam/ado/issues/18)) ([59ec3a6](https://github.com/anowarislam/ado/commit/59ec3a6ea55b68bfc57efc1e8a4cb088c7e72434))
+
 ## [1.0.2](https://github.com/anowarislam/ado/compare/v1.0.1...v1.0.2) (2025-11-25)
 
 
