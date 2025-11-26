@@ -338,7 +338,7 @@ Choose your adventure based on urgency and completeness:
 → [Goals](11-goals.md) - See the complete goals framework
 
 **"I need to convince my team"**
-→ This README Executive Summary + [Goals ROI section](11-goals.md#business-goals)
+→ This README Executive Summary + [Business Principles](11-goals.md#business-principles)
 
 **"I'm stuck on something"**
 → [Troubleshooting](08-troubleshooting.md) (search for your error)

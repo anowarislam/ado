@@ -80,7 +80,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 **Reading Plan**:
 - **Foundation**: [Implementation Guide](09-implementation-guide.md) - Foundation
-- **Testing**: [CI Components](02-ci-components.md) + [Testing](09-implementation-guide.md#week-2)
+- **Testing**: [CI Components](02-ci-components.md) + [Testing](09-implementation-guide.md#phase-2-testing-infrastructure)
 - **Workflow**: [Development Workflow](04-development-workflow.md) + [Build Automation](05-build-automation.md)
 - **Ongoing**: [Troubleshooting](08-troubleshooting.md) as needed
 
@@ -448,13 +448,13 @@ This system is based on the production `ado` CLI project which demonstrates:
 ### Choose Your Path:
 
 **In a Hurry?**
-→ [Quick Start](09-implementation-guide.md#quick-start-4-6-hours)
+→ [Quick Start](09-implementation-guide.md#quick-start)
 
 **Building Production System?**
-→ [Standard Path](09-implementation-guide.md#standard-path-2-3-weeks)
+→ [Standard Path](09-implementation-guide.md#standard-path)
 
 **Want Enterprise Grade?**
-→ [Comprehensive Path](09-implementation-guide.md#comprehensive-path-6-weeks)
+→ [Comprehensive Path](09-implementation-guide.md#comprehensive-path)
 
 **Not Sure?**
 → Start with [Chapter 1: Philosophy](01-philosophy.md)
