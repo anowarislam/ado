@@ -10,17 +10,17 @@
 |---------|-------|-------|------------------|---------------|
 | [README](README.md) | Introduction & Navigation | 600 | 1 | - |
 | [00](00-overview.md) | Navigation & Learning Paths | 3,200 | 2 | - |
-| [01](01-philosophy.md) | Philosophy & Principles | 2,978 | 6 | 15+ |
-| [02](02-ci-components.md) | Essential CI Components | 8,313 | 10+ | 25+ |
-| [03](03-security-features.md) | Security Implementation | 4,544 | 8 | 20+ |
-| [04](04-development-workflow.md) | Issues→ADR→Spec→Implementation | 9,254 | 15+ | 30+ |
-| [05](05-build-automation.md) | Make, Git Hooks, Tooling | 6,454 | 8+ | 35+ |
-| [06](06-release-automation.md) | Complete Release Automation | 11,078 | 8+ | 40+ |
-| [07](07-github-integrations.md) | GitHub Apps & Integrations | 12,540 | 8+ | 30+ |
-| [08](08-troubleshooting.md) | Troubleshooting & Pitfalls | 8,035 | 5+ | 25+ |
-| [09](09-implementation-guide.md) | Step-by-Step Implementation | 4,203 | 2+ | 50+ |
-| [10](10-python-adaptation.md) | Python-Specific Patterns | 7,753 | 6+ | 45+ |
-| [11](11-goals.md) | Principles & Standards | 5,871 | 3+ | 20+ |
+| [01](01-goals.md) | Principles & Standards | 5,871 | 3+ | 20+ |
+| [02](02-philosophy.md) | Philosophy & Principles | 2,978 | 6 | 15+ |
+| [03](03-ci-components.md) | Essential CI Components | 8,313 | 10+ | 25+ |
+| [04](04-security-features.md) | Security Implementation | 4,544 | 8 | 20+ |
+| [05](05-development-workflow.md) | Issues→ADR→Spec→Implementation | 9,254 | 15+ | 30+ |
+| [06](06-build-automation.md) | Make, Git Hooks, Tooling | 6,454 | 8+ | 35+ |
+| [07](07-release-automation.md) | Complete Release Automation | 11,078 | 8+ | 40+ |
+| [08](08-github-integrations.md) | GitHub Apps & Integrations | 12,540 | 8+ | 30+ |
+| [09](09-troubleshooting.md) | Troubleshooting & Pitfalls | 8,035 | 5+ | 25+ |
+| [10](10-implementation-guide.md) | Step-by-Step Implementation | 4,203 | 2+ | 50+ |
+| [11](11-python-adaptation.md) | Python-Specific Patterns | 7,753 | 6+ | 45+ |
 
 **Total**: 84,823 words | 80+ diagrams | 300+ code examples
 
@@ -66,11 +66,13 @@ This recipe guides you through building a complete CI/CD system with:
 **Goal**: Basic CI/CD working today
 
 **Chapters to Read**:
-1. [Philosophy](01-philosophy.md) - Core principles
-2. [Implementation Guide](09-implementation-guide.md) - Quick start section
-3. [Troubleshooting](08-troubleshooting.md) - As needed
+
+1. [Philosophy](02-philosophy.md) - Core principles
+2. [Implementation Guide](10-implementation-guide.md) - Quick start section
+3. [Troubleshooting](09-troubleshooting.md) - As needed
 
 **What You Get**:
+
 - Basic CI pipeline (lint + test)
 - Git commit message validation
 - GitHub Actions only
@@ -81,12 +83,14 @@ This recipe guides you through building a complete CI/CD system with:
 **Goal**: Production-ready for small teams
 
 **Reading Plan**:
-- **Foundation**: [Implementation Guide](09-implementation-guide.md) - Foundation
-- **Testing**: [CI Components](02-ci-components.md) + [Testing](09-implementation-guide.md#phase-2-testing-infrastructure)
-- **Workflow**: [Development Workflow](04-development-workflow.md) + [Build Automation](05-build-automation.md)
-- **Ongoing**: [Troubleshooting](08-troubleshooting.md) as needed
+
+- **Foundation**: [Implementation Guide](10-implementation-guide.md) - Foundation
+- **Testing**: [CI Components](03-ci-components.md) + [Testing](10-implementation-guide.md#phase-2-testing-infrastructure)
+- **Workflow**: [Development Workflow](05-development-workflow.md) + [Build Automation](06-build-automation.md)
+- **Ongoing**: [Troubleshooting](09-troubleshooting.md) as needed
 
 **What You Get**:
+
 - Complete CI/CD pipeline
 - Git hooks for local validation
 - Release automation
@@ -99,17 +103,19 @@ This recipe guides you through building a complete CI/CD system with:
 **Goal**: Enterprise-grade with all features
 
 **Full Curriculum**:
-1. **Foundation**: [Philosophy](01-philosophy.md) + [Implementation Guide](09-implementation-guide.md)
-2. **CI/CD**: [CI Components](02-ci-components.md) + Implementation
-3. **Workflow**: [Development Workflow](04-development-workflow.md) + Implementation
-4. **Releases**: [Release Automation](06-release-automation.md) + Implementation
-5. **Security**: [Security Features](03-security-features.md) + Implementation
-6. **Integrations**: [GitHub Integrations](07-github-integrations.md) + Implementation
+
+1. **Foundation**: [Philosophy](02-philosophy.md) + [Implementation Guide](10-implementation-guide.md)
+2. **CI/CD**: [CI Components](03-ci-components.md) + Implementation
+3. **Workflow**: [Development Workflow](05-development-workflow.md) + Implementation
+4. **Releases**: [Release Automation](07-release-automation.md) + Implementation
+5. **Security**: [Security Features](04-security-features.md) + Implementation
+6. **Integrations**: [GitHub Integrations](08-github-integrations.md) + Implementation
 
 **Additional Reading**:
-- [Build Automation](05-build-automation.md) - Deep dive into Make and hooks
-- [Python Adaptation](10-python-adaptation.md) - Python-specific patterns
-- [Troubleshooting](08-troubleshooting.md) - Comprehensive problem-solving
+
+- [Build Automation](06-build-automation.md) - Deep dive into Make and hooks
+- [Python Adaptation](11-python-adaptation.md) - Python-specific patterns
+- [Troubleshooting](09-troubleshooting.md) - Comprehensive problem-solving
 
 **What You Get**: Everything from Standard path, plus:
 - SLSA provenance and attestations
@@ -124,10 +130,11 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### For Developers
 **Start Here**:
-1. [Philosophy](01-philosophy.md) - Understand the "why"
-2. [Development Workflow](04-development-workflow.md) - Your daily workflow
-3. [Python Adaptation](10-python-adaptation.md) - Python-specific patterns
-4. [Troubleshooting](08-troubleshooting.md) - Bookmark for later
+
+1. [Philosophy](02-philosophy.md) - Understand the "why"
+2. [Development Workflow](05-development-workflow.md) - Your daily workflow
+3. [Python Adaptation](11-python-adaptation.md) - Python-specific patterns
+4. [Troubleshooting](09-troubleshooting.md) - Bookmark for later
 
 **Focus**: Day-to-day development experience
 
@@ -135,12 +142,13 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### For DevOps/Platform Engineers
 **Start Here**:
-1. [Philosophy](01-philosophy.md) - Design principles
-2. [CI Components](02-ci-components.md) - System architecture
-3. [Build Automation](05-build-automation.md) - Make and hooks
-4. [Release Automation](06-release-automation.md) - Zero-touch releases
-5. [Security Features](03-security-features.md) - Supply chain security
-6. [GitHub Integrations](07-github-integrations.md) - Complete setup
+
+1. [Philosophy](02-philosophy.md) - Design principles
+2. [CI Components](03-ci-components.md) - System architecture
+3. [Build Automation](06-build-automation.md) - Make and hooks
+4. [Release Automation](07-release-automation.md) - Zero-touch releases
+5. [Security Features](04-security-features.md) - Supply chain security
+6. [GitHub Integrations](08-github-integrations.md) - Complete setup
 
 **Focus**: System design and operations
 
@@ -148,13 +156,15 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### For Engineering Managers
 **Start Here**:
-1. [Philosophy](01-philosophy.md) - ROI and principles
-2. [Development Workflow](04-development-workflow.md) - Team process
-3. [Implementation Guide](09-implementation-guide.md) - Scope and planning
+
+1. [Philosophy](02-philosophy.md) - ROI and principles
+2. [Development Workflow](05-development-workflow.md) - Team process
+3. [Implementation Guide](10-implementation-guide.md) - Scope and planning
 
 **Optional Deep Dives**:
-- [Security Features](03-security-features.md) - Compliance requirements
-- [Troubleshooting](08-troubleshooting.md) - Common issues to know
+
+- [Security Features](04-security-features.md) - Compliance requirements
+- [Troubleshooting](09-troubleshooting.md) - Common issues to know
 
 **Focus**: Team adoption and business value
 
@@ -162,10 +172,11 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### For Security Engineers
 **Start Here**:
-1. [Philosophy](01-philosophy.md) - Security philosophy
-2. [Security Features](03-security-features.md) - Complete security guide
-3. [GitHub Integrations](07-github-integrations.md) - Security integrations
-4. [Release Automation](06-release-automation.md) - Build security
+
+1. [Philosophy](02-philosophy.md) - Security philosophy
+2. [Security Features](04-security-features.md) - Complete security guide
+3. [GitHub Integrations](08-github-integrations.md) - Security integrations
+4. [Release Automation](07-release-automation.md) - Build security
 
 **Focus**: Supply chain security and verification
 
@@ -175,6 +186,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 1: Philosophy
 **You'll Learn**:
+
 - Why shift-left quality matters
 - The three-phase development model
 - Quality gate architecture
@@ -187,6 +199,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 2: CI Components
 **You'll Learn**:
+
 - Complete CI architecture
 - GitHub Actions workflow design
 - Git hooks implementation
@@ -200,6 +213,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 3: Security Features
 **You'll Learn**:
+
 - SLSA provenance and levels
 - Artifact attestation implementation
 - Sigstore keyless signing
@@ -213,6 +227,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 4: Development Workflow
 **You'll Learn**:
+
 - Three-phase workflow (ADR → Spec → Implementation)
 - When to use ADRs vs specs
 - Branch naming conventions
@@ -226,6 +241,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 5: Build Automation
 **You'll Learn**:
+
 - Modular Makefile architecture
 - Git hooks implementation (commit-msg, pre-push)
 - Pre-commit framework integration
@@ -238,6 +254,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 6: Release Automation
 **You'll Learn**:
+
 - Release-please configuration
 - Conventional commits → version bumping
 - CHANGELOG generation
@@ -252,6 +269,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 7: GitHub Integrations
 **You'll Learn**:
+
 - GitHub Apps vs PAT vs GITHUB_TOKEN
 - Creating and configuring GitHub Apps
 - Dependabot setup and auto-merge
@@ -267,6 +285,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 8: Troubleshooting
 **You'll Learn**:
+
 - Systematic debugging approach
 - Common issues and solutions
 - Emergency procedures
@@ -280,6 +299,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 9: Implementation Guide
 **You'll Learn**:
+
 - Step-by-step implementation plan
 - Specific tasks with validation
 - Quick start vs comprehensive paths
@@ -293,6 +313,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 10: Python Adaptation
 **You'll Learn**:
+
 - Modern pyproject.toml setup
 - Pytest patterns and fixtures
 - Ruff configuration (replacing black/flake8/isort)
@@ -362,20 +383,20 @@ After implementing this system, you should achieve:
 ### Most Important Chapters
 
 **Must Read** (Core understanding):
-1. [Philosophy](01-philosophy.md) - Why and how
-2. [Development Workflow](04-development-workflow.md) - Daily process
-3. [Implementation Guide](09-implementation-guide.md) - Step-by-step
+1. [Philosophy](02-philosophy.md) - Why and how
+2. [Development Workflow](05-development-workflow.md) - Daily process
+3. [Implementation Guide](10-implementation-guide.md) - Step-by-step
 
 **Deep Dives** (Technical implementation):
-4. [CI Components](02-ci-components.md) - System architecture
-5. [Release Automation](06-release-automation.md) - Zero-touch releases
-6. [Security Features](03-security-features.md) - Supply chain security
+4. [CI Components](03-ci-components.md) - System architecture
+5. [Release Automation](07-release-automation.md) - Zero-touch releases
+6. [Security Features](04-security-features.md) - Supply chain security
 
 **Reference** (As needed):
-7. [Build Automation](05-build-automation.md) - Make and hooks details
-8. [GitHub Integrations](07-github-integrations.md) - Setup guides
-9. [Troubleshooting](08-troubleshooting.md) - Problem solving
-10. [Python Adaptation](10-python-adaptation.md) - Language-specific
+7. [Build Automation](06-build-automation.md) - Make and hooks details
+8. [GitHub Integrations](08-github-integrations.md) - Setup guides
+9. [Troubleshooting](09-troubleshooting.md) - Problem solving
+10. [Python Adaptation](11-python-adaptation.md) - Language-specific
 
 ---
 
@@ -410,6 +431,7 @@ After implementing this system, you should achieve:
 ### Common Pitfalls to Avoid
 
 ❌ **Don't**:
+
 - Skip the philosophy chapter (understand the "why")
 - Implement everything at once (overwhelming)
 - Skip git hooks (local validation is critical)
@@ -417,6 +439,7 @@ After implementing this system, you should achieve:
 - Skip documentation (future you will regret it)
 
 ✅ **Do**:
+
 - Read philosophy first (understand the foundations)
 - Follow implementation guide step-by-step
 - Set up git hooks early (immediate feedback)
@@ -450,23 +473,23 @@ This system is based on the production `ado` CLI project which demonstrates:
 ### Choose Your Path:
 
 **In a Hurry?**
-→ [Quick Start](09-implementation-guide.md#quick-start)
+→ [Quick Start](10-implementation-guide.md#quick-start)
 
 **Building Production System?**
-→ [Standard Path](09-implementation-guide.md#standard-path)
+→ [Standard Path](10-implementation-guide.md#standard-path)
 
 **Want Enterprise Grade?**
-→ [Comprehensive Path](09-implementation-guide.md#comprehensive-path)
+→ [Comprehensive Path](10-implementation-guide.md#comprehensive-path)
 
 **Not Sure?**
-→ Start with [Chapter 1: Philosophy](01-philosophy.md)
+→ Start with [Chapter 1: Philosophy](02-philosophy.md)
 
 ---
 
 ## 📞 Support and Feedback
 
 - **Issues**: Found a problem? Open an issue in the `ado` repository
-- **Questions**: Check [Troubleshooting](08-troubleshooting.md) first
+- **Questions**: Check [Troubleshooting](09-troubleshooting.md) first
 - **Contributions**: PRs welcome for recipe improvements
 
 ---

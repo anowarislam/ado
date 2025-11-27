@@ -48,6 +48,7 @@ graph TB
 ### Why Make?
 
 **Make is the universal build language**:
+
 - ✅ Available on all Unix systems (including macOS, Linux, WSL)
 - ✅ 50+ years of stability and maturity
 - ✅ Declarative dependency graphs
@@ -402,6 +403,7 @@ SHELL := /bin/bash
 ```
 
 **Breakdown**:
+
 - `SHELL := /bin/bash` - Use bash for all commands (not sh)
 - `-e` - Exit immediately on error
 - `-u` - Error on undefined variables
@@ -1126,6 +1128,7 @@ exit 0
 ```
 
 **Key Features**:
+
 1. **Regex Validation**: Enforces conventional commit format
 2. **Skip Special Commits**: Merges, fixups, and squashes bypass validation
 3. **Minimum Length**: Descriptions must be at least 10 characters
@@ -1281,6 +1284,7 @@ exit 0
 ```
 
 **Key Features**:
+
 1. **Five-Phase Validation**: Tests → Coverage → Build → Docs → Python
 2. **Race Detector**: Catches concurrency bugs
 3. **Coverage Enforcement**: 80% minimum threshold
@@ -1623,6 +1627,7 @@ make setup
 ```
 
 **What happens**:
+
 1. Installs git hooks (`.githooks/commit-msg`, `.githooks/pre-push`)
 2. Downloads Go dependencies
 3. Creates Python virtual environment
@@ -1656,6 +1661,7 @@ git commit -m "feat(config): add validation command"
 ```
 
 **Hook validates**:
+
 - Conventional commit format
 - Minimum description length
 - Valid commit type
@@ -1668,6 +1674,7 @@ make ci
 ```
 
 **Runs**:
+
 1. Lint (go.fmt.check, go.vet, py.lint)
 2. Test (go.test, py.test)
 3. Docs build (docs.build)
@@ -1681,6 +1688,7 @@ git push
 ```
 
 **Hook runs**:
+
 1. Tests with race detector
 2. Coverage check (80% minimum)
 3. Build verification
@@ -1702,11 +1710,13 @@ git push --no-verify
 ```
 
 **When to use**:
+
 - Pushing WIP to personal branch
 - Emergency hotfix (follow up with proper validation)
 - Known false positive (fix hook, then use)
 
 **When NOT to use**:
+
 - Pushing to main/master
 - Creating pull requests
 - Avoiding fixing real issues

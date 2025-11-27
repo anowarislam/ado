@@ -42,6 +42,7 @@ graph LR
 **Philosophy**: Humans are unreliable at repetitive tasks. Automate everything that can be automated.
 
 **In Practice**:
+
 - ✅ Version bumping: automated via conventional commits
 - ✅ CHANGELOG generation: automated from commit messages
 - ✅ Test execution: automated via git hooks + CI
@@ -52,6 +53,7 @@ graph LR
 **Anti-pattern**: Manual CHANGELOG updates (error-prone, forgotten)
 
 **Why This Works**:
+
 - **Consistency**: Same process every time
 - **Speed**: Instant execution, no waiting for humans
 - **Reliability**: Never forgets a step
@@ -88,6 +90,7 @@ graph TB
 ```
 
 **Why Multiple Layers**:
+
 1. **Defense in depth**: If one layer fails, others catch issues
 2. **Fast feedback**: Git hooks give instant feedback (seconds)
 3. **Comprehensive checks**: CI runs expensive checks (minutes)
@@ -131,6 +134,7 @@ sequenceDiagram
 ```
 
 **Why Documentation-First**:
+
 1. **Clarity before coding**: Design is validated before implementation
 2. **LLM-friendly**: Clear specs enable AI-assisted development
 3. **Async collaboration**: Team can review design without code
@@ -158,12 +162,14 @@ Phase 3 (Code): How to implement it? (follows spec exactly)
 **Philosophy**: Catch errors immediately and make them impossible to ignore.
 
 **In Practice**:
+
 - **Git hooks block bad commits**: Can't commit malformed commit message
 - **Coverage threshold blocks merge**: Can't merge if coverage drops below 80%
 - **CI failures block merge**: Can't merge if tests fail
 - **Build failures block release**: Can't release if binary doesn't compile
 
 **Why This Works**:
+
 - **Immediate feedback**: Developer knows instantly something is wrong
 - **No silent failures**: Errors are loud and visible
 - **Prevents accumulation**: Small issues don't become big problems
@@ -204,6 +210,7 @@ Developer sees:
 | **Documentation** | Markdown in `docs/` | GitHub-native |
 
 **Why Conventions Work**:
+
 - **Reduced cognitive load**: Don't decide where to put files
 - **Tooling compatibility**: Standard locations enable automation
 - **Onboarding speed**: New developers know patterns
@@ -293,6 +300,7 @@ def test_echo_upper():
 **Purpose**: Capture requirements and determine workflow path.
 
 **Issue Templates**:
+
 - ADR Proposal (architectural decisions)
 - Feature Proposal (new capabilities)
 - Command Proposal (CLI commands)
@@ -321,6 +329,7 @@ graph TB
 ```
 
 **Examples**:
+
 - "Add plugin system" → ADR (architectural decision) → Spec → Implementation
 - "Add `export` command" → Spec → Implementation (follows existing patterns)
 - "Fix Windows path bug" → Implementation only (bug fix)
@@ -332,6 +341,7 @@ graph TB
 **When**: Architectural changes, new patterns, significant dependencies
 
 **Template Sections**:
+
 1. **Context**: Why is this decision needed?
 2. **Decision**: What are we choosing?
 3. **Consequences**: Trade-offs (positive, negative, neutral)
@@ -371,6 +381,7 @@ Use Go's stdlib `log/slog` for structured logging.
 **When**: All new features and commands (after ADR if needed)
 
 **Template Sections**:
+
 1. **Overview**: What does this do?
 2. **Examples**: Concrete usage (3-5 examples)
 3. **Behavior**: Step-by-step logic
@@ -419,6 +430,7 @@ Exit code: 1
 **When**: After spec approval (or immediately for bug fixes)
 
 **Requirements**:
+
 - Implementation matches spec exactly
 - All spec examples work
 - All error cases behave as specified
@@ -449,21 +461,25 @@ Exit code: 1
 ### The 80% Coverage Standard
 
 **Why 80%**:
+
 - **High enough**: Catches most bugs
 - **Low enough**: Doesn't encourage artificial tests
 - **Industry standard**: Common threshold in production systems
 
 **What It Catches**:
+
 - Untested code paths
 - Edge cases missed
 - Error handling gaps
 
 **What It Doesn't Catch**:
+
 - Logic bugs in tested code
 - Integration issues
 - Performance problems
 
 **Coverage Enforcement Points**:
+
 1. **Pre-push hook**: Blocks push if below 80%
 2. **CI pipeline**: Fails if below 80%
 3. **Make target**: `make go.test.cover.check`
@@ -475,6 +491,7 @@ Exit code: 1
 ### Table-Driven Testing Philosophy
 
 **Why Table-Driven Tests**:
+
 - **Readable**: Test cases are data, not code
 - **Extensible**: Easy to add new cases
 - **Comprehensive**: Encourages edge case testing
@@ -564,6 +581,7 @@ graph TB
 ### Make: The Build Automation Philosophy
 
 **Why Make**:
+
 - **Universal**: Works on all platforms
 - **Simple**: Shell commands with dependencies
 - **Composable**: Targets can depend on other targets
@@ -583,6 +601,7 @@ make/
 ```
 
 **Benefits**:
+
 - **Separation of concerns**: Each file focuses on one area
 - **Maintainability**: Easy to find and update targets
 - **Reusability**: Modules can be shared across projects
@@ -645,6 +664,7 @@ graph TB
 ### Keyless Signing Philosophy
 
 **Why Keyless**:
+
 - **No key management**: No private keys to rotate/leak
 - **OIDC-based**: Tied to GitHub Actions identity
 - **Transparent**: Signatures logged publicly (Rekor)
@@ -761,6 +781,7 @@ def test_echo_basic():
 ### What This System Optimizes For
 
 ✅ **Optimizes**:
+
 - Long-term maintainability
 - Team scalability (1 → 10+ developers)
 - Async collaboration
@@ -769,6 +790,7 @@ def test_echo_basic():
 - Clear historical context
 
 ❌ **Doesn't Optimize**:
+
 - Speed of first commit (setup takes time)
 - Flexibility (opinionated conventions)
 - Minimal process (multiple phases)
@@ -777,6 +799,7 @@ def test_echo_basic():
 ### When To Use This System
 
 **Good Fit**:
+
 - Production applications
 - Open-source projects
 - Team projects (2+ developers)
@@ -785,6 +808,7 @@ def test_echo_basic():
 - LLM-assisted development
 
 **Poor Fit**:
+
 - Throw-away prototypes
 - Weekend hackathons
 - Solo experiments
@@ -803,7 +827,7 @@ This philosophy translates into practice:
 5. **Security** → SLSA provenance, signing, verification
 6. **Conventional** → Conventional commits, semantic versioning
 
-**Next Chapter**: [02-ci-components.md](02-ci-components.md) - The essential components you'll build.
+**Next Chapter**: [03-ci-components.md](03-ci-components.md) - The essential components you'll build.
 
 ---
 

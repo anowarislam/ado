@@ -639,6 +639,7 @@ If you use custom types, define them here.
 ```
 
 **include-v-in-tag**:
+
 - `true`: Tags are `v1.0.0` (Go convention)
 - `false`: Tags are `1.0.0` (Python/npm convention)
 
@@ -656,6 +657,7 @@ If you use custom types, define them here.
 Customize how release PRs are created:
 
 **Variables**:
+
 - `${version}`: The new version (1.2.3)
 - `${component}`: Package name (for monorepos)
 - `${scope}`: Scope string
@@ -686,6 +688,7 @@ How far back to search in commit history:
 - **commit-search-depth**: Maximum commits to analyze for current release
 
 **Increase if**:
+
 - You have very active repositories
 - Initial release with long history
 - Commits aren't being found
@@ -711,6 +714,7 @@ For monorepos:
 ```
 
 **Important**:
+
 - Release-please updates this file automatically
 - Commit this file to your repository
 - Don't edit manually (let release-please manage it)
@@ -740,6 +744,7 @@ For Python projects, use the `python` release type:
 ```
 
 **Key Differences**:
+
 - `release-type: "python"`
 - `include-v-in-tag: false` (Python convention)
 - `extra-files` includes `__init__.py` for version
@@ -815,6 +820,7 @@ build(deps): update dependencies
 ```
 
 **Analysis**:
+
 - Has `feat` → Triggers MINOR bump
 - Has `fix` → Would trigger PATCH, but feat takes precedence
 - `docs` and `build` are included but don't affect version
@@ -847,6 +853,7 @@ fix(cli): improve error messages
 ```
 
 **Analysis**:
+
 - Has breaking change (`!`) → Triggers MAJOR bump
 - Other commits are included
 
@@ -877,6 +884,7 @@ perf(query): optimize index usage
 ```
 
 **Analysis**:
+
 - Only `fix` and `perf` commits
 - Both trigger PATCH bump
 
@@ -893,6 +901,7 @@ style: format code
 ```
 
 **Analysis**:
+
 - No `feat`, `fix`, `perf`, or breaking changes
 - These commits don't trigger releases
 
@@ -1023,6 +1032,7 @@ Release-please generates standardized CHANGELOGs following [Keep a Changelog](ht
 ```
 
 **Components**:
+
 - **Version**: `[1.2.0]` - The new version number
 - **Comparison Link**: Link to GitHub compare view showing all changes
 - **Date**: ISO format date of release
@@ -1044,6 +1054,7 @@ Sections are created based on `changelog-sections` configuration. Order matters 
 ```
 
 **Format**:
+
 - `**scope:**` - Scope from commit (if present)
 - Description - Commit description
 - `[#123]` - Issue/PR number (if referenced)
@@ -1482,6 +1493,7 @@ func Info() string {
 | `{{.ProjectName}}` | `ado` | Project name from config |
 
 **ldflags Explained**:
+
 - `-s`: Strip symbol table
 - `-w`: Strip DWARF debugging info
 - `-X package.Variable=value`: Set variable at link time
@@ -1976,6 +1988,7 @@ ado-admin = "ado_cli.admin:main"
 ```
 
 **Creates executables**:
+
 - Linux/Mac: `/usr/local/bin/ado`
 - Windows: `C:\Python\Scripts\ado.exe`
 
@@ -2315,6 +2328,7 @@ jobs:
 ```
 
 **Creates 9 jobs**:
+
 - ubuntu-latest + Go 1.21
 - ubuntu-latest + Go 1.22
 - ubuntu-latest + Go 1.23
@@ -2369,6 +2383,7 @@ ENTRYPOINT ["/ado"]
 - **Performance**: Instant startup
 
 **Requirements for scratch**:
+
 - Static binary (CGO_ENABLED=0)
 - No runtime dependencies
 - Self-contained
@@ -2407,6 +2422,7 @@ ENTRYPOINT ["/ado"]
 ```
 
 **Benefits**:
+
 - Build tools not in final image
 - Reproducible builds
 - Layer caching for faster rebuilds
@@ -2499,6 +2515,7 @@ docker inspect ghcr.io/user/repo:v1.2.3 | jq '.[0].Config.Labels'
 ```
 
 **Benefits**:
+
 - Metadata searchable in registries
 - Build provenance tracking
 - License compliance
@@ -2665,16 +2682,19 @@ This PR was generated with [Release Please](https://github.com/googleapis/releas
 #### Files Changed
 
 **For Go projects**:
+
 - `CHANGELOG.md` - Updated with new entries
 - `.release-please-manifest.json` - Version updated
 
 **For Python projects**:
+
 - `CHANGELOG.md`
 - `.release-please-manifest.json`
 - `pyproject.toml` - version field
 - `src/package/__init__.py` - __version__ variable
 
 **For Node projects**:
+
 - `CHANGELOG.md`
 - `.release-please-manifest.json`
 - `package.json` - version field
@@ -2705,6 +2725,7 @@ flowchart TB
 ```
 
 **Key Points**:
+
 1. Release PR created on first releasable commit
 2. Auto-updated as more commits merge
 3. Version recalculated based on ALL commits
@@ -2737,16 +2758,19 @@ gh pr diff 123
 #### When to Merge
 
 **Continuous Delivery Approach**:
+
 - Merge Release PR immediately after each feature PR
 - Rapid releases (multiple per day possible)
 - Good for: SaaS, high-velocity teams
 
 **Batched Release Approach**:
+
 - Let Release PR accumulate changes
 - Merge weekly/biweekly/at milestones
 - Good for: Scheduled releases, major features
 
 **Triggered by Events**:
+
 - Merge when critical bug fix is included
 - Merge before deadline (end of sprint, etc.)
 - Merge when feature set is complete
@@ -2762,6 +2786,7 @@ gh pr merge 123 --squash
 ```
 
 **What happens next**:
+
 1. Release Please workflow triggers (on push to main)
 2. Detects Release PR was merged
 3. Creates Git tag (e.g., `v1.2.0`)
@@ -2801,6 +2826,7 @@ RELEASE AS: 2.0.0"
 #### Release PR Not Created
 
 **Possible causes**:
+
 1. No releasable commits (only `docs`, `test`, `chore` without scope)
 2. Commits don't follow conventional commit format
 3. Release-please configuration error
@@ -2820,6 +2846,7 @@ gh run list --workflow=release-please.yml
 #### Release PR Stuck/Outdated
 
 **If Release PR shows conflicts**:
+
 1. Checkout the release PR branch locally
 2. Rebase on main
 3. Push (force if needed)
@@ -3007,12 +3034,14 @@ release:
 ```
 
 **Auto-detected as pre-release**:
+
 - `v0.1.0` (any v0.x.x version)
 - `v1.2.3-rc.1` (release candidates)
 - `v1.2.3-alpha.1` (alpha versions)
 - `v1.2.3-beta.2` (beta versions)
 
 **Marked as stable**:
+
 - `v1.0.0`
 - `v1.2.3`
 - `v2.0.0`
@@ -3043,6 +3072,7 @@ release:
 **Use case**: Review release before making public.
 
 **Workflow**:
+
 1. GoReleaser creates draft release with assets
 2. Review assets and release notes
 3. Manually publish via UI or API
@@ -3201,6 +3231,7 @@ jobs:
 **Recommended approach** - no API token needed!
 
 **Setup**:
+
 1. Go to PyPI project settings
 2. Navigate to "Publishing" tab
 3. Add GitHub Actions publisher:
@@ -3210,6 +3241,7 @@ jobs:
    - Environment: `release` (optional)
 
 **Benefits**:
+
 - No long-lived tokens
 - Automatic token rotation
 - Better security
@@ -3253,6 +3285,7 @@ That's it! No credentials needed.
 ```
 
 **Secrets to create**:
+
 - `DOCKERHUB_USERNAME`: Your Docker Hub username
 - `DOCKERHUB_TOKEN`: Access token from Docker Hub
 
@@ -3293,6 +3326,7 @@ brews:
 ```
 
 **Setup**:
+
 1. Create `homebrew-tap` repository
 2. Create GitHub token with `repo` scope
 3. Add as `HOMEBREW_TAP_GITHUB_TOKEN` secret
@@ -3355,6 +3389,7 @@ cosign verify ghcr.io/user/repo:1.2.0 \
 #### Issue: Release PR Not Created
 
 **Symptoms**:
+
 - Merged PR but no Release PR appeared
 - Expected version bump didn't happen
 
@@ -3409,6 +3444,7 @@ gh run view <run-id> --log
 ```
 
 **Common config issues**:
+
 - Wrong `release-type`
 - Invalid JSON in `release-please-config.json`
 - Incorrect package path
@@ -3425,6 +3461,7 @@ cat .release-please-manifest.json | jq .
 #### Issue: GoReleaser Fails
 
 **Symptoms**:
+
 - Release created but no assets
 - Build workflow failed
 
@@ -3456,6 +3493,7 @@ goreleaser check
 ```
 
 **Common errors**:
+
 - Invalid YAML syntax
 - Unknown fields
 - Missing required fields
@@ -3470,6 +3508,7 @@ goreleaser release --snapshot --clean
 ```
 
 **Common causes**:
+
 - Missing Dockerfile
 - Invalid build context
 - Platform not supported
@@ -3488,6 +3527,7 @@ permissions:
 #### Issue: Version Not Bumped Correctly
 
 **Symptoms**:
+
 - Expected MINOR bump but got PATCH
 - Expected MAJOR bump but got MINOR
 
@@ -3531,6 +3571,7 @@ If you have breaking change, it always wins (MAJOR bump).
 #### Issue: CHANGELOG Missing Commits
 
 **Symptoms**:
+
 - Some commits not in CHANGELOG
 - Expected section missing
 
@@ -3568,6 +3609,7 @@ feat(api): add GraphQL support (#123)
 #### Issue: Container Images Not Published
 
 **Symptoms**:
+
 - Release successful but Docker images missing
 - Images not in registry
 
@@ -3609,6 +3651,7 @@ permissions:
 #### Issue: Signing Failed
 
 **Symptoms**:
+
 - Build successful but signing failed
 - cosign errors in logs
 
@@ -3748,6 +3791,7 @@ git push origin :refs/tags/v1.2.0
 ```
 
 **Then**:
+
 1. Fix bug
 2. Update `.release-please-manifest.json` back to `1.1.0`
 3. Create fix PR
@@ -3919,6 +3963,7 @@ jobs:
 ```
 
 **Results**:
+
 - `main` → `v1.2.0`
 - `next` → `v1.3.0-rc.1`, `v1.3.0-rc.2`, ...
 
@@ -4045,6 +4090,7 @@ Track release frequency and velocity:
 ```
 
 **Track**:
+
 - Release frequency
 - Time between releases
 - Commits per release
@@ -4134,6 +4180,7 @@ gh workflow run goreleaser.yml -f tag=v1.2.0
 5. **Monitor**: Track metrics and improve
 
 **Further Reading**:
+
 - [Release Please Documentation](https://github.com/googleapis/release-please)
 - [GoReleaser Documentation](https://goreleaser.com/)
 - [Conventional Commits Spec](https://www.conventionalcommits.org/)

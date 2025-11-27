@@ -46,16 +46,16 @@ We will create a comprehensive **recipe-based documentation system** under `docs
 docs/recipes/
 ├── README.md                    # Executive overview
 ├── 00-overview.md              # Navigation hub
-├── 01-philosophy.md            # Foundation: Why & how
-├── 02-ci-components.md         # Foundation: System architecture
-├── 03-security-features.md     # Foundation: SLSA, signing
-├── 04-development-workflow.md  # Process: Issues→ADR→Spec
-├── 05-build-automation.md      # Process: Make, hooks
-├── 06-release-automation.md    # Process: Zero-touch releases
-├── 07-github-integrations.md   # Integration: Apps, Dependabot
-├── 08-troubleshooting.md       # Integration: Problem-solving
-├── 09-implementation-guide.md  # Implementation: Step-by-step
-├── 10-python-adaptation.md     # Implementation: Python patterns
+├── 02-philosophy.md            # Foundation: Why & how
+├── 03-ci-components.md         # Foundation: System architecture
+├── 04-security-features.md     # Foundation: SLSA, signing
+├── 05-development-workflow.md  # Process: Issues→ADR→Spec
+├── 06-build-automation.md      # Process: Make, hooks
+├── 07-release-automation.md    # Process: Zero-touch releases
+├── 08-github-integrations.md   # Integration: Apps, Dependabot
+├── 09-troubleshooting.md       # Integration: Problem-solving
+├── 10-implementation-guide.md  # Implementation: Step-by-step
+├── 11-python-adaptation.md     # Implementation: Python patterns
 └── 11-principles.md            # Implementation: Standards framework
 ```
 

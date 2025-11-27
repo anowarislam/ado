@@ -1336,7 +1336,7 @@ gh secret list
 # APP_ID                Updated 2024-XX-XX
 # APP_PRIVATE_KEY       Updated 2024-XX-XX
 
-# If missing, see docs/recipes/07-github-integrations.md for setup
+# If missing, see docs/recipes/08-github-integrations.md for setup
 ```
 
 **Solution 4: Already have open Release PR**
@@ -1992,7 +1992,7 @@ gh run view <run-id> --log
 
 **Solutions**:
 
-See `docs/recipes/07-github-integrations.md` for full Dependabot setup.
+See `docs/recipes/08-github-integrations.md` for full Dependabot setup.
 
 ---
 
@@ -2588,9 +2588,10 @@ git push      # Push with confidence
 ---
 
 **Next Steps**:
-- [Chapter 9: Implementation Guide](09-implementation-guide.md) - Step-by-step setup
-- [Chapter 7: GitHub Integrations](07-github-integrations.md) - GitHub App setup
-- [Chapter 6: Release Automation](06-release-automation.md) - Understanding release-please
+
+- [Chapter 9: Implementation Guide](10-implementation-guide.md) - Step-by-step setup
+- [Chapter 7: GitHub Integrations](08-github-integrations.md) - GitHub App setup
+- [Chapter 6: Release Automation](07-release-automation.md) - Understanding release-please
 
 For issues not covered in this guide, check:
 - GitHub Actions logs: `gh run view <run-id> --log`

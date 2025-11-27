@@ -102,4 +102,4 @@ Dockerfile                    @anowarislam
 # Files that require extra scrutiny for security
 
 SECURITY.md                   @anowarislam
-/docs/recipes/03-security-features.md @anowarislam
+/docs/recipes/04-security-features.md @anowarislam

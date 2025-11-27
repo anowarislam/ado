@@ -395,7 +395,7 @@ The `ado` project uses a comprehensive ownership model covering all major compon
 | **Git Hooks** | `/.githooks/` | @anowarislam | Pre-commit and pre-push hooks |
 | **Release Config** | `/.goreleaser.yaml`, `/release-please-config.json` | @anowarislam | Release automation |
 | **Dependencies** | `go.mod`, `go.sum`, `lab/py/pyproject.toml` | @anowarislam | Dependency management |
-| **Security** | `/SECURITY.md`, `/docs/recipes/03-security-features.md` | @anowarislam | Security policies and features |
+| **Security** | `/SECURITY.md`, `/docs/recipes/04-security-features.md` | @anowarislam | Security policies and features |
 
 **Complete mapping**: See [`.github/CODEOWNERS`](../.github/CODEOWNERS)
 
@@ -496,7 +496,7 @@ Here's a simplified example showing the key patterns used in this project:
 # Security-Critical Files - requires security review
 # =============================================================================
 SECURITY.md                           @anowarislam
-/docs/recipes/03-security-features.md @anowarislam
+/docs/recipes/04-security-features.md @anowarislam
 ```
 
 **Pattern Precedence Example**:
