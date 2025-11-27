@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.5.0](https://github.com/anowarislam/ado/compare/v1.4.1...v1.5.0) (2025-11-27)
+
+
+### Features
+
+* **ci:** implement PR-level metrics dashboard ([#65](https://github.com/anowarislam/ado/issues/65)) ([b5690b1](https://github.com/anowarislam/ado/commit/b5690b11ac95a000e775ba6fb9028fffb334633e))
+
+
+### Documentation
+
+* **adr:** 0005 - PR-level metrics dashboard ([#63](https://github.com/anowarislam/ado/issues/63)) ([d8a008d](https://github.com/anowarislam/ado/commit/d8a008d565eb84fc3754f3a13f658f0ee78fb1b5))
+* **spec:** claude code review optimization ([#52](https://github.com/anowarislam/ado/issues/52)) ([#66](https://github.com/anowarislam/ado/issues/66)) ([72a58f2](https://github.com/anowarislam/ado/commit/72a58f2c13b911f082e451a7fd4cbe07f7d8c887))
+* **spec:** feature homebrew-distribution ([#61](https://github.com/anowarislam/ado/issues/61)) ([13c9a9e](https://github.com/anowarislam/ado/commit/13c9a9e5d0b185bd41d187182e1da0f485b71536)), closes [#54](https://github.com/anowarislam/ado/issues/54)
+* **spec:** feature pr-metrics-dashboard ([#64](https://github.com/anowarislam/ado/issues/64)) ([69c3b7d](https://github.com/anowarislam/ado/commit/69c3b7dd8ff3be027736bd862d46b2e7f3202ab9))
+
 ## [1.4.1](https://github.com/anowarislam/ado/compare/v1.4.0...v1.4.1) (2025-11-27)
 
 
