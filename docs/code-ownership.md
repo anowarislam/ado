@@ -385,10 +385,10 @@ Only when all conditions are met can the PR be merged.
 - [Development Workflow](workflow.md) - Complete workflow guide
 - [CODEOWNERS Integration](workflow.md#codeowners-automated-reviewer-assignment) - Automated reviewer assignment and integration architecture
 - [Contributing Guide](contributing.md) - Contribution guidelines
-- [Code Review Process](workflow.md#code-review-process) - Detailed review criteria
+- [Code Review Process](workflow.md#code-ownership-reviewer-assignment) - Detailed review criteria
 - [Branch Protection](workflow.md#branch-protection-rules) - GitHub settings
 - [ADR Process](adr/README.md) - Architecture Decision Records
-- [Spec-Driven Development](workflow.md#phase-2-spec-feature-or-command-specification) - Specification workflow
+- [Spec-Driven Development](workflow.md#phase-2-specification) - Specification workflow
 
 ## References
 
