@@ -141,6 +141,7 @@ nav:
           - Overview: features/README.md
           - "01: Structured Logging": features/01-structured-logging.md
           - "02: Homebrew Distribution": features/02-homebrew-distribution.md
+          - "03: PR-Level Metrics Dashboard": features/03-pr-metrics-dashboard.md
   - Contributing:
       - Guide: contributing.md
       - Style Guides:
