@@ -3,17 +3,19 @@ module github.com/anowarislam/ado
 go 1.24.0
 
 require (
-	github.com/jaypipes/ghw v0.20.0
-	github.com/shirou/gopsutil/v4 v4.25.10
+	github.com/jaypipes/ghw v0.13.0
+	github.com/shirou/gopsutil/v4 v4.24.12
 	github.com/spf13/cobra v1.9.1
 	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
+	github.com/StackExchange/wmi v1.2.1 // indirect
 	github.com/ebitengine/purego v0.9.0 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jaypipes/pcidb v1.1.1 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
