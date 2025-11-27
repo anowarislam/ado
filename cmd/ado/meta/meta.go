@@ -20,6 +20,7 @@ func NewCommand(buildInfo internalmeta.BuildInfo) *cobra.Command {
 		newInfoCommand(buildInfo),
 		newEnvCommand(),
 		newFeaturesCommand(),
+		newSystemCommand(),
 	)
 
 	return cmd
@@ -113,6 +114,52 @@ func formatBuildInfo(info internalmeta.BuildInfo) string {
 	return b.String()
 }
 
+func newSystemCommand() *cobra.Command {
+	var output string
+
+	cmd := &cobra.Command{
+		Use:   "system",
+		Short: "Show system diagnostic information",
+		Long: `Display system-level diagnostic information including OS, CPU, GPU, NPU, memory, and storage.
+
+Useful for:
+  - Troubleshooting environment-specific issues
+  - Sharing system information in bug reports
+  - Validating system requirements for ado commands
+  - Capturing system state in CI/CD pipelines
+
+Output formats:
+  - text (default): Human-readable sectioned output
+  - json: Structured JSON for parsing/automation
+  - yaml: Structured YAML for parsing/automation
+
+Examples:
+  # Show system info in human-readable format
+  ado meta system
+
+  # Export as JSON for bug report
+  ado meta system --output json
+
+  # Extract specific field with jq
+  ado meta system --output json | jq '.memory.used_percent'`,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx := cmd.Context()
+			info := internalmeta.CollectSystemInfo(ctx)
+			format, err := ui.ParseOutputFormat(output)
+			if err != nil {
+				return err
+			}
+
+			return ui.PrintOutput(cmd.OutOrStdout(), format, info, func() (string, error) {
+				return formatSystemInfo(info), nil
+			})
+		},
+	}
+
+	cmd.Flags().StringVarP(&output, "output", "o", "text", "Output format: text, json, yaml")
+	return cmd
+}
+
 func formatEnvInfo(info internalmeta.EnvInfo) string {
 	var b strings.Builder
 
@@ -141,6 +188,67 @@ func formatEnvInfo(info internalmeta.EnvInfo) string {
 		for key, value := range info.Env {
 			fmt.Fprintf(&b, "  %s=%s\n", key, value)
 		}
+	}
+
+	return b.String()
+}
+
+func formatSystemInfo(info internalmeta.SystemInfo) string {
+	var b strings.Builder
+
+	// OS Section
+	fmt.Fprintf(&b, "OS: %s\n", info.OS)
+	fmt.Fprintf(&b, "Platform: %s\n", info.Platform)
+	fmt.Fprintf(&b, "Kernel: %s\n", info.Kernel)
+	fmt.Fprintf(&b, "Architecture: %s\n", info.Architecture)
+	fmt.Fprintln(&b)
+
+	// CPU Section
+	fmt.Fprintln(&b, "CPU:")
+	fmt.Fprintf(&b, "  Model: %s\n", info.CPU.Model)
+	fmt.Fprintf(&b, "  Vendor: %s\n", info.CPU.Vendor)
+	fmt.Fprintf(&b, "  Cores: %d\n", info.CPU.Cores)
+	if info.CPU.FrequencyMHz > 0 {
+		fmt.Fprintf(&b, "  Frequency: %.0f MHz\n", info.CPU.FrequencyMHz)
+	} else {
+		fmt.Fprintln(&b, "  Frequency: unknown")
+	}
+	fmt.Fprintln(&b)
+
+	// Memory Section
+	fmt.Fprintln(&b, "Memory:")
+	fmt.Fprintf(&b, "  Total: %d MB\n", info.Memory.TotalMB)
+	fmt.Fprintf(&b, "  Available: %d MB\n", info.Memory.AvailableMB)
+	fmt.Fprintf(&b, "  Used: %d MB (%.1f%%)\n", info.Memory.UsedMB, info.Memory.UsedPercent)
+	if info.Memory.SwapTotalMB > 0 {
+		fmt.Fprintf(&b, "  Swap: %d MB total, %d MB used\n", info.Memory.SwapTotalMB, info.Memory.SwapUsedMB)
+	}
+	fmt.Fprintln(&b)
+
+	// Storage Section
+	if len(info.Storage) > 0 {
+		fmt.Fprintln(&b, "Storage:")
+		for _, storage := range info.Storage {
+			fmt.Fprintf(&b, "  %s: %d MB total, %d MB used (%.1f%%)\n",
+				storage.Mountpoint, storage.TotalMB, storage.UsedMB, storage.UsedPercent)
+		}
+		fmt.Fprintln(&b)
+	}
+
+	// GPU Section
+	if len(info.GPU) > 0 {
+		fmt.Fprintln(&b, "GPU:")
+		for _, gpu := range info.GPU {
+			fmt.Fprintf(&b, "  %s %s (%s)\n", gpu.Vendor, gpu.Model, gpu.Type)
+		}
+		fmt.Fprintln(&b)
+	}
+
+	// NPU Section
+	if info.NPU != nil && info.NPU.Detected {
+		fmt.Fprintln(&b, "NPU:")
+		fmt.Fprintf(&b, "  Type: %s\n", info.NPU.Type)
+		fmt.Fprintf(&b, "  Detection Method: %s\n", info.NPU.InferenceMethod)
 	}
 
 	return b.String()
