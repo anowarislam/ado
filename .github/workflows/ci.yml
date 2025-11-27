@@ -105,14 +105,14 @@ jobs:
           profile: coverage.out
           local-prefix: github.com/anowarislam/ado
 
-      # NEW: Upload Coverage Artifact (required for PR comment action)
+      # NEW: Upload Coverage Artifact (for PR comments + baseline on main)
       - name: Upload coverage artifact
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097  # v4.4.2 SHA-pinned
         with:
           name: code-coverage
           path: coverage.out
-          retention-days: 1
+          retention-days: 90  # Extended retention for baseline stability
 
       # NEW: PR Coverage Comment with Diff Analysis
       - name: Post coverage comment
@@ -123,6 +123,7 @@ jobs:
           coverage-file-name: coverage.out
           root-package: github.com/anowarislam/ado
           trim: github.com/anowarislam/ado/
+          skip-comment: true  # TODO: Remove after PR #65 merges (bootstrap - no baseline exists yet)
 
       # NEW: Calculate Estimated CI Cost
       - name: Calculate estimated cost
