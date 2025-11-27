@@ -10,27 +10,27 @@ threshold:
 # Per-package overrides (array of path regex patterns with thresholds)
 override:
   # Lower thresholds for packages below 80% (to be improved incrementally)
-  - path: ^github\.com/anowarislam/ado/cmd/ado/config$
+  - path: ^cmd/ado/config$
     threshold: 65       # Current: 66%, target: 80%
-  - path: ^github\.com/anowarislam/ado/cmd/ado$
+  - path: ^cmd/ado$
     threshold: 0        # Main package (just imports)
-  - path: ^github\.com/anowarislam/ado/cmd/ado/root$
+  - path: ^cmd/ado/root$
     threshold: 75       # Current: 77.8%, target: 80%
-  - path: ^github\.com/anowarislam/ado/internal/meta$
+  - path: ^internal/meta$
     threshold: 60       # Current: 62.4%, target: 80%
 
   # Higher thresholds for well-tested packages
-  - path: ^github\.com/anowarislam/ado/internal/config$
+  - path: ^internal/config$
     threshold: 85       # Already exceeds 80%
-  - path: ^github\.com/anowarislam/ado/internal/logging$
+  - path: ^internal/logging$
     threshold: 85       # Already exceeds 80%
-  - path: ^github\.com/anowarislam/ado/internal/ui$
+  - path: ^internal/ui$
     threshold: 90       # Already exceeds 80%
 
 # Exclusions (object with paths array of regex patterns)
 exclude:
   paths:
-    - ^github\.com/anowarislam/ado/internal/testutil$      # Test utilities
+    - ^internal/testutil$      # Test utilities
 
 # Local coverage threshold (applied to files with >0% coverage)
 # Files with 0% coverage are reported but don't fail the check
