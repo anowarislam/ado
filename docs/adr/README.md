@@ -19,6 +19,7 @@ An ADR is a document that captures an important architectural decision along wit
 | [0002](0002-structured-logging.md) | Structured Logging | Accepted | 2025-11-26 |
 | [0003](0003-recipe-based-documentation.md) | Recipe-Based Documentation for CI/CD Patterns | Accepted | 2025-11-26 |
 | [0004](0004-code-ownership-system.md) | Code Ownership System | Accepted | 2025-11-26 |
+| [0005](0005-pr-metrics-dashboard.md) | PR-Level Metrics Dashboard | Proposed | 2025-11-26 |
 
 ## ADR Lifecycle
 
