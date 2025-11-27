@@ -118,12 +118,12 @@ jobs:
       - name: Post coverage comment
         if: github.event_name == 'pull_request'
         uses: fgrosse/go-coverage-report@ae3204f4125161ae4a75780bdb57dec472bfd49c  # v1.2.0 SHA-pinned
+        continue-on-error: true  # TODO: Remove after PR #65 merges (bootstrap - no baseline exists yet)
         with:
           coverage-artifact-name: code-coverage
           coverage-file-name: coverage.out
           root-package: github.com/anowarislam/ado
           trim: github.com/anowarislam/ado/
-          skip-comment: true  # TODO: Remove after PR #65 merges (bootstrap - no baseline exists yet)
 
       # NEW: Calculate Estimated CI Cost
       - name: Calculate estimated cost
