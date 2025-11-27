@@ -190,6 +190,7 @@ graph LR
 **Purpose**: Validate all code changes before merge.
 
 **Trigger Conditions**:
+
 - Every push to `main` branch
 - Every pull request targeting `main`
 
@@ -233,6 +234,7 @@ jobs:
 ```
 
 **Why This Design**:
+
 - **Parallel execution**: All jobs run simultaneously for speed
 - **Independent failures**: One job failure doesn't block others
 - **Conditional logic**: Commit check only runs on PRs (not needed on main)
@@ -268,12 +270,14 @@ commits:
 ```
 
 **Why This Works**:
+
 - **PR titles become commit messages**: GitHub squash merges use PR title
 - **Regex validation**: Enforces exact format programmatically
 - **Descriptive errors**: Helps developers fix issues quickly
 - **Minimum length**: 10 characters prevents lazy descriptions
 
 **What It Catches**:
+
 - ❌ `Add feature` → Missing type prefix
 - ❌ `feat: add` → Description too short
 - ❌ `feature: add new command` → Invalid type
@@ -371,6 +375,7 @@ fi
 ```
 
 **Why This Approach**:
+
 - **Floating-point handling**: Shell comparison requires integer conversion
 - **GitHub Actions integration**: `::error::` creates annotation on PR
 - **Clear output**: Shows exact coverage percentage
@@ -410,6 +415,7 @@ python:
 ```
 
 **Why Separate Job**:
+
 - **Independent failures**: Python issues don't block Go code
 - **Different runtime**: Python requires different setup than Go
 - **Parallel execution**: Runs simultaneously with Go tests
@@ -427,6 +433,7 @@ select = ["E", "F", "W", "I"]  # Errors, Warnings, Import sorting
 ```
 
 **What It Checks**:
+
 - **E**: PEP 8 style errors
 - **F**: Pyflakes (logic errors, unused imports)
 - **W**: PEP 8 warnings
@@ -463,11 +470,13 @@ docs:
 ```
 
 **Why `--strict` Flag**:
+
 - **No warnings tolerated**: Broken links, missing files cause failure
 - **Early detection**: Catches documentation issues before deploy
 - **Quality enforcement**: Maintains documentation standards
 
 **Common Issues Caught**:
+
 - Broken internal links: `[link](missing-page.md)`
 - Missing navigation entries
 - Invalid Markdown syntax
@@ -521,12 +530,14 @@ docker.test:
 ```
 
 **Why This Test Is Critical**:
+
 - **Catches GoReleaser issues**: Validates Dockerfile before release
 - **Tests in CI**: Ensures Docker image builds on clean machine
 - **Validates runtime**: Runs command to verify binary works in container
 - **Prevents broken releases**: Release will fail if this test fails
 
 **What It Catches**:
+
 - Missing dependencies in Docker image
 - Incorrect file paths in Dockerfile
 - Binary not executable in container
@@ -600,6 +611,7 @@ jobs:
 ```
 
 **Why GitHub App Token**:
+
 - **Repo permissions**: Can trigger workflows (PAT cannot)
 - **Fine-grained access**: Scoped to specific permissions
 - **Audit trail**: Shows actions by app, not user
@@ -666,6 +678,7 @@ When release-please creates a PR, it includes:
 ```
 
 **Why This Approach**:
+
 - **Automatic versioning**: No manual version bumps
 - **Conventional commits enforced**: CI ensures compliance
 - **Human review**: Release PR can be reviewed before merge
@@ -731,6 +744,7 @@ goreleaser:
 ```
 
 **Why Full History**:
+
 - GoReleaser generates changelog from commits
 - Needs previous tags to calculate diff
 - Build metadata includes commit count
@@ -743,6 +757,7 @@ goreleaser:
 ```
 
 **Why Test Again**:
+
 - **Double-check**: Tests run in CI, but re-run before release
 - **Catch last-minute issues**: Ensures code at tag is working
 - **Fail fast**: Don't build if tests fail
@@ -758,11 +773,13 @@ goreleaser:
 ```
 
 **Why QEMU**:
+
 - **ARM64 builds on AMD64 runners**: GitHub Actions runners are x86_64
 - **Emulation**: QEMU emulates ARM64 for cross-compilation
 - **Multi-arch manifests**: Creates images for both architectures
 
 **Why Buildx**:
+
 - **Multi-platform builds**: Single build command for multiple architectures
 - **BuildKit backend**: Faster, more efficient Docker builds
 - **Cache support**: Speeds up subsequent builds
@@ -830,6 +847,7 @@ builds:
 ```
 
 **Why These Flags**:
+
 - **`CGO_ENABLED=0`**: Static binaries, no C dependencies
 - **`-s -w`**: Smaller binaries (removes debug info)
 - **`-X` (ldflags)**: Inject build-time variables
@@ -898,6 +916,7 @@ docker_manifests:
 ```
 
 **Why Multi-Arch Manifests**:
+
 - **Single image tag**: Users pull `ado:1.2.0`, not `ado:1.2.0-amd64`
 - **Automatic selection**: Docker pulls correct architecture automatically
 - **Transparent**: Users don't need to know/care about architecture
@@ -960,6 +979,7 @@ For each artifact, GitHub creates a **SLSA provenance attestation** - a signed s
 ```
 
 **Why Provenance Matters**:
+
 - **Proves origin**: Artifact was built by GitHub Actions, not locally
 - **Immutable record**: Stored on Sigstore's transparency log
 - **Supply chain security**: Verifiable build process
@@ -1033,6 +1053,7 @@ sequenceDiagram
 7. **OCI Artifact**: Signature stored alongside image in registry
 
 **Why Keyless**:
+
 - **No key management**: No private keys to store or rotate
 - **GitHub identity**: Tied to repository and workflow
 - **Transparency**: All signatures publicly logged
@@ -1069,6 +1090,7 @@ The following checks were performed on each of these signatures:
 ```
 
 **What This Proves**:
+
 - ✅ Image was built by GitHub Actions (not locally)
 - ✅ Build was from `anowarislam/ado` repository
 - ✅ Signature is in transparency log (tamper-proof)
@@ -1081,6 +1103,7 @@ The following checks were performed on each of these signatures:
 **Purpose**: Build and deploy MkDocs documentation to GitHub Pages.
 
 **Triggers**:
+
 - **Release published**: Deploy docs with new version
 - **Push to main** (docs changes only): Update docs immediately
 - **Pull request** (docs changes only): Validate docs build
@@ -1100,6 +1123,7 @@ on:
 ```
 
 **Why Path Filters**:
+
 - **Avoid unnecessary builds**: Don't rebuild docs for Go code changes
 - **Faster feedback**: Only runs when docs-related files change
 - **Resource efficiency**: Saves GitHub Actions minutes
@@ -1179,6 +1203,7 @@ build:
 ```
 
 **Why Full Git History**:
+
 - **Git metadata**: Shows last modified date for each page
 - **Contributors**: Can extract author information
 - **Version tracking**: Links to specific commits
@@ -1190,6 +1215,7 @@ mkdocs build --strict
 ```
 
 **What Strict Mode Catches**:
+
 - ❌ Broken internal links: `[link](missing.md)`
 - ❌ Missing pages in navigation
 - ❌ Invalid Markdown syntax
@@ -1220,6 +1246,7 @@ deploy:
 ```
 
 **Why Separate Job**:
+
 - **Conditional deployment**: Build on PRs, deploy only on main
 - **Environment protection**: Can add manual approval
 - **Output URL**: Gets deployment URL for status checks
@@ -1245,6 +1272,7 @@ validate-links:
 ```
 
 **Why Skip External Links**:
+
 - **Rate limits**: External sites may block repeated requests
 - **Flaky tests**: External sites may be temporarily down
 - **Focus on internal**: Internal links are what we control
@@ -1258,11 +1286,13 @@ validate-links:
 **Purpose**: Automatically merge Dependabot PRs for minor/patch updates.
 
 **Key Features**:
+
 - Auto-approves Dependabot PRs
 - Only merges if CI passes
 - Only minor/patch versions (not major)
 
 **Why Useful**:
+
 - **Security updates**: Fast deployment of security patches
 - **Maintenance burden**: Reduces manual PR review
 - **Safe automation**: CI must pass before merge
@@ -1274,6 +1304,7 @@ validate-links:
 **When It Runs**: Pull requests
 
 **What It Does**:
+
 - Analyzes code changes
 - Provides suggestions
 - Checks for common issues
@@ -1495,6 +1526,7 @@ $ git commit -m "feat: add export command"
 ```
 
 **Why This Works**:
+
 - **Immediate feedback**: Developer knows instantly
 - **Helpful errors**: Shows what's wrong and how to fix
 - **Examples included**: No need to look up format
@@ -1509,6 +1541,7 @@ $ git commit -m "feat: add export command"
 **Location**: `.githooks/pre-push`
 
 **What It Checks**:
+
 1. Go tests with race detector (detects concurrency bugs)
 2. Coverage threshold (80% minimum)
 3. Build verification (ensures binary compiles)
@@ -1612,6 +1645,7 @@ go test -race -timeout 60s ./cmd/ado/... ./internal/...
 ```
 
 **What Race Detector Finds**:
+
 - Concurrent access to shared variables
 - Data races in goroutines
 - Unsynchronized map access
@@ -1656,6 +1690,7 @@ Previous write at 0x00c000012098 by goroutine 6:
 ```
 
 **Why This Matters**:
+
 - **Production safety**: Prevents subtle concurrency bugs
 - **Goroutine-heavy code**: Go code often uses concurrency
 - **Hard to debug**: Race conditions are notoriously difficult to reproduce
@@ -1692,12 +1727,14 @@ total:                          (statements)           82.4%
 ```
 
 **Why 80% Threshold**:
+
 - **High quality**: Catches most uncovered code paths
 - **Practical**: Not too strict (allows some uncovered code)
 - **Industry standard**: Common in production systems
 - **Incentive**: Encourages writing tests for new code
 
 **What It Doesn't Catch**:
+
 - Logic bugs in tested code
 - Wrong assertions in tests
 - Integration issues
@@ -1710,12 +1747,14 @@ go build -o /dev/null ./cmd/ado
 ```
 
 **Why This Check**:
+
 - **Compilation**: Ensures code compiles without errors
 - **Type checking**: Go's type system catches many errors
 - **Imports**: Validates all imports exist
 - **Syntax**: Catches syntax errors
 
 **What It Catches**:
+
 - Undefined functions/variables
 - Type mismatches
 - Import cycles
@@ -1747,6 +1786,7 @@ git push --no-verify
 ```
 
 **When to Bypass**:
+
 - Emergency hotfix
 - Known issue, will fix in next commit
 - Working on non-code files only
@@ -1773,6 +1813,7 @@ Makefile                    # Main entry point
 ```
 
 **Why Modular**:
+
 - **Separation of concerns**: Each file focuses on one area
 - **Maintainability**: Easy to find and update targets
 - **Reusability**: Modules can be shared across projects
@@ -1858,6 +1899,7 @@ test: go.test py.test
 ```
 
 **Benefits**:
+
 - **One command**: `make validate` runs everything
 - **Mirrors CI**: Same checks as GitHub Actions
 - **Fail fast**: Stops on first error
@@ -2248,6 +2290,7 @@ internal/config/
 ```
 
 **Test File Pattern**:
+
 - `*_test.go` files alongside implementation
 - Table-driven tests with subtests
 - Test fixtures in `testdata/` directories
@@ -2315,6 +2358,7 @@ func TestResolveConfigPath(t *testing.T) {
 ```
 
 **Why This Pattern**:
+
 - **Readable**: Test cases are data, not code
 - **Extensible**: Easy to add new test cases
 - **Isolated**: Each subtest runs independently
@@ -2432,6 +2476,7 @@ make py.test.cover
 ### Go Linting
 
 **Tools Used**:
+
 1. **`go fmt`**: Standard Go formatter
 2. **`go vet`**: Static analysis for common mistakes
 
@@ -2446,6 +2491,7 @@ make go.fmt.check
 ```
 
 **What `go fmt` Does**:
+
 - Indentation (tabs)
 - Spacing around operators
 - Line wrapping
@@ -2459,6 +2505,7 @@ make go.vet
 ```
 
 **What `go vet` Catches**:
+
 - Printf format string issues
 - Struct tag mistakes
 - Unreachable code
@@ -2503,6 +2550,7 @@ select = ["E", "F", "W", "I"]
 ```
 
 **Lint Rules**:
+
 - **E**: PEP 8 style errors (indentation, spacing)
 - **F**: Pyflakes (unused imports, undefined names)
 - **W**: PEP 8 warnings (deprecated features)
@@ -2562,10 +2610,12 @@ Found 3 errors.
 **Theme**: Material for MkDocs (modern, responsive)
 
 **Key Plugins**:
+
 - `search`: Built-in search functionality
 - `minify`: Minifies HTML/CSS/JS
 
 **Extensions**:
+
 - `pymdownx.superfences`: Code blocks with syntax highlighting
 - `pymdownx.tabbed`: Tabbed content blocks
 - `pymdownx.tasklist`: GitHub-style task lists
@@ -2633,6 +2683,7 @@ make docs.serve
 ```
 
 **Features**:
+
 - Live reload on file changes
 - Instant search
 - Responsive design

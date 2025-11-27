@@ -122,6 +122,7 @@ graph TB
 #### Path 1: Full Workflow (ADR → Spec → Implementation)
 
 **Use when**:
+
 - Adding plugin architecture
 - Changing logging framework
 - Introducing new security model
@@ -136,6 +137,7 @@ graph TB
 #### Path 2: Spec → Implementation (No ADR)
 
 **Use when**:
+
 - Adding new CLI command that follows existing patterns
 - Adding feature to existing subsystem
 - Extending well-defined API
@@ -148,6 +150,7 @@ graph TB
 #### Path 3: Direct to Implementation (Bug Fix)
 
 **Use when**:
+
 - Fixing broken behavior
 - Correcting typos
 - Updating dependencies
@@ -168,6 +171,7 @@ graph TB
 **File**: `.github/ISSUE_TEMPLATE/adr_proposal.md`
 
 **When to use**:
+
 - Proposing architectural decisions
 - Evaluating technology choices
 - Defining system-wide patterns
@@ -203,6 +207,7 @@ What will this decision affect?
 **File**: `.github/ISSUE_TEMPLATE/command_proposal.md`
 
 **When to use**:
+
 - Proposing new CLI commands
 - Adding subcommands
 - Extending existing commands
@@ -240,6 +245,7 @@ ado command arg
 **File**: `.github/ISSUE_TEMPLATE/feature_proposal.md`
 
 **When to use**:
+
 - Proposing internal features (not CLI commands)
 - Config system enhancements
 - Developer tooling
@@ -273,6 +279,7 @@ Does this require an ADR first?
 **File**: `.github/ISSUE_TEMPLATE/bug_report.md`
 
 **When to use**:
+
 - Reporting broken functionality
 - Unexpected errors
 - Performance issues
@@ -624,6 +631,7 @@ There are two types of specifications:
 **Use for**: CLI commands visible to users
 
 **Template sections**:
+
 - Command syntax
 - Purpose
 - Usage examples (3-5)
@@ -641,6 +649,7 @@ There are two types of specifications:
 **Use for**: Internal features, libraries, subsystems
 
 **Template sections**:
+
 - Overview
 - Motivation
 - Behavior
@@ -1027,6 +1036,7 @@ func TestConfigValidate_InvalidYAML(t *testing.T) {
 ```
 
 **Benefits**:
+
 - Tests written before implementation (TDD)
 - Tests verify spec compliance
 - CI enforces spec adherence
@@ -1252,11 +1262,13 @@ make hooks.install
 **Minimum threshold**: 80%
 
 **Why 80%**:
+
 - High enough to catch most bugs
 - Low enough to avoid artificial tests
 - Industry standard for production code
 
 **Enforced at**:
+
 1. Pre-push git hook (blocks local push)
 2. CI pipeline (blocks merge)
 3. Make target: `make go.test.cover.check`
@@ -1548,6 +1560,7 @@ Each phase has different review criteria:
 **Focus**: Architectural soundness
 
 **Checklist**:
+
 - [ ] **Problem well-defined**: Context section clear?
 - [ ] **Decision justified**: Does it solve the problem?
 - [ ] **Alternatives considered**: Were other options genuinely evaluated?
@@ -1556,12 +1569,14 @@ Each phase has different review criteria:
 - [ ] **Precedent searched**: Have other projects solved this?
 
 **Questions to ask**:
+
 - "Have we considered approach X?"
 - "What's the worst-case scenario with this decision?"
 - "How does this scale to 10x users?"
 - "Can we revert this decision later?"
 
 **Approval criteria**:
+
 - Team consensus (not unanimous, but majority)
 - All alternatives documented
 - Consequences clearly understood
@@ -1571,6 +1586,7 @@ Each phase has different review criteria:
 **Focus**: Behavior definition and testability
 
 **Checklist**:
+
 - [ ] **Examples concrete**: Can they become test cases?
 - [ ] **Behavior unambiguous**: No room for interpretation?
 - [ ] **Error cases complete**: All failures covered?
@@ -1579,12 +1595,14 @@ Each phase has different review criteria:
 - [ ] **Minimal surface**: Simplest API that works?
 
 **Questions to ask**:
+
 - "What happens if user does X?" (edge cases)
 - "How does this command compose with others?"
 - "What should the error message say?"
 - "Is this consistent with existing commands?"
 
 **Approval criteria**:
+
 - All examples can be tested
 - Error cases comprehensive
 - Team agrees on behavior
@@ -1594,6 +1612,7 @@ Each phase has different review criteria:
 **Focus**: Spec compliance and code quality
 
 **Checklist**:
+
 - [ ] **Spec compliance**:
   - [ ] All examples work
   - [ ] Error cases match spec
@@ -1614,12 +1633,14 @@ Each phase has different review criteria:
   - [ ] README.md updated if user-facing
 
 **Questions to ask**:
+
 - "Does this match the spec exactly?"
 - "Are all spec examples tested?"
 - "What's the test coverage?"
 - "Are errors actionable?"
 
 **Approval criteria**:
+
 - CI passes (tests, lint, coverage)
 - Spec compliance verified
 - Code quality acceptable
@@ -1748,6 +1769,7 @@ gh pr merge 123 --squash
 ```
 
 **Benefits**:
+
 - Clean commit history on main
 - One commit per feature
 - Easier to revert
@@ -1805,6 +1827,7 @@ Use Go's stdlib `log/slog` for zero dependencies.
 **PR #40**: `docs(adr): 0002 - structured logging`
 
 **Files**:
+
 - Created: `docs/adr/0002-structured-logging.md`
 
 **Review discussion**:
@@ -1827,6 +1850,7 @@ Team: Approved ✓
 **PR #41**: `docs(spec): feature structured-logging`
 
 **Files**:
+
 - Created: `docs/features/01-structured-logging.md`
 
 **Key sections**:
@@ -1948,6 +1972,7 @@ Users want to verify their config file is valid before running commands.
 **PR #38**: `docs(spec): command config-validate`
 
 **Files**:
+
 - Created: `docs/commands/04-config-validate.md`
 
 **Key examples**:
@@ -2051,6 +2076,7 @@ func runValidate(cmd *cobra.Command, args []string) error {
 **PR #39**: `feat(config): add validate command`
 
 **CI results**:
+
 - Tests: ✓ Pass
 - Coverage: 87.3% ✓
 - Lint: ✓ Pass
@@ -2107,6 +2133,7 @@ Arch: amd64
 **Branch**: `fix/windows-path`
 
 **Approach**:
+
 1. Write failing test
 2. Fix the code
 3. Verify test passes
@@ -2322,6 +2349,7 @@ ok      github.com/anowarislam/ado/internal/config   0.156s  coverage: 92.1%
 **File**: `.github/workflows/ci.yml`
 
 **Triggers**:
+
 - Push to any branch
 - Pull request
 
@@ -2449,6 +2477,7 @@ required_status_checks:
 **Trigger**: Push to main
 
 **What it does**:
+
 1. Analyze commits since last release
 2. Determine version bump (feat = minor, fix = patch, feat! = major)
 3. Generate CHANGELOG from commit messages
@@ -2480,6 +2509,7 @@ required_status_checks:
 **Trigger**: Release published (when Release PR merged)
 
 **What it does**:
+
 1. Checkout tagged commit
 2. Run tests
 3. Build binaries for all platforms
@@ -2488,6 +2518,7 @@ required_status_checks:
 6. Upload to GitHub Release
 
 **Platforms built**:
+
 - linux/amd64, linux/arm64
 - darwin/amd64, darwin/arm64
 - windows/amd64, windows/arm64

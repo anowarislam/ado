@@ -66,11 +66,13 @@ This recipe guides you through building a complete CI/CD system with:
 **Goal**: Basic CI/CD working today
 
 **Chapters to Read**:
+
 1. [Philosophy](01-philosophy.md) - Core principles
 2. [Implementation Guide](09-implementation-guide.md) - Quick start section
 3. [Troubleshooting](08-troubleshooting.md) - As needed
 
 **What You Get**:
+
 - Basic CI pipeline (lint + test)
 - Git commit message validation
 - GitHub Actions only
@@ -81,12 +83,14 @@ This recipe guides you through building a complete CI/CD system with:
 **Goal**: Production-ready for small teams
 
 **Reading Plan**:
+
 - **Foundation**: [Implementation Guide](09-implementation-guide.md) - Foundation
 - **Testing**: [CI Components](02-ci-components.md) + [Testing](09-implementation-guide.md#phase-2-testing-infrastructure)
 - **Workflow**: [Development Workflow](04-development-workflow.md) + [Build Automation](05-build-automation.md)
 - **Ongoing**: [Troubleshooting](08-troubleshooting.md) as needed
 
 **What You Get**:
+
 - Complete CI/CD pipeline
 - Git hooks for local validation
 - Release automation
@@ -99,6 +103,7 @@ This recipe guides you through building a complete CI/CD system with:
 **Goal**: Enterprise-grade with all features
 
 **Full Curriculum**:
+
 1. **Foundation**: [Philosophy](01-philosophy.md) + [Implementation Guide](09-implementation-guide.md)
 2. **CI/CD**: [CI Components](02-ci-components.md) + Implementation
 3. **Workflow**: [Development Workflow](04-development-workflow.md) + Implementation
@@ -107,6 +112,7 @@ This recipe guides you through building a complete CI/CD system with:
 6. **Integrations**: [GitHub Integrations](07-github-integrations.md) + Implementation
 
 **Additional Reading**:
+
 - [Build Automation](05-build-automation.md) - Deep dive into Make and hooks
 - [Python Adaptation](10-python-adaptation.md) - Python-specific patterns
 - [Troubleshooting](08-troubleshooting.md) - Comprehensive problem-solving
@@ -124,6 +130,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### For Developers
 **Start Here**:
+
 1. [Philosophy](01-philosophy.md) - Understand the "why"
 2. [Development Workflow](04-development-workflow.md) - Your daily workflow
 3. [Python Adaptation](10-python-adaptation.md) - Python-specific patterns
@@ -135,6 +142,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### For DevOps/Platform Engineers
 **Start Here**:
+
 1. [Philosophy](01-philosophy.md) - Design principles
 2. [CI Components](02-ci-components.md) - System architecture
 3. [Build Automation](05-build-automation.md) - Make and hooks
@@ -148,11 +156,13 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### For Engineering Managers
 **Start Here**:
+
 1. [Philosophy](01-philosophy.md) - ROI and principles
 2. [Development Workflow](04-development-workflow.md) - Team process
 3. [Implementation Guide](09-implementation-guide.md) - Scope and planning
 
 **Optional Deep Dives**:
+
 - [Security Features](03-security-features.md) - Compliance requirements
 - [Troubleshooting](08-troubleshooting.md) - Common issues to know
 
@@ -162,6 +172,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### For Security Engineers
 **Start Here**:
+
 1. [Philosophy](01-philosophy.md) - Security philosophy
 2. [Security Features](03-security-features.md) - Complete security guide
 3. [GitHub Integrations](07-github-integrations.md) - Security integrations
@@ -175,6 +186,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 1: Philosophy
 **You'll Learn**:
+
 - Why shift-left quality matters
 - The three-phase development model
 - Quality gate architecture
@@ -187,6 +199,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 2: CI Components
 **You'll Learn**:
+
 - Complete CI architecture
 - GitHub Actions workflow design
 - Git hooks implementation
@@ -200,6 +213,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 3: Security Features
 **You'll Learn**:
+
 - SLSA provenance and levels
 - Artifact attestation implementation
 - Sigstore keyless signing
@@ -213,6 +227,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 4: Development Workflow
 **You'll Learn**:
+
 - Three-phase workflow (ADR → Spec → Implementation)
 - When to use ADRs vs specs
 - Branch naming conventions
@@ -226,6 +241,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 5: Build Automation
 **You'll Learn**:
+
 - Modular Makefile architecture
 - Git hooks implementation (commit-msg, pre-push)
 - Pre-commit framework integration
@@ -238,6 +254,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 6: Release Automation
 **You'll Learn**:
+
 - Release-please configuration
 - Conventional commits → version bumping
 - CHANGELOG generation
@@ -252,6 +269,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 7: GitHub Integrations
 **You'll Learn**:
+
 - GitHub Apps vs PAT vs GITHUB_TOKEN
 - Creating and configuring GitHub Apps
 - Dependabot setup and auto-merge
@@ -267,6 +285,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 8: Troubleshooting
 **You'll Learn**:
+
 - Systematic debugging approach
 - Common issues and solutions
 - Emergency procedures
@@ -280,6 +299,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 9: Implementation Guide
 **You'll Learn**:
+
 - Step-by-step implementation plan
 - Specific tasks with validation
 - Quick start vs comprehensive paths
@@ -293,6 +313,7 @@ This recipe guides you through building a complete CI/CD system with:
 
 ### Chapter 10: Python Adaptation
 **You'll Learn**:
+
 - Modern pyproject.toml setup
 - Pytest patterns and fixtures
 - Ruff configuration (replacing black/flake8/isort)
@@ -410,6 +431,7 @@ After implementing this system, you should achieve:
 ### Common Pitfalls to Avoid
 
 ❌ **Don't**:
+
 - Skip the philosophy chapter (understand the "why")
 - Implement everything at once (overwhelming)
 - Skip git hooks (local validation is critical)
@@ -417,6 +439,7 @@ After implementing this system, you should achieve:
 - Skip documentation (future you will regret it)
 
 ✅ **Do**:
+
 - Read philosophy first (understand the foundations)
 - Follow implementation guide step-by-step
 - Set up git hooks early (immediate feedback)

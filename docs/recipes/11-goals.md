@@ -48,6 +48,7 @@ The main branch is the source of truth for production deployments. A broken main
 - Business maintains predictable release cadence
 
 **Implementation Pattern**:
+
 - Configure branch protection rules to prevent direct pushes
 - Require all PRs to pass CI checks before merge
 - Install pre-push hooks to catch issues locally
@@ -55,6 +56,7 @@ The main branch is the source of truth for production deployments. A broken main
 - Set up automated rollback for failed merges
 
 **Verification**:
+
 - [ ] Branch protection enabled on main
 - [ ] Required status checks configured
 - [ ] Pre-push hooks installed for all developers
@@ -75,6 +77,7 @@ Test coverage is a proxy for code quality and regression prevention. While the s
 - Production bugs are reduced through early detection
 
 **Implementation Pattern**:
+
 - Configure pytest with pytest-cov for coverage measurement
 - Set coverage threshold in pyproject.toml (commonly 80%)
 - Install pre-push hooks that block commits below threshold
@@ -84,6 +87,7 @@ Test coverage is a proxy for code quality and regression prevention. While the s
 - Track coverage at package, module, and function levels
 
 **Verification**:
+
 - [ ] Coverage tool configured (pytest-cov)
 - [ ] Threshold set in pyproject.toml
 - [ ] Pre-push hooks enforce threshold
@@ -105,6 +109,7 @@ Regular releases reduce risk through smaller, incremental changes and provide fa
 - Faster iteration than manual release processes
 
 **Implementation Pattern**:
+
 - Set up automated release process (e.g., release-please)
 - Enforce conventional commits to drive versioning
 - Use Release PRs to batch changes automatically
@@ -114,6 +119,7 @@ Regular releases reduce risk through smaller, incremental changes and provide fa
 - Configure release workflow to handle all publishing
 
 **Verification**:
+
 - [ ] Automated release system configured
 - [ ] Conventional commits enforced
 - [ ] Release PRs generated automatically
@@ -138,6 +144,7 @@ Consistent code style eliminates bikeshedding in reviews and makes codebases eas
 - No time wasted debating style in code reviews
 
 **Implementation Pattern**:
+
 - Configure a linter in pyproject.toml (e.g., Ruff for Python)
 - Set up pre-commit hooks for auto-fixing
 - Configure CI to block PRs with violations
@@ -147,6 +154,7 @@ Consistent code style eliminates bikeshedding in reviews and makes codebases eas
 - Auto-format code where possible
 
 **Verification**:
+
 - [ ] Linter configured in project
 - [ ] Pre-commit hooks installed and working
 - [ ] CI enforces lint checks
@@ -169,6 +177,7 @@ Well-handled errors improve user experience and reduce debugging time. Clear err
 - Exit codes are consistent and meaningful
 
 **Implementation Pattern**:
+
 - Write explicit tests for every error case
 - Document error behavior in feature specs
 - Include error scenarios in table-driven tests
@@ -179,6 +188,7 @@ Well-handled errors improve user experience and reduce debugging time. Clear err
 - Include suggestions for fixing common errors
 
 **Verification**:
+
 - [ ] Error cases have explicit tests
 - [ ] Specs document error behavior
 - [ ] Error messages include helpful context
@@ -201,6 +211,7 @@ Fast feedback loops maximize developer productivity by minimizing waiting time. 
 - Higher team throughput with more PRs per day
 
 **Implementation Pattern**:
+
 - Enable parallel test execution (e.g., pytest-xdist)
 - Implement smart test selection for changed code
 - Parallelize CI jobs where possible
@@ -211,6 +222,7 @@ Fast feedback loops maximize developer productivity by minimizing waiting time. 
 - Run fast checks first, slow checks later
 
 **Verification**:
+
 - [ ] Tests run in parallel
 - [ ] Dependency caching configured
 - [ ] CI jobs run in parallel
@@ -235,6 +247,7 @@ Manual versioning is error-prone and time-consuming. Automated versioning based 
 - Traceability with every change documented
 
 **Implementation Pattern**:
+
 - Enforce conventional commit format
 - Use release automation tools (e.g., release-please)
 - Configure automatic version bumping (feat → minor, fix → patch)
@@ -244,6 +257,7 @@ Manual versioning is error-prone and time-consuming. Automated versioning based 
 - Link CHANGELOG entries to commits
 
 **Verification**:
+
 - [ ] Conventional commits enforced
 - [ ] Release automation configured
 - [ ] Version bumping automated
@@ -266,6 +280,7 @@ Manual deployment steps introduce friction, errors, and delays. A fully automate
 - Complete audit trail as everything is logged in CI
 
 **Implementation Pattern**:
+
 - Trigger release workflow from Release PR merge
 - Automate build process (wheels, source distributions, etc.)
 - Use trusted publishing for package registries (no tokens)
@@ -276,6 +291,7 @@ Manual deployment steps introduce friction, errors, and delays. A fully automate
 - Configure rollback procedures
 
 **Verification**:
+
 - [ ] Release workflow automated
 - [ ] Build process automated
 - [ ] Publishing automated (PyPI, npm, etc.)
@@ -299,6 +315,7 @@ Manual dependency updates are time-consuming and often neglected, leading to sec
 - Significant time savings from automation
 
 **Implementation Pattern**:
+
 - Configure dependency automation (e.g., Dependabot, Renovate)
 - Set up auto-merge for low-risk updates (patch/minor)
 - Require manual review for major version updates
@@ -308,6 +325,7 @@ Manual dependency updates are time-consuming and often neglected, leading to sec
 - Ensure CI passes before any auto-merge
 
 **Verification**:
+
 - [ ] Dependency automation configured
 - [ ] Auto-merge enabled for safe updates
 - [ ] Major updates require review
@@ -332,6 +350,7 @@ Supply chain attacks are a growing threat. Cryptographic verification allows use
 - Tampering is evident
 
 **Implementation Pattern**:
+
 - Generate artifact attestations (e.g., GitHub Actions attestations)
 - Target SLSA Build Level 3 compliance
 - Sign container images (e.g., with Sigstore/cosign)
@@ -341,6 +360,7 @@ Supply chain attacks are a growing threat. Cryptographic verification allows use
 - Automate signing in release workflow
 
 **Verification**:
+
 - [ ] Artifact attestations generated
 - [ ] SLSA provenance included
 - [ ] Container images signed
@@ -363,6 +383,7 @@ Unpatched vulnerabilities expose users to security risks. Active monitoring and 
 - Security is treated as a priority
 
 **Implementation Pattern**:
+
 - Enable security alert systems (e.g., Dependabot, Snyk)
 - Configure auto-merge for security updates when CI passes
 - Use dependency review to block risky PRs
@@ -372,6 +393,7 @@ Unpatched vulnerabilities expose users to security risks. Active monitoring and 
 - Document remediation procedures
 
 **Verification**:
+
 - [ ] Security alerts enabled
 - [ ] Security updates auto-merge configured
 - [ ] Dependency review active
@@ -394,6 +416,7 @@ A clear security policy enables responsible disclosure and sets expectations for
 - Supported versions are clear
 
 **Implementation Pattern**:
+
 - Create SECURITY.md in repository root
 - Enable GitHub Security Advisories (or equivalent)
 - Document response timeline commitments
@@ -404,6 +427,7 @@ A clear security policy enables responsible disclosure and sets expectations for
 - Review and update policy regularly
 
 **Verification**:
+
 - [ ] SECURITY.md exists
 - [ ] Security advisories enabled
 - [ ] Response timeline documented
@@ -428,6 +452,7 @@ Complex setup procedures slow down onboarding and frustrate new team members. Au
 - Proper development environment from day one
 
 **Implementation Pattern**:
+
 - Create clear README.md with Quick Start section
 - Provide automated setup (e.g., `make setup`)
 - Enable local CI validation (e.g., `make validate`)
@@ -437,6 +462,7 @@ Complex setup procedures slow down onboarding and frustrate new team members. Au
 - Provide troubleshooting guides
 
 **Verification**:
+
 - [ ] README has clear setup instructions
 - [ ] Automated setup command exists
 - [ ] Local validation possible
@@ -459,6 +485,7 @@ Cryptic error messages waste developer time and cause frustration. Clear, action
 - Issues are fixed correctly, not just bypassed
 
 **Implementation Pattern**:
+
 - Write informative error messages in git hooks
 - Include fix suggestions in CI failures
 - Show examples in linter errors
@@ -468,6 +495,7 @@ Cryptic error messages waste developer time and cause frustration. Clear, action
 - Suggest specific remediation steps
 
 **Verification**:
+
 - [ ] Git hooks have helpful errors
 - [ ] CI failures include fix suggestions
 - [ ] Linter errors show examples
@@ -490,6 +518,7 @@ Waiting for CI to discover issues wastes time and breaks developer flow. Running
 - Reduced CI costs and usage
 
 **Implementation Pattern**:
+
 - Create make targets that mirror CI exactly
 - Provide comprehensive validation command (e.g., `make validate`)
 - Install git hooks to enforce checks locally
@@ -499,6 +528,7 @@ Waiting for CI to discover issues wastes time and breaks developer flow. Running
 - Document how to run checks locally
 
 **Verification**:
+
 - [ ] Make targets mirror CI
 - [ ] Full validation runs locally
 - [ ] Git hooks enforce standards
@@ -523,6 +553,7 @@ Writing specifications before code ensures design is reviewed early and requirem
 - Design can be reviewed asynchronously without code
 
 **Implementation Pattern**:
+
 - Create spec templates for commands and features
 - Require spec PR approval before implementation
 - Reference relevant ADRs in specs
@@ -532,6 +563,7 @@ Writing specifications before code ensures design is reviewed early and requirem
 - Provide testing checklists
 
 **Verification**:
+
 - [ ] Spec templates exist
 - [ ] Spec approval required
 - [ ] Specs reference ADRs
@@ -554,6 +586,7 @@ Architectural decisions made without documentation lead to lost context and conf
 - Accountability through traceable decision history
 
 **Implementation Pattern**:
+
 - Provide ADR template for consistency
 - Create decision tree to guide ADR usage
 - Index ADRs for easy discovery
@@ -563,6 +596,7 @@ Architectural decisions made without documentation lead to lost context and conf
 - Record expected consequences
 
 **Verification**:
+
 - [ ] ADR template exists
 - [ ] Decision tree guides usage
 - [ ] ADRs indexed
@@ -585,6 +619,7 @@ Slow code reviews block progress and hurt morale. Fast, thorough reviews enabled
 - Higher overall team throughput
 
 **Implementation Pattern**:
+
 - Encourage small, focused PRs
 - Use specs to set clear expectations
 - Automate quality checks in CI
@@ -594,6 +629,7 @@ Slow code reviews block progress and hurt morale. Fast, thorough reviews enabled
 - Make PR size guidelines clear
 
 **Verification**:
+
 - [ ] PR size guidelines established
 - [ ] Specs set expectations
 - [ ] CI automates quality checks
@@ -618,6 +654,7 @@ Unobservable releases make it difficult to diagnose issues and improve processes
 - Complete audit trail for compliance
 
 **Implementation Pattern**:
+
 - Generate comprehensive GitHub Release notes
 - Maintain CHANGELOG with links to issues/PRs
 - Log all release workflow steps
@@ -628,6 +665,7 @@ Unobservable releases make it difficult to diagnose issues and improve processes
 - Keep previous versions accessible
 
 **Verification**:
+
 - [ ] Release notes generated
 - [ ] CHANGELOG maintained
 - [ ] Workflow logs captured
@@ -651,6 +689,7 @@ Outdated documentation frustrates users and increases support burden. Keeping do
 - Professional, polished product impression
 
 **Implementation Pattern**:
+
 - Build documentation in CI to catch errors
 - Automate link checking to find broken references
 - Test code examples to ensure they work
@@ -661,6 +700,7 @@ Outdated documentation frustrates users and increases support burden. Keeping do
 - Provide working examples for all features
 
 **Verification**:
+
 - [ ] Docs build in CI
 - [ ] Link checking automated
 - [ ] Examples are tested
@@ -686,6 +726,7 @@ Bugs found in production are exponentially more expensive to fix than bugs caugh
 - More time for features, less time firefighting
 
 **Implementation Pattern**:
+
 - Maintain meaningful test coverage
 - Use linting to catch common bugs
 - Enable type checking (mypy, pyright, etc.)
@@ -695,6 +736,7 @@ Bugs found in production are exponentially more expensive to fix than bugs caugh
 - Track bug sources to improve processes
 
 **Verification**:
+
 - [ ] Test coverage enforced
 - [ ] Linting catches bugs
 - [ ] Type checking enabled
@@ -717,6 +759,7 @@ Manual processes and technical debt slow teams down over time. Automation and qu
 - Higher morale through less toil, more creation
 
 **Implementation Pattern**:
+
 - Automate repetitive manual work
 - Implement fast feedback loops
 - Use specs to reduce rework
@@ -726,6 +769,7 @@ Manual processes and technical debt slow teams down over time. Automation and qu
 - Invest in developer productivity
 
 **Verification**:
+
 - [ ] Manual work automated
 - [ ] Feedback loops optimized
 - [ ] Specs reduce rework
@@ -748,6 +792,7 @@ Long cycle times reduce market responsiveness and waste effort on features that 
 - Reduced waste by failing fast on bad ideas
 
 **Implementation Pattern**:
+
 - Break features into small, focused increments
 - Streamline spec approval processes
 - Optimize implementation with clear requirements
@@ -757,6 +802,7 @@ Long cycle times reduce market responsiveness and waste effort on features that 
 - Measure and improve cycle times
 
 **Verification**:
+
 - [ ] Feature decomposition practiced
 - [ ] Spec approval streamlined
 - [ ] Requirements clear upfront
@@ -779,6 +825,7 @@ Ad-hoc compliance preparation is time-consuming and stressful. Built-in complian
 - Peace of mind with continuous readiness
 
 **Implementation Pattern**:
+
 - Generate SLSA provenance for audit trails
 - Sign all release artifacts
 - Generate SBOMs automatically
@@ -789,6 +836,7 @@ Ad-hoc compliance preparation is time-consuming and stressful. Built-in complian
 - Document all compliance-relevant processes
 
 **Verification**:
+
 - [ ] SLSA provenance generated
 - [ ] Artifacts signed
 - [ ] SBOMs generated
@@ -885,6 +933,7 @@ These phases describe the progressive adoption of CI/CD principles. Focus on wha
 ### Phase 0: Manual Processes
 
 **Characteristics**:
+
 - Manual testing and quality checks
 - No automated CI/CD pipeline
 - Ad-hoc or forgotten releases
@@ -899,6 +948,7 @@ These phases describe the progressive adoption of CI/CD principles. Focus on wha
 
 **Principles Addressed**: 1, 4, 13
 **Characteristics**:
+
 - Basic CI pipeline running
 - Git hooks installed for basic checks
 - Lint checks automated
@@ -914,6 +964,7 @@ These phases describe the progressive adoption of CI/CD principles. Focus on wha
 
 **Principles Addressed**: 1, 2, 4, 5, 6, 13, 15
 **Characteristics**:
+
 - Test coverage threshold enforced
 - Branch protection enabled
 - Fast feedback loops established
@@ -930,6 +981,7 @@ These phases describe the progressive adoption of CI/CD principles. Focus on wha
 
 **Principles Addressed**: 1-9, 13-18
 **Characteristics**:
+
 - Zero-touch release process
 - Automated versioning and CHANGELOG
 - Regular release cadence established
@@ -946,6 +998,7 @@ These phases describe the progressive adoption of CI/CD principles. Focus on wha
 
 **Principles Addressed**: 1-24 (All)
 **Characteristics**:
+
 - SLSA provenance and attestations
 - Cryptographic verification enabled
 - Active vulnerability management

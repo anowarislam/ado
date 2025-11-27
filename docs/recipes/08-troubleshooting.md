@@ -2588,6 +2588,7 @@ git push      # Push with confidence
 ---
 
 **Next Steps**:
+
 - [Chapter 9: Implementation Guide](09-implementation-guide.md) - Step-by-step setup
 - [Chapter 7: GitHub Integrations](07-github-integrations.md) - GitHub App setup
 - [Chapter 6: Release Automation](06-release-automation.md) - Understanding release-please

@@ -90,6 +90,7 @@ GitHub provides three primary ways to authenticate in automated workflows:
 **What it is**: Automatically created for each workflow run by GitHub Actions.
 
 **Characteristics**:
+
 - Automatically available as `${{ secrets.GITHUB_TOKEN }}`
 - Scoped to the current repository
 - Expires when the workflow completes
@@ -115,6 +116,7 @@ jobs:
 ```
 
 **Best for**:
+
 - CI checks (tests, linting, builds)
 - Reading repository contents
 - Commenting on PRs
@@ -122,6 +124,7 @@ jobs:
 - Basic PR operations
 
 **Limitations**:
+
 - Cannot trigger workflows (prevents recursive triggers)
 - Cannot access organization-level resources
 - Cannot bypass branch protection rules
@@ -132,6 +135,7 @@ jobs:
 **What it is**: A token tied to a specific user account.
 
 **Characteristics**:
+
 - Created manually in user settings
 - Can be classic or fine-grained
 - Tied to user permissions and rate limits
@@ -150,11 +154,13 @@ jobs:
 ```
 
 **Best for**:
+
 - **Nothing in production** - use GitHub Apps instead
 - Personal projects (with caution)
 - Quick prototyping
 
 **Problems**:
+
 - Tied to individual user (breaks if user leaves)
 - Hard to audit ("who did this?")
 - All permissions tied to user
@@ -166,6 +172,7 @@ jobs:
 **What it is**: A first-class integration that authenticates as itself, not a user.
 
 **Characteristics**:
+
 - Identity independent of users
 - Fine-grained permissions
 - Can trigger workflows
@@ -192,6 +199,7 @@ jobs:
 ```
 
 **Best for**:
+
 - Production workflows
 - Release automation
 - Cross-repository operations
@@ -200,6 +208,7 @@ jobs:
 - Organization-wide operations
 
 **Advantages**:
+
 - Not tied to individual users
 - Fine-grained permissions
 - Can trigger workflows
@@ -313,6 +322,7 @@ sequenceDiagram
 ```
 
 **Why This Works**:
+
 1. Release Please can trigger on push events (App bypasses limitations)
 2. Release PR updates don't require manual intervention
 3. GoReleaser can create releases and trigger subsequent workflows
@@ -352,6 +362,7 @@ graph TB
 ```
 
 **Components Explained**:
+
 - **App ID**: Public identifier for your app
 - **Private Key**: Secret used to sign JWTs
 - **Installation ID**: Links app to specific org/repo
@@ -367,6 +378,7 @@ graph TB
 #### Step 1: Navigate to GitHub App Settings
 
 **UI Path**:
+
 1. Click your profile picture (top right)
 2. Settings → Developer settings → GitHub Apps
 3. Click "New GitHub App"
@@ -406,6 +418,7 @@ Webhook:
 This is the most critical step. GitHub Apps use **fine-grained permissions**.
 
 **Permission Philosophy**:
+
 - **Principle of least privilege**: Only request what you need
 - **Repository vs Organization**: Start with repository-only
 - **Read vs Write**: Start with read, upgrade if needed
@@ -451,6 +464,7 @@ Where can this GitHub App be installed?
 ```
 
 **Choose based on**:
+
 - **Only on this account**: Private app, just for your org
 - **Any account**: If you plan to share the app (e.g., open source tool)
 
@@ -464,6 +478,7 @@ Where can this GitHub App be installed?
 Click **"Create GitHub App"** button at bottom.
 
 **What happens next**:
+
 1. App is created with a unique App ID
 2. You're redirected to the app's settings page
 3. You can now generate a private key
@@ -510,6 +525,7 @@ App ID: 123456
 ```
 
 **You'll need two secrets for GitHub Actions**:
+
 1. `APP_ID`: The numeric ID (e.g., 123456)
 2. `APP_PRIVATE_KEY`: The entire contents of the `.pem` file
 
@@ -564,6 +580,7 @@ sequenceDiagram
 ```
 
 **Two token types**:
+
 1. **JWT (JSON Web Token)**: Proves the app's identity (short-lived, seconds)
 2. **Installation Token**: Used for actual API calls (default: 1 hour)
 
@@ -574,6 +591,7 @@ Before using the app in workflows, you must store two secrets:
 #### Adding Repository Secrets
 
 **UI Path**:
+
 1. Go to your repository on GitHub
 2. Settings → Secrets and variables → Actions
 3. Click "New repository secret"
@@ -606,6 +624,7 @@ MIIEpAIBAAKCAQEA2Z3qX+0FAKEC0dGToEXAMPLEKEYiLCXnSq7vL9...
 > Secrets page showing a list of secrets with masked values. A green "New repository secret" button at top right. Each secret row shows name, last updated date, and an "Update" button.
 
 **Security Notes**:
+
 - Secrets are encrypted at rest by GitHub
 - Secrets are never exposed in logs (automatically masked)
 - Only workflows can access repository secrets
@@ -645,12 +664,14 @@ jobs:
 ```
 
 **How it works**:
+
 1. The action reads `APP_ID` and `APP_PRIVATE_KEY` from secrets
 2. Generates a JWT signed with the private key
 3. Requests an installation token from GitHub
 4. Outputs the token for use in later steps
 
 **Token properties**:
+
 - Expires in 1 hour (default)
 - Has permissions defined in app configuration
 - Can bypass `GITHUB_TOKEN` limitations
@@ -780,6 +801,7 @@ jobs:
 ### Token Lifetime and Refresh
 
 **Default behavior**:
+
 - Installation tokens expire after 1 hour
 - If your workflow runs longer, the token expires mid-workflow
 
@@ -896,6 +918,7 @@ jobs:
 ```
 
 **When GITHUB_TOKEN is enough**:
+
 - Running tests
 - Building artifacts
 - Commenting on PRs
@@ -929,6 +952,7 @@ jobs:
 ```
 
 **When GitHub App is required**:
+
 - Creating PRs that trigger CI workflows
 - Bypassing branch protection rules
 - Triggering workflow_dispatch events
@@ -965,6 +989,7 @@ jobs:
 ```
 
 **Available permissions**:
+
 - `actions: read|write`
 - `checks: read|write`
 - `contents: read|write`
@@ -1023,6 +1048,7 @@ jobs:
 ```
 
 **Common conditions**:
+
 - `github.event_name == 'push'` - Specific event type
 - `github.ref == 'refs/heads/main'` - Specific branch
 - `github.actor == 'dependabot[bot]'` - Specific actor
@@ -1210,6 +1236,7 @@ jobs:
 ```
 
 **Configure in repository settings**:
+
 - Settings → Environments → New environment
 - Add protection rules:
   - Required reviewers
@@ -1229,6 +1256,7 @@ Dependabot automatically:
 4. Groups related updates together
 
 **Benefits**:
+
 - Stay up-to-date with minimal effort
 - Security patches applied quickly
 - Consistent PR format for automation
@@ -1254,6 +1282,7 @@ updates:
 ```
 
 **Key fields**:
+
 - `package-ecosystem`: Which dependency system (gomod, pip, npm, etc.)
 - `directory`: Where the manifest file lives
 - `schedule`: How often to check for updates
@@ -1391,6 +1420,7 @@ Dependabot creates two types of PRs:
 **Triggered by**: GitHub Security Advisories
 
 **Characteristics**:
+
 - Created immediately (ignores schedule)
 - Labeled with `security` automatically
 - Includes vulnerability details
@@ -1408,6 +1438,7 @@ Fixes: CVE-2023-48795 (High severity)
 **Triggered by**: Regular schedule checks
 
 **Characteristics**:
+
 - Created per schedule (e.g., weekly)
 - Labeled per configuration
 - Follows grouping rules
@@ -1592,10 +1623,12 @@ updates:
 ### Safety Principles
 
 **What to auto-merge**:
+
 - Patch updates (1.2.3 → 1.2.4) - bug fixes only
 - Minor updates (1.2.0 → 1.3.0) - new features, backward compatible
 
 **What NOT to auto-merge**:
+
 - Major updates (1.0.0 → 2.0.0) - breaking changes possible
 - Security updates - may need investigation
 - Failed CI checks - obvious
@@ -1650,6 +1683,7 @@ jobs:
 ```
 
 **How it works**:
+
 1. Trigger on any PR activity
 2. Check if PR is from Dependabot
 3. Fetch metadata about the update
@@ -1666,6 +1700,7 @@ jobs:
 4. Merges automatically when conditions met
 
 **Merge strategies**:
+
 - `--squash`: All commits squashed (recommended for dependency updates)
 - `--merge`: Standard merge commit
 - `--rebase`: Rebase and merge
@@ -1686,6 +1721,7 @@ steps.metadata.outputs:
 ```
 
 **Use cases**:
+
 - Filter by dependency name
 - Treat production vs dev dependencies differently
 - Special handling for specific ecosystems
@@ -1796,6 +1832,7 @@ jobs:
 **Answer**: Yes, with proper safeguards:
 
 ✅ **Safeguards in place**:
+
 1. CI must pass (tests, linting, coverage)
 2. Only patch/minor updates (semantic versioning guarantee)
 3. Branch protection rules enforced
@@ -1803,6 +1840,7 @@ jobs:
 5. Can be reverted immediately if issues found
 
 ❌ **Don't auto-merge**:
+
 - Major version updates (breaking changes likely)
 - Updates from untrusted sources
 - Critical infrastructure dependencies without review
@@ -1835,6 +1873,7 @@ jobs:
 ```
 
 **Track metrics**:
+
 - How many PRs auto-merged vs manual review?
 - Any reverted auto-merges?
 - Time saved vs manual merging
@@ -1885,6 +1924,7 @@ git push origin main  # Error: Protected branch
 ### Basic Protection Setup
 
 **UI Path**:
+
 1. Repository → Settings → Branches
 2. Add branch protection rule
 3. Branch name pattern: `main` (or `main|develop` for multiple)
@@ -1906,6 +1946,7 @@ git push origin main  # Error: Protected branch
 ```
 
 **Effect**:
+
 - Direct pushes blocked
 - At least 1 approval required
 - Maintains review quality
@@ -1927,6 +1968,7 @@ git push origin main  # Error: Protected branch
 ```
 
 **Effect**:
+
 - All CI checks must pass
 - Branch must be up-to-date with main
 - Prevents merging broken code
@@ -1955,6 +1997,7 @@ git push origin main  # Error: Protected branch
 ### Required Status Checks
 
 **How to identify check names**:
+
 1. Run a workflow in a PR
 2. Check the "Checks" tab on PR
 3. Note the exact name of each check
@@ -1978,6 +2021,7 @@ jobs:
 ```
 
 **Add to branch protection**:
+
 - ✅ Conventional Commits
 - ✅ Go
 - ✅ Python Lab
@@ -2048,6 +2092,7 @@ jobs:
 ```
 
 **Use cases**:
+
 - Emergency hotfixes
 - Release automation (GitHub App)
 - Security patches
@@ -2083,6 +2128,7 @@ GitHub is migrating to "Rulesets" - a more flexible system:
 **UI Path**: Settings → Rules → Rulesets
 
 **Benefits**:
+
 - Apply rules across multiple branches with patterns
 - More granular bypass permissions
 - Better performance
@@ -2141,6 +2187,7 @@ git push origin test-branch
 ### Protection Rules Anti-Patterns
 
 ❌ **Don't**:
+
 - Allow force pushes to main
 - Allow deletions of main
 - Disable status checks "temporarily" (you'll forget)
@@ -2148,6 +2195,7 @@ git push origin test-branch
 - Require signed commits without team buy-in
 
 ✅ **Do**:
+
 - Start with basic rules, add more over time
 - Document why each rule exists
 - Review rules quarterly
@@ -2163,6 +2211,7 @@ git push origin test-branch
 GitHub Container Registry (GHCR) is GitHub's Docker image hosting service:
 
 **Benefits**:
+
 - Integrated with GitHub (same permissions)
 - Free for public repositories
 - Fast (globally distributed CDN)
@@ -2184,6 +2233,7 @@ ghcr.io/anowarislam/ado:latest
 ### Enabling GHCR
 
 **Repository Settings**:
+
 1. Settings → Actions → General
 2. Scroll to "Workflow permissions"
 3. Select "Read and write permissions"
@@ -2233,6 +2283,7 @@ jobs:
 ```
 
 **Key points**:
+
 - Use `GITHUB_TOKEN` (not GitHub App) for packages
 - Requires `packages: write` permission
 - `github.actor` is the user/bot triggering the workflow
@@ -2337,6 +2388,7 @@ LABEL org.opencontainers.image.licenses="MIT"
 ```
 
 **Benefits**:
+
 - Visible in GHCR UI
 - Machine-readable metadata
 - Links back to source code
@@ -2347,6 +2399,7 @@ LABEL org.opencontainers.image.licenses="MIT"
 **By default**: Images are private (even for public repos).
 
 **Make images public**:
+
 1. Go to package page: `https://github.com/users/<username>/packages/container/<package-name>`
 2. Package settings → Change visibility
 3. Select "Public"
@@ -2373,6 +2426,7 @@ docker pull ghcr.io/myorg/private-image:latest
 ### Image Lifecycle
 
 **Retention policies**:
+
 - Untagged images: Delete after 14 days (default)
 - Can configure per package
 
@@ -2386,6 +2440,7 @@ ghcr.io/owner/image:main        # Latest commit on main (updates)
 ```
 
 **ado's strategy**:
+
 - `1.0.0`: Specific release (never changes)
 - `latest`: Most recent release (updates on each release)
 
@@ -2418,6 +2473,7 @@ cosign verify ghcr.io/anowarislam/ado:1.0.0 \
 GitHub Pages hosts static websites directly from repositories:
 
 **Use cases**:
+
 - Documentation sites
 - Project landing pages
 - API references
@@ -2433,6 +2489,7 @@ GitHub Pages hosts static websites directly from repositories:
 ### Enabling GitHub Pages
 
 **Repository Settings**:
+
 1. Settings → Pages
 2. Source: "GitHub Actions"
 3. (Old method: Deploy from branch - don't use this)
@@ -2441,6 +2498,7 @@ GitHub Pages hosts static websites directly from repositories:
 > GitHub Pages settings showing "Source" dropdown with "GitHub Actions" selected (recommended). Below, a notice: "Your site is live at https://username.github.io/repo/". Branch and folder dropdowns are greyed out when using GitHub Actions.
 
 **Why GitHub Actions source?**:
+
 - Full control over build process
 - Can use any static site generator
 - Better caching and performance
@@ -2542,6 +2600,7 @@ jobs:
 ```
 
 **Key features**:
+
 1. **Build on PRs** - validates docs before merge
 2. **Deploy on main** - keeps docs up-to-date
 3. **Deploy on release** - major doc updates
@@ -2602,6 +2661,7 @@ nav:
 ```
 
 **Why MkDocs Material?**:
+
 - Beautiful out-of-the-box
 - Fast search
 - Mobile-responsive
@@ -2673,6 +2733,7 @@ deploy:
 ```
 
 **Benefits**:
+
 - Deployment history
 - Protection rules (require approval)
 - Environment secrets
@@ -2721,6 +2782,7 @@ validate-links:
 Codecov is a coverage reporting and visualization service:
 
 **Features**:
+
 - Visual coverage reports
 - Line-by-line coverage in PR comments
 - Coverage trends over time
@@ -2837,6 +2899,7 @@ Additional details:
 **View at**: `https://app.codecov.io/gh/<username>/<repo>`
 
 **Features**:
+
 - Coverage trends over time
 - File-by-file coverage
 - Sunburst visualization
@@ -2881,6 +2944,7 @@ ignore:
 ```
 
 **Status checks**:
+
 - `codecov/project` - Overall project coverage
 - `codecov/patch` - Coverage of changed lines in PR
 
@@ -2937,6 +3001,7 @@ flags:
 ```
 
 **Advantages**:
+
 - Immediate feedback
 - Doesn't depend on external service
 - Blocks merge if threshold not met
@@ -2955,6 +3020,7 @@ coverage:
 ```
 
 **Advantages**:
+
 - Historical trends
 - Visual reports
 - Line-by-line view
@@ -3022,6 +3088,7 @@ graph TB
 **What it is**: Automated vulnerability detection for dependencies.
 
 **Enable**:
+
 1. Settings → Security → Code security and analysis
 2. ✅ Enable Dependabot alerts
 3. ✅ Enable Dependabot security updates
@@ -3030,6 +3097,7 @@ graph TB
 > Security settings page showing "Code security and analysis" section. Multiple toggles for "Dependabot alerts" (On), "Dependabot security updates" (On), "Grouped security updates" (On). Each with "Enable" or "Disable" buttons and explanatory text.
 
 **How it works**:
+
 1. GitHub scans your dependencies (go.mod, requirements.txt, etc.)
 2. Compares against GitHub Advisory Database
 3. Creates alert when vulnerability found
@@ -3047,6 +3115,7 @@ Dependabot will create a PR to fix this vulnerability.
 ```
 
 **Alert severity levels**:
+
 - **Critical**: Immediate action required
 - **High**: Prompt attention needed
 - **Medium**: Review and plan fix
@@ -3101,6 +3170,7 @@ jobs:
 ```
 
 **What it detects**:
+
 - SQL injection
 - XSS vulnerabilities
 - Path traversal
@@ -3109,6 +3179,7 @@ jobs:
 - Cryptographic weaknesses
 
 **Results appear**:
+
 - Security tab → Code scanning alerts
 - PR comments (if issues in changed code)
 
@@ -3120,11 +3191,13 @@ jobs:
 **What it is**: Detects committed secrets (API keys, tokens, passwords).
 
 **Enable**:
+
 1. Settings → Security → Code security and analysis
 2. ✅ Enable secret scanning
 3. ✅ Enable push protection (blocks commits with secrets)
 
 **Detected secrets**:
+
 - GitHub tokens
 - AWS access keys
 - Azure credentials
@@ -3181,6 +3254,7 @@ jobs:
 ```
 
 **What it checks**:
+
 - New dependencies added
 - Dependencies with known vulnerabilities
 - License compatibility
@@ -3228,6 +3302,7 @@ jobs:
 ```
 
 **What it proves**:
+
 - Built in GitHub Actions (not local machine)
 - Exact commit SHA
 - Workflow file used
@@ -3286,6 +3361,7 @@ Verification successful!
 ```
 
 **Why keyless signing?**:
+
 - No private keys to manage
 - Uses GitHub's OIDC identity
 - Signatures stored in public transparency log
@@ -3338,6 +3414,7 @@ cosign verify ghcr.io/username/repo:1.0.0 \
 ```
 
 **Benefits**:
+
 - Shows users you take security seriously
 - Provides responsible disclosure process
 - Documents verification procedures
@@ -3346,6 +3423,7 @@ cosign verify ghcr.io/username/repo:1.0.0 \
 ### 8. Security Advisories
 
 **Create private advisory**:
+
 1. Security tab → Advisories
 2. "New draft security advisory"
 3. Fill in details (vulnerability, severity, affected versions)
@@ -3357,6 +3435,7 @@ cosign verify ghcr.io/username/repo:1.0.0 \
 > Form for creating security advisory with fields: Title, Severity (dropdown: Low/Medium/High/Critical), CWE (Common Weakness Enumeration dropdown), Description (markdown editor), Affected versions, Patched versions, Workarounds. Buttons: "Create advisory" and "Cancel".
 
 **Why use advisories?**:
+
 - Coordinate disclosure with fix
 - Get CVE assigned automatically
 - Notify users via Dependabot
@@ -3594,10 +3673,12 @@ graph TB
 ```
 
 **External services**:
+
 - Codecov: Outbound HTTPS (coverage upload)
 - Sigstore: Outbound HTTPS (signing, transparency log)
 
 **Internal services**:
+
 - GHCR: GitHub-hosted, same authentication
 - GitHub Pages: GitHub-hosted, same authentication
 
@@ -3631,16 +3712,19 @@ Code push → main
 ### Integration Costs
 
 **GitHub-hosted (free for public repos)**:
+
 - CI minutes: 2,000 min/month (private repos)
 - GHCR storage: 500 MB (private repos)
 - GitHub Pages: Unlimited bandwidth (public repos)
 - Actions: Unlimited (public repos)
 
 **External services**:
+
 - Codecov: Free for public repos, paid for private
 - Sigstore: Free (transparency log)
 
 **Cost optimization**:
+
 - Cache dependencies (faster builds, fewer minutes)
 - Use concurrency limits (prevent runaway builds)
 - Schedule heavy workflows (e.g., CodeQL weekly, not every push)
@@ -3893,6 +3977,7 @@ Error: Secret CODECOV_TOKEN not found
 #### Strategy 1: Enable Debug Logging
 
 **Enable in repository**:
+
 1. Settings → Secrets → Actions
 2. Add secret: `ACTIONS_STEP_DEBUG` = `true`
 3. Add secret: `ACTIONS_RUNNER_DEBUG` = `true`

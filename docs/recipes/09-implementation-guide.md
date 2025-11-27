@@ -142,11 +142,13 @@ Docker version 24.0.0
 **Goal**: Get basic CI/CD working quickly
 
 **Includes**:
+
 - Basic CI workflow (lint + test)
 - Commit message validation
 - GitHub Actions only (no local hooks yet)
 
 **Skip**:
+
 - Release automation
 - Security features
 - Advanced integrations
@@ -160,6 +162,7 @@ Docker version 24.0.0
 **Goal**: Production-ready CI/CD for small teams
 
 **Includes**:
+
 - Complete CI pipeline
 - Git hooks for local validation
 - Release automation
@@ -167,6 +170,7 @@ Docker version 24.0.0
 - Documentation system
 
 **Skip**:
+
 - SLSA provenance (can add later)
 - Container signing (if not using containers)
 - GitHub App (use GITHUB_TOKEN initially)
@@ -784,6 +788,7 @@ make validate
 Navigate to GitHub Settings → Branches → Add rule for `main`:
 
 **Settings**:
+
 - ✅ Require a pull request before merging
 - ✅ Require status checks to pass before merging
   - Required checks:
@@ -971,9 +976,11 @@ What are we deciding to do?
 
 ### Alternative 1: Name
 **Pros**:
+
 - Pro 1
 
 **Cons**:
+
 - Con 1
 
 **Why Rejected**: Reason
@@ -1623,16 +1630,19 @@ Congratulations! You've implemented a production-grade CI/CD system.
 ### Next Steps
 
 **Enhance**:
+
 - Add container signing (Chapter 3)
 - Set up Codecov insights
 - Add more advanced monitoring
 
 **Scale**:
+
 - Onboard more team members
 - Create team-specific documentation
 - Tune coverage thresholds per package
 
 **Optimize**:
+
 - Cache more in CI
 - Parallelize test execution
 - Reduce CI runtime

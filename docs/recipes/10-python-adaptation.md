@@ -114,6 +114,7 @@ myproject/
 ```
 
 **Advantages**:
+
 - Prevents accidental imports of non-installed code
 - Clearly separates source from tests
 - Forces proper package installation
@@ -128,6 +129,7 @@ myproject/
 ```
 
 **Use When**:
+
 - Small projects or libraries
 - Prototyping
 - Educational projects
@@ -441,28 +443,33 @@ ignore_missing_imports = true
 ### Key Sections Explained
 
 **Project Metadata**:
+
 - `version = "0.0.0"`: Managed by release-please; update only in releases
 - `requires-python`: Minimum Python version (use 3.10+ for modern features)
 - `dependencies`: Runtime requirements only
 - `optional-dependencies`: Dev tools, docs tools, etc.
 
 **Build System**:
+
 - `setuptools>=68.0.0`: Modern setuptools with PEP 621 support
 - `package-dir`: Use src-layout
 - `package-data`: Include type stubs (py.typed), configs, etc.
 
 **Ruff Configuration**:
+
 - Replaces black, flake8, isort, and more
 - `select`: Enable specific rule sets
 - `ignore`: Disable problematic rules
 - `per-file-ignores`: Different rules for tests
 
 **Pytest**:
+
 - `testpaths`: Where to find tests
 - `addopts`: Default CLI options
 - Coverage thresholds: 80% minimum (matches Go CI)
 
 **Mypy**:
+
 - Strict type checking enabled
 - Per-module overrides for tests and third-party packages
 
@@ -1109,12 +1116,14 @@ class Client:
 ### When to Use Type Checking
 
 **Always use for**:
+
 - Public libraries
 - Large codebases
 - Team projects
 - Critical business logic
 
 **Optional for**:
+
 - Small scripts
 - Prototypes
 - Data science notebooks (though gradually adding types helps)
@@ -1221,6 +1230,7 @@ pipenv shell
 | Adoption | Universal | Growing | Declining |
 
 **Recommendation**:
+
 - **Small projects / scripts**: venv + pip
 - **Libraries / published packages**: Poetry
 - **This CI/CD system**: venv + pip (simplicity, speed, CI-friendly)
@@ -1842,6 +1852,7 @@ jobs:
 ```
 
 **Setup**:
+
 1. Generate PyPI API token: https://pypi.org/manage/account/token/
 2. Add to GitHub Secrets: `PYPI_API_TOKEN`
 
@@ -1850,6 +1861,7 @@ jobs:
 **No tokens needed!** GitHub Actions becomes a trusted publisher.
 
 **Setup**:
+
 1. Go to https://pypi.org/manage/account/publishing/
 2. Add publisher:
    - PyPI Project: `myproject`
@@ -1900,6 +1912,7 @@ jobs:
 ```
 
 **Benefits**:
+
 - No token management
 - More secure (scoped to repo)
 - Easier rotation
@@ -2390,6 +2403,7 @@ def cli(config):
 | Dependencies | None | Click | Stdlib |
 
 **Recommendation**:
+
 - **Click**: Production-ready, battle-tested, used by Flask
 - **Typer**: Modern, type-hint based, great for new projects
 - **Argparse**: Only for stdlib-only projects
@@ -2977,6 +2991,7 @@ This chapter provided a complete guide to adapting the CI/CD system for Python p
 15. **Data Science**: Jupyter, DVC, and data pipeline testing
 
 **Key Takeaways**:
+
 - Use src-layout for proper package isolation
 - Ruff replaces black, flake8, isort with better performance
 - Pytest parametrize mirrors Go's table-driven tests
@@ -2986,6 +3001,7 @@ This chapter provided a complete guide to adapting the CI/CD system for Python p
 - Click provides production-ready CLI framework
 
 **Next Steps**:
+
 - Clone the example structure
 - Adapt Makefile targets to your project
 - Set up GitHub Actions workflows

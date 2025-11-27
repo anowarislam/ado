@@ -56,6 +56,7 @@ graph TB
 ```
 
 **Why Defense in Depth**:
+
 - **Attackers must break multiple layers** - not just one
 - **Each layer catches different threat types** - checksums catch corruption, signatures catch tampering
 - **Independent verification methods** - don't rely on single trust anchor
@@ -272,6 +273,7 @@ sequenceDiagram
 ```
 
 **Key Fields**:
+
 - **subject**: The artifact (filename + hash)
 - **buildType**: How it was built (GitHub Actions)
 - **externalParameters**: Source repo + commit
@@ -355,6 +357,7 @@ jobs:
 ```
 
 **Key Points**:
+
 - **Automatic**: Runs on every release
 - **Zero configuration**: Uses GitHub's defaults
 - **Multi-artifact**: Attests all release files
@@ -417,12 +420,14 @@ done
 ### Trust Model
 
 **What attestations prove**:
+
 - ✅ Artifact was built by GitHub Actions (not a developer's laptop)
 - ✅ Built from specific commit in specific repo
 - ✅ Built by specific workflow file
 - ✅ No tampering after build
 
 **What attestations DON'T prove**:
+
 - ❌ Source code is free of vulnerabilities
 - ❌ Dependencies are secure
 - ❌ No supply chain attacks on dependencies
@@ -486,6 +491,7 @@ graph TB
 ```
 
 **Key Properties**:
+
 - **Keyless signing**: No private keys to manage
 - **OIDC-based**: Tied to GitHub Actions identity
 - **Transparent**: All signatures logged publicly
@@ -527,6 +533,7 @@ jobs:
 ```
 
 **Key Points**:
+
 - **`--yes` flag**: Non-interactive signing (required for CI)
 - **No key files**: Uses GitHub's OIDC token
 - **Multiple tags**: Sign both versioned and latest tags
@@ -632,6 +639,7 @@ Verification proves:
 **What are checksums?**: Fixed-size hash values that uniquely identify files.
 
 **Properties**:
+
 - **Deterministic**: Same file always produces same hash
 - **One-way**: Can't reverse hash to get file
 - **Collision-resistant**: Near-impossible to find two files with same hash
@@ -738,10 +746,12 @@ func verifyChecksum(filepath string, expectedSum string) error {
 ### Checksum Trust Model
 
 **What checksums prove**:
+
 - ✅ File integrity (not corrupted during download)
 - ✅ Exact match to released version
 
 **What checksums DON'T prove**:
+
 - ❌ File authenticity (who created it)
 - ❌ Build provenance (how it was built)
 - ❌ No malware (content is safe)
@@ -779,6 +789,7 @@ Attacker → GitHub Release (compromises account)
 **What is an SBOM?**: A complete inventory of all components in your software.
 
 **Why SBOMs matter**:
+
 - **Transparency**: Know what's in your software
 - **Vulnerability management**: Identify affected components
 - **Compliance**: Required by many regulations
@@ -872,6 +883,7 @@ updates:
 ```
 
 **Benefits**:
+
 - **Automatic PR creation**: Dependabot opens PRs for updates
 - **Security alerts**: Notifies of known vulnerabilities
 - **Changelogs included**: PRs show what changed
@@ -952,6 +964,7 @@ jobs:
 ### Dependency Pinning
 
 **Why pin dependencies?**:
+
 - **Reproducible builds**: Same inputs → same outputs
 - **Security**: Prevent surprise updates
 - **Stability**: Avoid breaking changes
@@ -1022,6 +1035,7 @@ jobs:
 ```
 
 **Best Practices**:
+
 - ✅ Use least-privilege secrets
 - ✅ Rotate regularly
 - ✅ Never print secrets to logs
@@ -1034,6 +1048,7 @@ jobs:
 **What is OIDC?**: OpenID Connect - standard for federated authentication.
 
 **Why OIDC?**:
+
 - **No static secrets**: Tokens are short-lived (hours)
 - **Automatic rotation**: New token per workflow run
 - **Scoped**: Tied to specific workflow and repo
@@ -1074,6 +1089,7 @@ jobs:
 ### GitHub App Tokens
 
 **Why GitHub Apps?**:
+
 - **Fine-grained permissions**: Only what's needed
 - **Short-lived tokens**: 1 hour max
 - **Installation scoped**: Per-repo or per-org
@@ -1310,6 +1326,7 @@ allow {
 ### How to Report
 
 Use **GitHub Security Advisories**:
+
 1. Go to the [Security tab](https://github.com/anowarislam/ado/security/advisories)
 2. Click "Report a vulnerability"
 3. Fill out the form
@@ -1429,24 +1446,28 @@ We thank the following security researchers:
 ### Implementation Checklist
 
 **Source Control Security**:
+
 - [ ] Branch protection enabled on main
 - [ ] Require PR reviews
 - [ ] Require CI checks to pass
 - [ ] Signed commits (optional but recommended)
 
 **Build Security**:
+
 - [ ] Builds run in isolated CI environment
 - [ ] No user input in build process
 - [ ] Reproducible builds enabled
 - [ ] Build logs publicly accessible
 
 **Artifact Security**:
+
 - [ ] SHA256 checksums generated
 - [ ] SLSA provenance attestations created
 - [ ] Checksums included in attestations
 - [ ] All artifacts attested
 
 **Container Security**:
+
 - [ ] Minimal base image (scratch or distroless)
 - [ ] Non-root user
 - [ ] Signed with Sigstore/cosign
@@ -1454,6 +1475,7 @@ We thank the following security researchers:
 - [ ] Verification documented
 
 **Supply Chain Security**:
+
 - [ ] SBOM generated (SPDX or CycloneDX)
 - [ ] Dependabot enabled
 - [ ] Dependency pinning enforced
@@ -1461,6 +1483,7 @@ We thank the following security researchers:
 - [ ] Auto-merge for safe updates
 
 **Secret Management**:
+
 - [ ] GitHub secrets properly scoped
 - [ ] OIDC tokens used where possible
 - [ ] GitHub App for release automation
@@ -1468,6 +1491,7 @@ We thank the following security researchers:
 - [ ] No secrets in code
 
 **Documentation**:
+
 - [ ] SECURITY.md created
 - [ ] Verification instructions documented
 - [ ] Trust model explained
@@ -1476,6 +1500,7 @@ We thank the following security researchers:
 ### Verification Checklist
 
 **For Each Release**:
+
 - [ ] Checksums generated and published
 - [ ] Attestations created for all artifacts
 - [ ] Container images signed
@@ -1484,6 +1509,7 @@ We thank the following security researchers:
 - [ ] Verification instructions in release notes
 
 **Periodic Security Reviews**:
+
 - [ ] Review dependency updates monthly
 - [ ] Audit CI workflows quarterly
 - [ ] Review secret usage quarterly
