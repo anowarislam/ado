@@ -652,9 +652,12 @@ Coverage thresholds are configurable in `.testcoverage.yml`:
 
 ```yaml
 override:
-  github.com/anowarislam/ado/internal/meta: 90       # Critical packages
-  github.com/anowarislam/ado/internal/config: 85     # Important logic
-  github.com/anowarislam/ado/cmd/ado/version: 60     # Simple commands
+  - path: ^github\.com/anowarislam/ado/internal/meta$
+    threshold: 90       # Critical packages
+  - path: ^github\.com/anowarislam/ado/internal/config$
+    threshold: 85       # Important logic
+  - path: ^github\.com/anowarislam/ado/cmd/ado/version$
+    threshold: 60       # Simple commands
 ```
 
 **Philosophy**: Higher thresholds for critical code, lower for trivial wiring.

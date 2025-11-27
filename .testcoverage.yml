@@ -7,18 +7,20 @@ threshold:
   package: 80   # Minimum coverage per package
   total: 80     # Minimum total project coverage
 
-# Per-package overrides (optional)
-# Format: package_path: threshold_percentage
+# Per-package overrides (array of path regex patterns with thresholds)
 override:
-  github.com/anowarislam/ado/internal/meta: 90       # Higher requirement for meta package
-  github.com/anowarislam/ado/internal/config: 85     # Stricter config package
-  github.com/anowarislam/ado/cmd/ado/version: 60     # Lower for simple commands
+  - path: ^github\.com/anowarislam/ado/internal/meta$
+    threshold: 90       # Higher requirement for meta package
+  - path: ^github\.com/anowarislam/ado/internal/config$
+    threshold: 85       # Stricter config package
+  - path: ^github\.com/anowarislam/ado/cmd/ado/version$
+    threshold: 60       # Lower for simple commands
 
-# Exclusions (optional)
-# Packages to exclude from coverage analysis
+# Exclusions (object with paths array of regex patterns)
 exclude:
-  - github.com/anowarislam/ado/internal/testutil      # Test utilities
-  - github.com/anowarislam/ado/cmd/ado/root          # CLI wiring
+  paths:
+    - ^github\.com/anowarislam/ado/internal/testutil$      # Test utilities
+    - ^github\.com/anowarislam/ado/cmd/ado/root$           # CLI wiring
 
 # Local coverage threshold (applied to files with >0% coverage)
 # Files with 0% coverage are reported but don't fail the check

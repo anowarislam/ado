@@ -441,11 +441,14 @@ threshold:
   total: 80     # Minimum total project coverage
 
 override:
-  github.com/anowarislam/ado/internal/meta: 90       # Higher for critical packages
-  github.com/anowarislam/ado/cmd/ado/version: 60     # Lower for simple commands
+  - path: ^github\.com/anowarislam/ado/internal/meta$
+    threshold: 90       # Higher for critical packages
+  - path: ^github\.com/anowarislam/ado/cmd/ado/version$
+    threshold: 60       # Lower for simple commands
 
 exclude:
-  - github.com/anowarislam/ado/internal/testutil      # Test utilities
+  paths:
+    - ^github\.com/anowarislam/ado/internal/testutil$      # Test utilities
 ```
 
 **PR Comment Example**:
