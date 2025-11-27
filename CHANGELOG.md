@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://github.com/anowarislam/ado/compare/v1.3.0...v1.4.0) (2025-11-27)
+
+
+### Features
+
+* **meta:** add system subcommand with GPU/NPU detection ([#57](https://github.com/anowarislam/ado/issues/57)) ([b734009](https://github.com/anowarislam/ado/commit/b734009653b24755c8974fbf26a5b1dfb9a6a764))
+
+
+### Documentation
+
+* **recipes:** fix markdown formatting for lists after bold headers ([#58](https://github.com/anowarislam/ado/issues/58)) ([0bae5bb](https://github.com/anowarislam/ado/commit/0bae5bbd7c9d6b82cd74c4fb931236acd698691e))
+* **spec:** command meta system ([#55](https://github.com/anowarislam/ado/issues/55)) ([a54f188](https://github.com/anowarislam/ado/commit/a54f188a091c19c25b3277caa4f7f9aa130640e9))
+
 ## [1.3.0](https://github.com/anowarislam/ado/compare/v1.2.0...v1.3.0) (2025-11-26)
 
 
