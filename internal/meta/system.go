@@ -64,7 +64,7 @@ type GPUInfo struct {
 // NPUInfo represents NPU (Neural Processing Unit) information.
 type NPUInfo struct {
 	Detected        bool   `json:"detected" yaml:"detected"`
-	Type            string `json:"type" yaml:"type"`              // Apple Neural Engine, Intel AI Boost, AMD Ryzen AI, unknown
+	Type            string `json:"type" yaml:"type"`                         // Apple Neural Engine, Intel AI Boost, AMD Ryzen AI, unknown
 	InferenceMethod string `json:"inference_method" yaml:"inference_method"` // cpu_model, platform_api, unknown
 }
 

@@ -102,67 +102,67 @@ func TestDetectNPU(t *testing.T) {
 	ctx := context.Background()
 
 	tests := []struct {
-		name        string
-		cpuModel    string
-		os          string
+		name         string
+		cpuModel     string
+		os           string
 		wantDetected bool
-		wantType    string
+		wantType     string
 	}{
 		{
-			name:        "Apple M1",
-			cpuModel:    "Apple M1",
-			os:          "darwin",
+			name:         "Apple M1",
+			cpuModel:     "Apple M1",
+			os:           "darwin",
 			wantDetected: true,
-			wantType:    "Apple Neural Engine",
+			wantType:     "Apple Neural Engine",
 		},
 		{
-			name:        "Apple M2 Pro",
-			cpuModel:    "Apple M2 Pro",
-			os:          "darwin",
+			name:         "Apple M2 Pro",
+			cpuModel:     "Apple M2 Pro",
+			os:           "darwin",
 			wantDetected: true,
-			wantType:    "Apple Neural Engine",
+			wantType:     "Apple Neural Engine",
 		},
 		{
-			name:        "Apple M3 Max",
-			cpuModel:    "Apple M3 Max",
-			os:          "darwin",
+			name:         "Apple M3 Max",
+			cpuModel:     "Apple M3 Max",
+			os:           "darwin",
 			wantDetected: true,
-			wantType:    "Apple Neural Engine",
+			wantType:     "Apple Neural Engine",
 		},
 		{
-			name:        "Apple M4",
-			cpuModel:    "Apple M4",
-			os:          "darwin",
+			name:         "Apple M4",
+			cpuModel:     "Apple M4",
+			os:           "darwin",
 			wantDetected: true,
-			wantType:    "Apple Neural Engine",
+			wantType:     "Apple Neural Engine",
 		},
 		{
-			name:        "Intel Core Ultra",
-			cpuModel:    "Intel(R) Core(TM) Ultra 7 155H",
-			os:          "windows",
+			name:         "Intel Core Ultra",
+			cpuModel:     "Intel(R) Core(TM) Ultra 7 155H",
+			os:           "windows",
 			wantDetected: true,
-			wantType:    "Intel AI Boost",
+			wantType:     "Intel AI Boost",
 		},
 		{
-			name:        "AMD Ryzen AI",
-			cpuModel:    "AMD Ryzen AI 9 HX 370",
-			os:          "windows",
+			name:         "AMD Ryzen AI",
+			cpuModel:     "AMD Ryzen AI 9 HX 370",
+			os:           "windows",
 			wantDetected: true,
-			wantType:    "AMD Ryzen AI",
+			wantType:     "AMD Ryzen AI",
 		},
 		{
-			name:        "Intel Core i7 (no NPU)",
-			cpuModel:    "Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz",
-			os:          "linux",
+			name:         "Intel Core i7 (no NPU)",
+			cpuModel:     "Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz",
+			os:           "linux",
 			wantDetected: false,
-			wantType:    "",
+			wantType:     "",
 		},
 		{
-			name:        "AMD Ryzen 9 (no NPU)",
-			cpuModel:    "AMD Ryzen 9 5900X",
-			os:          "linux",
+			name:         "AMD Ryzen 9 (no NPU)",
+			cpuModel:     "AMD Ryzen 9 5900X",
+			os:           "linux",
 			wantDetected: false,
-			wantType:    "",
+			wantType:     "",
 		},
 	}
 
@@ -192,4 +192,3 @@ func TestDetectNPU(t *testing.T) {
 		})
 	}
 }
-
