@@ -29,11 +29,11 @@ The `ado` project has robust CI/CD infrastructure with comprehensive testing, 80
 
 **What triggered this discussion?**
 
-Issue #50 proposes a 4-phase enhancement to bring metrics directly into the PR:
-1. Enhanced test reporting (rich summaries, failure annotations)
-2. Granular coverage enforcement (per-file, per-package, total thresholds)
-3. PR coverage comments (diff coverage, uncovered lines visualization)
-4. Cost tracking and benchmark monitoring (workflow costs, performance trends)
+Issue #50 proposes comprehensive enhancements to bring metrics directly into the PR:
+- Enhanced test reporting (rich summaries, failure annotations)
+- Granular coverage enforcement (per-file, per-package, total thresholds)
+- PR coverage comments (diff coverage, uncovered lines visualization)
+- Cost tracking and benchmark monitoring (workflow costs, performance trends)
 
 This is complementary to Issue #44 (broader observability with OpenTelemetry) but focused specifically on **PR-time developer feedback**.
 
@@ -58,23 +58,23 @@ This is complementary to Issue #44 (broader observability with OpenTelemetry) bu
 
 #### 2. Metrics to Track
 
-**Phase 1: Test Reporting**
+**Test Reporting**
 - Test pass/fail counts by package
 - Failure annotations with stack traces
 - Test execution time per package
 
-**Phase 2: Coverage Analysis**
+**Coverage Analysis**
 - Total coverage percentage (project-wide)
-- Per-package coverage thresholds
-- Per-file coverage thresholds
-- Diff coverage (new/changed code)
+- Per-package coverage thresholds (80% default, configurable)
+- Per-file coverage thresholds (70% for new files)
+- Diff coverage (85% for changed lines)
 
-**Phase 3: Coverage Visualization**
-- Uncovered lines in changed files
+**Coverage Visualization**
+- Uncovered lines in changed files (PR comment)
 - Coverage trend (vs main branch)
 - Coverage change per commit
 
-**Phase 4: Performance & Costs**
+**Performance & Costs**
 - CI workflow duration and cost per PR
 - Historical cost trends
 - Benchmark results with regression detection
@@ -114,33 +114,25 @@ This is complementary to Issue #44 (broader observability with OpenTelemetry) bu
 - Add workflow job for PR comment updates
 - Add benchmark workflow (manual trigger + PR automation)
 
-#### 5. Implementation Approach: 4 Sequential Phases
+#### 5. Implementation Approach
 
-**Phase 1: Enhanced Test Reporting** (Immediate)
-- Add `robherley/go-test-action` to CI workflow
-- Provides rich test summaries and failure annotations
-- Low risk, high value (better test visibility)
+**Single unified implementation** that adds all metrics to CI workflow:
 
-**Phase 2: Granular Coverage Enforcement** (Short-term)
-- Add `vladopajic/go-test-coverage` for threshold checks
-- Create `.github/.testcoverage.yml` config
-- Enforce per-package and per-file coverage
-
-**Phase 3: PR Coverage Comments** (Medium-term)
-- Add `fgrosse/go-coverage-report` for PR comments
-- Display diff coverage and uncovered lines
-- Update comment on each push (not spam)
-
-**Phase 4: Cost & Benchmark Tracking** (Long-term)
-- Implement GitHub API cost calculation
+- Enhance `.github/workflows/ci.yml` with new actions and jobs
+- Add `.github/.testcoverage.yml` for granular coverage thresholds
+- Add test reporting action (`robherley/go-test-action`)
+- Add coverage enforcement action (`vladopajic/go-test-coverage`)
+- Add PR comment action (`fgrosse/go-coverage-report`)
+- Add workflow job for cost calculation (GitHub API)
 - Add benchmark workflow with regression detection
-- Create historical trend dashboard (GitHub Pages)
 
-**Why sequential:**
-- Each phase delivers value independently
-- Allows testing and iteration before next phase
-- Reduces risk of breaking existing CI
-- Easier code review and rollback if needed
+**Implementation scope:**
+- Workflow modifications: ~100-150 lines of YAML
+- Configuration file: ~30-50 lines (`.testcoverage.yml`)
+- Documentation updates: CLAUDE.md, recipes, workflow.md
+- Tests: Validate workflow syntax, test coverage config parsing
+
+The changes are straightforward GitHub Actions additions - no need for multiple PRs.
 
 ## Consequences
 
@@ -153,7 +145,7 @@ This is complementary to Issue #44 (broader observability with OpenTelemetry) bu
 - **Performance safety**: Benchmark regression detection prevents performance bugs
 - **GitHub-native**: No external services, tokens, or hosting required
 - **Transparent**: All metrics visible to contributors, no hidden dashboards
-- **Incremental adoption**: 4-phase approach allows gradual rollout
+- **Simple implementation**: Straightforward GitHub Actions additions, single PR
 
 ### Negative
 
@@ -162,7 +154,7 @@ This is complementary to Issue #44 (broader observability with OpenTelemetry) bu
 - **CI complexity**: Additional workflow jobs increase pipeline complexity
 - **False positives**: Coverage thresholds may be too strict for some files (mitigated by configuration)
 - **Limited history**: Status checks/comments don't provide long-term trends (mitigated by keeping Codecov)
-- **Implementation time**: 4 phases could take 15-20 hours total
+- **CI runtime increase**: Additional jobs may add 1-2 minutes to CI pipeline
 
 ### Neutral
 
@@ -237,23 +229,27 @@ This is complementary to Issue #44 (broader observability with OpenTelemetry) bu
    - Document configuration schema
    - Provide example outputs
 
-2. **Implementation (4 PRs)**:
-   - PR 1: Phase 1 - Enhanced test reporting
-   - PR 2: Phase 2 - Granular coverage enforcement
-   - PR 3: Phase 3 - PR coverage comments
-   - PR 4: Phase 4 - Cost and benchmark tracking
+2. **Implementation (Single PR)**:
+   - Add all GitHub Actions to `.github/workflows/ci.yml`
+   - Create `.github/.testcoverage.yml` configuration
+   - Add benchmark workflow
+   - Update documentation (CLAUDE.md, recipes, workflow.md)
+   - Test workflow changes
 
-3. **Documentation Updates**:
-   - Update `docs/recipes/03-ci-components.md` with new patterns
-   - Update `CLAUDE.md` with new workflow details
-   - Update `docs/workflow.md` with PR quality standards
+3. **Files Modified**:
+   - `.github/workflows/ci.yml` (enhanced with metrics actions)
+   - `.github/.testcoverage.yml` (new configuration file)
+   - `.github/workflows/benchmark.yml` (new workflow)
+   - `docs/recipes/03-ci-components.md` (updated patterns)
+   - `CLAUDE.md` (updated workflow details)
+   - `docs/workflow.md` (PR quality standards)
 
 **Success Criteria:**
 - Developers see test failures in PR without navigating to Actions
 - Coverage impact visible in PR comment within 2 minutes of push
 - Per-package coverage violations block merge
 - Performance regressions detected and reported in PR
-- CI workflow costs visible and trending downward
+- CI workflow costs visible in PR comments
 
 ## References
 
