@@ -75,9 +75,10 @@ This is complementary to Issue #44 (broader observability with OpenTelemetry) bu
 - Coverage change per commit
 
 **Performance & Costs**
-- CI workflow duration and cost per PR
-- Historical cost trends
+- CI workflow duration with estimated cost per PR
+- Estimated cost calculation (duration × runner rate)
 - Benchmark results with regression detection
+- Cost estimates clearly labeled (not actual billed minutes)
 
 #### 3. Tool Stack
 
@@ -85,8 +86,14 @@ This is complementary to Issue #44 (broader observability with OpenTelemetry) bu
 - **Test reporting**: `robherley/go-test-action` (GitHub Action for rich test summaries)
 - **Coverage enforcement**: `vladopajic/go-test-coverage` (YAML-based thresholds)
 - **Coverage comments**: `fgrosse/go-coverage-report` (diff coverage PR comments)
-- **Cost tracking**: GitHub API (workflow run metadata) + custom reporting
+- **Cost tracking**: Estimated from workflow duration via GitHub Actions Performance Metrics
 - **Benchmarks**: `benchstat` (Go standard tooling) + custom trend analysis
+
+**Cost Estimation Methodology:**
+- Calculate: `Estimated Cost = Duration (minutes) × Runner Rate`
+- Runner rates (November 2025): ubuntu-latest ($0.008/min), macos-latest ($0.016/min)
+- Uses workflow timing from GitHub Actions context (no API calls required)
+- Note: Previous billing API deprecated April 2025; new consolidated billing API provides actual data with 24-48hr delay
 
 **Why these tools:**
 - All integrate natively with GitHub Actions
@@ -119,18 +126,25 @@ This is complementary to Issue #44 (broader observability with OpenTelemetry) bu
 **Single unified implementation** that adds all metrics to CI workflow:
 
 - Enhance `.github/workflows/ci.yml` with new actions and jobs
-- Add `.github/.testcoverage.yml` for granular coverage thresholds
-- Add test reporting action (`robherley/go-test-action`)
-- Add coverage enforcement action (`vladopajic/go-test-coverage`)
-- Add PR comment action (`fgrosse/go-coverage-report`)
-- Add workflow job for cost calculation (GitHub API)
+- Add `.testcoverage.yml` at repo root for granular coverage thresholds
+- Add test reporting action (`robherley/go-test-action`, pinned to SHA)
+- Add coverage enforcement action (`vladopajic/go-test-coverage`, pinned to SHA)
+- Add PR comment action (`fgrosse/go-coverage-report`, pinned to SHA)
+- Add workflow job for estimated cost calculation (duration × runner rate)
 - Add benchmark workflow with regression detection
+- Create/update `.codecov.yml` to disable PR comments (avoid duplication with new comment action)
 
 **Implementation scope:**
 - Workflow modifications: ~100-150 lines of YAML
-- Configuration file: ~30-50 lines (`.testcoverage.yml`)
+- Configuration file: ~30-50 lines (`.testcoverage.yml` at repo root)
+- Codecov config update: 2-3 lines (disable comment feature)
 - Documentation updates: CLAUDE.md, recipes, workflow.md
 - Tests: Validate workflow syntax, test coverage config parsing
+
+**Codecov coordination:**
+- Disable Codecov PR comments to avoid duplication: `comment: false` in `.codecov.yml`
+- Keep Codecov upload for historical trends and dashboard
+- New PR comment action provides richer diff coverage visualization
 
 The changes are straightforward GitHub Actions additions - no need for multiple PRs.
 
@@ -219,6 +233,44 @@ The changes are straightforward GitHub Actions additions - no need for multiple 
 - No cost visibility or optimization opportunities
 - Reviewers lack objective quality signals
 
+## Security Considerations
+
+**Supply Chain Security:**
+- **Pin all third-party actions to SHA** (not tags) for immutability
+- Aligns with SLSA Level 3 requirements (ADR-0003)
+- Example: `uses: robherley/go-test-action@v1.2.3` → `uses: robherley/go-test-action@abc123...`
+
+**Permissions:**
+- Test reporting: `contents: read` (default)
+- Coverage comments: `pull-requests: write` (minimal required)
+- Cost tracking: `actions: read` (workflow metadata only)
+- Follows principle of least privilege
+
+**Dependency Verification:**
+All chosen actions are:
+- Actively maintained (verified 2024 commits)
+- Widely adopted in community
+- GitHub Actions-native or well-established
+
+## Rollback Strategy
+
+If issues arise post-implementation:
+
+1. **Immediate rollback**: Disable actions via workflow conditions
+   ```yaml
+   if: false  # Temporary disable while investigating
+   ```
+
+2. **Partial rollback**: Comment out specific jobs (test reporting, coverage comments, cost tracking independently)
+
+3. **Full rollback**: Revert workflow changes via git
+   - Codecov remains primary coverage source (no data loss)
+   - All changes are additive (no removal of existing functionality)
+
+4. **Configuration tuning**: Adjust thresholds in `.testcoverage.yml` without workflow changes
+
+**Risk mitigation**: Changes are low-risk, easily reversible, and Codecov provides continuity.
+
 ## Implementation Notes
 
 **Completed after ADR approval:**
@@ -238,18 +290,21 @@ The changes are straightforward GitHub Actions additions - no need for multiple 
 
 3. **Files Modified**:
    - `.github/workflows/ci.yml` (enhanced with metrics actions)
-   - `.github/.testcoverage.yml` (new configuration file)
+   - `.testcoverage.yml` (new configuration file at repo root)
    - `.github/workflows/benchmark.yml` (new workflow)
+   - `.codecov.yml` (disable PR comments to avoid duplication)
    - `docs/recipes/03-ci-components.md` (updated patterns)
    - `CLAUDE.md` (updated workflow details)
    - `docs/workflow.md` (PR quality standards)
 
-**Success Criteria:**
-- Developers see test failures in PR without navigating to Actions
-- Coverage impact visible in PR comment within 2 minutes of push
-- Per-package coverage violations block merge
-- Performance regressions detected and reported in PR
-- CI workflow costs visible in PR comments
+**Success Criteria (Measurable):**
+- **Test visibility**: Developers see test failures in PR without navigating to Actions (100% of PRs)
+- **Coverage timeliness**: Coverage impact visible in PR comment within 2 minutes of push (95% of runs)
+- **Enforcement effectiveness**: Per-package coverage violations block merge with clear error messages
+- **Performance safety**: Performance regressions >5% detected and reported in PR
+- **Cost visibility**: Estimated CI costs visible in PR comments with <5% overhead
+- **Cost accuracy**: Estimates within 10% of actual billed minutes (verified quarterly)
+- **Developer satisfaction**: Zero complaints about metric noise in first 3 months
 
 ## References
 
@@ -261,4 +316,5 @@ The changes are straightforward GitHub Actions additions - no need for multiple 
 - [fgrosse/go-coverage-report](https://github.com/fgrosse/go-coverage-report) - PR comments
 - [GitHub Actions Checks API](https://docs.github.com/en/rest/checks) - Status checks
 - [Codecov GitHub Action](https://github.com/codecov/codecov-action) - Existing integration
-- [GitHub Actions Usage API](https://docs.github.com/en/rest/actions/workflows#get-workflow-usage) - Cost tracking
+- [GitHub Actions Performance Metrics](https://docs.github.com/en/actions/concepts/metrics) - Runtime data for cost estimation
+- [New Billing Platform Usage API](https://docs.github.com/en/billing/using-the-new-billing-platform/automating-usage-reporting) - Actual billing data (24-48hr delay, optional)
