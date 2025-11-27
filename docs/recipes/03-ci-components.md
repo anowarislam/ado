@@ -380,6 +380,98 @@ fi
 - **GitHub Actions integration**: `::error::` creates annotation on PR
 - **Clear output**: Shows exact coverage percentage
 
+**PR-Level Metrics Dashboard** (Enhanced Coverage & Quality Feedback):
+
+Beyond the basic coverage threshold, the CI workflow includes comprehensive PR-level metrics:
+
+```yaml
+# NEW: Test Reporting Action
+- name: Report test results
+  if: always()
+  uses: robherley/go-test-action@<SHA>
+  with:
+    testJsonPath: test-output.json
+    omitUntestedPackages: true
+
+# NEW: Granular Coverage Enforcement
+- name: Enforce coverage thresholds
+  uses: vladopajic/go-test-coverage@<SHA>
+  with:
+    config: ./.testcoverage.yml
+    profile: coverage.out
+    local-prefix: github.com/anowarislam/ado
+
+# NEW: PR Coverage Comment with Diff Analysis
+- name: Post coverage comment
+  if: github.event_name == 'pull_request'
+  uses: fgrosse/go-coverage-report@<SHA>
+  with:
+    coverage-file-name: coverage.out
+    root-package: github.com/anowarislam/ado
+    threshold-total: 80
+    threshold-file: 70
+
+# NEW: Calculate Estimated CI Cost
+- name: Calculate estimated cost
+  if: github.event_name == 'pull_request'
+  run: |
+    DURATION_MINUTES=$(awk "BEGIN {printf \"%.2f\", $SECONDS / 60}")
+    ESTIMATED_COST=$(awk "BEGIN {printf \"%.3f\", $DURATION_MINUTES * 0.008}")
+    echo "**Estimated Cost:** \$${ESTIMATED_COST}" >> $GITHUB_STEP_SUMMARY
+```
+
+**What This Provides**:
+
+| Component | Purpose | Benefit |
+|-----------|---------|---------|
+| **Test reporting** | Rich test summaries with failure annotations | Developers see test failures in PR without navigating to Actions tab |
+| **Granular coverage** | Per-package (80%), per-file (70%), total (80%), diff (85%) thresholds | Prevents localized coverage drops, enforces quality on changed lines |
+| **PR coverage comments** | Automated PR comments with diff coverage visualization | Reviewers see coverage impact and uncovered lines directly in PR |
+| **Cost estimation** | Calculated estimated CI costs per PR | Teams track workflow efficiency and identify optimization opportunities |
+| **Benchmark monitoring** | Optional performance regression detection | Catches performance issues before production |
+
+**Coverage Threshold Configuration** (`.testcoverage.yml`):
+
+```yaml
+profile: coverage.out
+
+threshold:
+  file: 70      # Minimum per-file coverage
+  package: 80   # Minimum per-package coverage
+  total: 80     # Minimum total project coverage
+
+override:
+  - path: ^github\.com/anowarislam/ado/internal/meta$
+    threshold: 90       # Higher for critical packages
+  - path: ^github\.com/anowarislam/ado/cmd/ado/version$
+    threshold: 60       # Lower for simple commands
+
+exclude:
+  paths:
+    - ^github\.com/anowarislam/ado/internal/testutil$      # Test utilities
+```
+
+**PR Comment Example**:
+
+```markdown
+## Test Coverage Report
+
+**Total Coverage:** 82.5% (+1.2% vs main) ✅
+
+**Diff Coverage:** 87.5% (35/40 changed lines) ✅
+
+**Estimated CI Cost:** $0.027 (3m 24s @ $0.008/min)
+```
+
+**Why This Matters**:
+
+- **Immediate feedback**: Developers see quality metrics without leaving PR
+- **Granular enforcement**: Per-package/file thresholds prevent localized quality drops
+- **Cost awareness**: Teams can optimize expensive workflows
+- **Better reviews**: Objective quality signals improve review process
+
+See [ADR-0005](../adr/0005-pr-metrics-dashboard.md) and [Feature Spec](../features/03-pr-metrics-dashboard.md) for complete implementation details.
+
 #### Job 3: Python Lab Validation
 
 **Purpose**: Validate Python prototype code.

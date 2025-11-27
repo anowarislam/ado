@@ -1,0 +1,14 @@
+# Codecov configuration
+# Disable PR comments to avoid duplication with go-coverage-report action
+comment: false
+
+# Keep coverage upload for historical trends and dashboard
+coverage:
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 1%
+    patch:
+      default:
+        target: 85%

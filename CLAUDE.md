@@ -42,6 +42,14 @@ make help                # Show all available targets
 # Git Hooks (installed via make hooks.install)
 # commit-msg: Validates conventional commit format
 # pre-push:   Runs tests, coverage check (80%), and build verification
+
+# PR Metrics Dashboard (automated in CI)
+# - Test results with failure annotations
+# - Granular coverage enforcement (total 80%, package 80%, file 70%, diff 85%)
+# - PR coverage comments with diff analysis
+# - Performance benchmarks (workflow_dispatch or automatic on PRs)
+# - Estimated CI costs
+# See ADR-0005 and docs/features/03-pr-metrics-dashboard.md
 ```
 
 ## Architecture

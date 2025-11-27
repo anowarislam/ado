@@ -599,6 +599,115 @@ See [Code Ownership Guide](code-ownership.md) for:
 - Emergency procedures
 - FAQ
 
+## PR Quality Standards
+
+Every PR is automatically validated against quality standards via the PR Metrics Dashboard (see [ADR-0005](adr/0005-pr-metrics-dashboard.md)).
+
+### Automated Quality Checks
+
+When you open or update a PR, GitHub Actions automatically runs comprehensive checks:
+
+| Check | Threshold | Enforcement |
+|-------|-----------|-------------|
+| **Total Coverage** | 80% minimum | Blocks merge if below threshold |
+| **Package Coverage** | 80% per package (configurable) | Blocks merge if any package below threshold |
+| **File Coverage** | 70% per file | Blocks merge if any file below threshold |
+| **Diff Coverage** | 85% of changed lines | Blocks merge if new/modified code insufficiently tested |
+| **Test Results** | All tests passing | Blocks merge on any test failure |
+| **Build** | Binary compiles | Blocks merge on build failure |
+
+### What You'll See in Your PR
+
+**1. Status Checks** (PR header):
+```
+✅ Go / Test Coverage (82.5% - threshold: 80%)
+✅ Go / Package Coverage Enforcement
+✅ Go / Test Results (142 tests passing)
+❌ Go / Diff Coverage (75% - need 85%)
+```
+
+**2. PR Comment** (automatically posted/updated):
+```markdown
+## Test Coverage Report
+
+**Total Coverage:** 82.5% (+1.2% vs main) ✅
+**Diff Coverage:** 87.5% (35/40 changed lines) ✅
+**Estimated CI Cost:** $0.027 (3m 24s @ $0.008/min)
+
+### Changed Files
+| File | Coverage | Status |
+|------|----------|--------|
+| internal/config/loader.go | 85.0% (34/40 lines) | ✅ |
+| internal/logging/handler.go | 72.0% (18/25 lines) | ⚠️ Below threshold |
+```
+
+**3. Test Failure Annotations** (Files changed tab):
+- Failed tests appear as inline annotations
+- Click annotation to see full stack trace
+- Line numbers link directly to failure location
+
+### Coverage Thresholds by Package
+
+Coverage thresholds are configurable in `.testcoverage.yml`:
+
+```yaml
+override:
+  - path: ^github\.com/anowarislam/ado/internal/meta$
+    threshold: 90       # Critical packages
+  - path: ^github\.com/anowarislam/ado/internal/config$
+    threshold: 85       # Important logic
+  - path: ^github\.com/anowarislam/ado/cmd/ado/version$
+    threshold: 60       # Simple commands
+```
+
+**Philosophy**: Higher thresholds for critical code, lower for trivial wiring.
+
+### Handling Coverage Failures
+
+If your PR is blocked by coverage:
+
+1. **Check the PR comment** to see which files/packages need improvement
+2. **Add tests** for uncovered lines (preferred)
+3. **Adjust thresholds** in `.testcoverage.yml` if justified (requires explanation in PR)
+4. **Document why** certain lines are hard to test (e.g., error handling for rare conditions)
+
+**Do not bypass** coverage checks without team discussion.
+
+### Performance Benchmarks
+
+Optional benchmark workflow tracks performance regressions:
+
+- Automatically runs on PRs that change `.go` files
+- Compares PR performance vs main branch
+- Posts warning if >5% slower
+- Does not block merge (informational only)
+
+### Cost Awareness
+
+Each PR shows estimated CI cost to help teams:
+
+- Identify expensive workflows
+- Optimize long-running tests
+- Track CI budget over time
+
+**Note**: Costs are estimates based on workflow duration, not actual billing.
+
+### Quality Philosophy
+
+**Our approach**:
+- **Prevent regressions**: Coverage can only increase, never decrease
+- **Granular enforcement**: Package-level thresholds prevent localized quality drops
+- **Diff coverage**: New code must be well-tested (85% minimum)
+- **Transparency**: All metrics visible in PR, no hidden dashboards
+
+**Why this matters**:
+- Catches bugs before production
+- Maintains codebase health long-term
+- Provides objective review criteria
+- Encourages thorough testing
+
+See [Feature Spec](features/03-pr-metrics-dashboard.md) for complete implementation details.
+
 ## Examples
 
 ### Example 1: Adding a New Command (No ADR Needed)
