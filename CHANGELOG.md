@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/anowarislam/ado/compare/v1.4.0...v1.4.1) (2025-11-27)
+
+
+### Bug Fixes
+
+* **ci:** update GoReleaser workflow to use Go 1.24 ([#59](https://github.com/anowarislam/ado/issues/59)) ([d77b397](https://github.com/anowarislam/ado/commit/d77b3970308c0d84dd06292f86bfb86d73a9c1f3))
+
 ## [1.4.0](https://github.com/anowarislam/ado/compare/v1.3.0...v1.4.0) (2025-11-27)
 
 
