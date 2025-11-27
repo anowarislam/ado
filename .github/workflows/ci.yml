@@ -79,7 +79,7 @@ jobs:
       # NEW: Test Reporting Action
       - name: Report test results
         if: always()  # Run even if tests fail
-        uses: robherley/go-test-action@9e6c0951ef301d7d16f3a64e0e5868e7e443ec57  # v0.4.1 SHA-pinned
+        uses: robherley/go-test-action@a612d1675dda7397d3bced585f8a2a3a8545455f  # v0.4.1 SHA-pinned
         with:
           testJsonPath: test-output.json
           omitUntestedPackages: true
