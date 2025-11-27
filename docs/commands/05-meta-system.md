@@ -28,7 +28,7 @@ ado meta system
 # CPUs: 10 (Apple M2 Pro)
 # Memory: 16384 MB total, 8192 MB available (50.0% used)
 # Storage:
-#   /: 494 GB total, 123 GB used (25.0%)
+#   /: 505856 MB total, 125952 MB used (25.0%)
 # GPU:
 #   Apple M2 Pro (integrated)
 # NPU: Apple Neural Engine (detected)
@@ -45,7 +45,6 @@ ado meta system --output json
 #     "model": "Apple M2 Pro",
 #     "vendor": "Apple",
 #     "cores": 10,
-#     "physical_cores": 10,
 #     "frequency_mhz": 0
 #   },
 #   "memory": {
@@ -61,9 +60,9 @@ ado meta system --output json
 #       "device": "/dev/disk3s1s1",
 #       "mountpoint": "/",
 #       "filesystem": "apfs",
-#       "total_gb": 494,
-#       "used_gb": 123,
-#       "free_gb": 371,
+#       "total_mb": 505856,
+#       "used_mb": 125952,
+#       "free_mb": 379904,
 #       "used_percent": 25.0
 #     }
 #   ],
@@ -92,7 +91,6 @@ ado meta system --output yaml
 #   model: Apple M2 Pro
 #   vendor: Apple
 #   cores: 10
-#   physical_cores: 10
 #   frequency_mhz: 0
 # memory:
 #   total_mb: 16384
@@ -105,9 +103,9 @@ ado meta system --output yaml
 #   - device: /dev/disk3s1s1
 #     mountpoint: /
 #     filesystem: apfs
-#     total_gb: 494
-#     used_gb: 123
-#     free_gb: 371
+#     total_mb: 505856
+#     used_mb: 125952
+#     free_mb: 379904
 #     used_percent: 25.0
 # gpu:
 #   - vendor: Apple
@@ -187,7 +185,7 @@ Architecture: arm64
 CPU:
   Model: Apple M2 Pro
   Vendor: Apple
-  Cores: 10 (10 physical)
+  Cores: 10
   Frequency: unknown
 
 Memory:
@@ -197,7 +195,7 @@ Memory:
   Swap: 0 MB total, 0 MB used
 
 Storage:
-  /: 494 GB total, 123 GB used (25.0%)
+  /: 505856 MB total, 125952 MB used (25.0%)
 
 GPU:
   Apple M2 Pro (integrated)
@@ -221,7 +219,6 @@ Structured JSON with stable keys (suitable for parsing):
     "model": "Apple M2 Pro",
     "vendor": "Apple",
     "cores": 10,
-    "physical_cores": 10,
     "frequency_mhz": 0
   },
   "memory": {
@@ -237,9 +234,9 @@ Structured JSON with stable keys (suitable for parsing):
       "device": "/dev/disk3s1s1",
       "mountpoint": "/",
       "filesystem": "apfs",
-      "total_gb": 494,
-      "used_gb": 123,
-      "free_gb": 371,
+      "total_mb": 505856,
+      "used_mb": 125952,
+      "free_mb": 379904,
       "used_percent": 25.0
     }
   ],
@@ -259,10 +256,12 @@ Structured JSON with stable keys (suitable for parsing):
 ```
 
 **JSON Schema Notes:**
-- All top-level fields always present (never omitted)
-- `gpu` and `npu` may be `null` if not detectable
-- `storage` is always an array (may be empty)
-- Numeric values use appropriate types (int, float64)
+- All fields always present in JSON output (no fields omitted)
+- `gpu` is always an array (empty `[]` if no GPU detected)
+- `npu` may be `null` if no NPU detected
+- `storage` is always an array (may be empty `[]`)
+- Memory and storage sizes use megabytes (MB) for consistency
+- Numeric values: `int32` for counts, `uint64` for sizes, `float64` for percentages and frequencies
 
 #### YAML (`--output yaml`)
 
@@ -277,7 +276,6 @@ cpu:
   model: Apple M2 Pro
   vendor: Apple
   cores: 10
-  physical_cores: 10
   frequency_mhz: 0
 memory:
   total_mb: 16384
@@ -290,9 +288,9 @@ storage:
   - device: /dev/disk3s1s1
     mountpoint: /
     filesystem: apfs
-    total_gb: 494
-    used_gb: 123
-    free_gb: 371
+    total_mb: 505856
+    used_mb: 125952
+    free_mb: 379904
     used_percent: 25.0
 gpu:
   - vendor: Apple
@@ -332,14 +330,16 @@ npu:
 #### Required Dependencies
 
 ```bash
-go get github.com/shirou/gopsutil/v4@latest
+go get github.com/shirou/gopsutil/v4@v4.24.0
 ```
 
 **Justification:**
-- **gopsutil/v4**: Cross-platform system info library (10.5k stars)
+- **gopsutil/v4.24.0**: Cross-platform system info library (10.5k stars)
+  - Version: v4.24.0 (tested with Go 1.23+)
   - Covers: OS, CPU, Memory, Storage
   - No CGO required (easy cross-compilation)
   - Battle-tested in production systems
+  - License: BSD-3-Clause (compatible with ado)
 
 #### Optional Dependencies (for GPU/NPU enhancement)
 
@@ -365,6 +365,9 @@ go get github.com/jaypipes/ghw@latest
 package meta
 
 import (
+	"context"
+	"log/slog"
+
 	"github.com/shirou/gopsutil/v4/cpu"
 	"github.com/shirou/gopsutil/v4/disk"
 	"github.com/shirou/gopsutil/v4/host"
@@ -380,16 +383,15 @@ type SystemInfo struct {
 	CPU          CPUInfo       `json:"cpu" yaml:"cpu"`
 	Memory       MemoryInfo    `json:"memory" yaml:"memory"`
 	Storage      []StorageInfo `json:"storage" yaml:"storage"`
-	GPU          []GPUInfo     `json:"gpu,omitempty" yaml:"gpu,omitempty"`
-	NPU          *NPUInfo      `json:"npu,omitempty" yaml:"npu,omitempty"`
+	GPU          []GPUInfo     `json:"gpu" yaml:"gpu"`
+	NPU          *NPUInfo      `json:"npu" yaml:"npu"`
 }
 
 type CPUInfo struct {
-	Model         string  `json:"model" yaml:"model"`
-	Vendor        string  `json:"vendor" yaml:"vendor"`
-	Cores         int     `json:"cores" yaml:"cores"`
-	PhysicalCores int     `json:"physical_cores" yaml:"physical_cores"`
-	FrequencyMHz  float64 `json:"frequency_mhz" yaml:"frequency_mhz"`
+	Model        string  `json:"model" yaml:"model"`
+	Vendor       string  `json:"vendor" yaml:"vendor"`
+	Cores        int32   `json:"cores" yaml:"cores"`
+	FrequencyMHz float64 `json:"frequency_mhz" yaml:"frequency_mhz"`
 }
 
 type MemoryInfo struct {
@@ -405,9 +407,9 @@ type StorageInfo struct {
 	Device      string  `json:"device" yaml:"device"`
 	Mountpoint  string  `json:"mountpoint" yaml:"mountpoint"`
 	Filesystem  string  `json:"filesystem" yaml:"filesystem"`
-	TotalGB     uint64  `json:"total_gb" yaml:"total_gb"`
-	UsedGB      uint64  `json:"used_gb" yaml:"used_gb"`
-	FreeGB      uint64  `json:"free_gb" yaml:"free_gb"`
+	TotalMB     uint64  `json:"total_mb" yaml:"total_mb"`
+	UsedMB      uint64  `json:"used_mb" yaml:"used_mb"`
+	FreeMB      uint64  `json:"free_mb" yaml:"free_mb"`
 	UsedPercent float64 `json:"used_percent" yaml:"used_percent"`
 }
 
@@ -425,17 +427,23 @@ type NPUInfo struct {
 
 // CollectSystemInfo gathers system diagnostic information.
 // Returns partial information if some detection fails (graceful degradation).
+// Detection failures are logged via slog at debug level.
 // Never returns an error (diagnostic tool, not validation tool).
-func CollectSystemInfo() SystemInfo {
+//
+// Zero values indicate "unknown" or "not detected":
+// - Cores: 0 = unknown
+// - FrequencyMHz: 0.0 = unknown (common on Apple Silicon)
+// - TotalMB/UsedMB: 0 = detection failed
+func CollectSystemInfo(ctx context.Context) SystemInfo {
 	info := SystemInfo{
 		OS:           "unknown",
 		Platform:     "unknown",
 		Kernel:       "unknown",
 		Architecture: "unknown",
 		CPU: CPUInfo{
-			Model:  "unknown",
+			Model: "unknown",
 			Vendor: "unknown",
-			Cores:  0,
+			Cores: 0,
 		},
 		Memory:  MemoryInfo{},
 		Storage: []StorageInfo{},
@@ -454,12 +462,13 @@ func CollectSystemInfo() SystemInfo {
 	if cpuInfos, err := cpu.Info(); err == nil && len(cpuInfos) > 0 {
 		first := cpuInfos[0]
 		info.CPU = CPUInfo{
-			Model:         first.ModelName,
-			Vendor:        first.VendorID,
-			Cores:         int(first.Cores),
-			PhysicalCores: int(first.Cores), // gopsutil doesn't distinguish, use same value
-			FrequencyMHz:  first.Mhz,
+			Model:        first.ModelName,
+			Vendor:       first.VendorID,
+			Cores:        int32(first.Cores),
+			FrequencyMHz: first.Mhz,
 		}
+	} else if err != nil {
+		slog.DebugContext(ctx, "CPU detection failed", "error", err)
 	}
 
 	// Memory info (graceful degradation)
@@ -478,44 +487,60 @@ func CollectSystemInfo() SystemInfo {
 
 	// Storage info (graceful degradation)
 	if partitions, err := disk.Partitions(false); err == nil {
+		// Filter out pseudo-filesystems (Linux /proc, /sys, etc.)
+		skipFsTypes := map[string]bool{
+			"sysfs": true, "proc": true, "devtmpfs": true, "tmpfs": true,
+			"devpts": true, "cgroup": true, "cgroup2": true, "overlay": true,
+		}
+
 		for _, partition := range partitions {
+			// Skip pseudo-filesystems
+			if skipFsTypes[partition.Fstype] {
+				continue
+			}
+
 			if usage, err := disk.Usage(partition.Mountpoint); err == nil {
 				info.Storage = append(info.Storage, StorageInfo{
 					Device:      partition.Device,
 					Mountpoint:  partition.Mountpoint,
 					Filesystem:  partition.Fstype,
-					TotalGB:     usage.Total / 1024 / 1024 / 1024,
-					UsedGB:      usage.Used / 1024 / 1024 / 1024,
-					FreeGB:      usage.Free / 1024 / 1024 / 1024,
+					TotalMB:     usage.Total / 1024 / 1024,
+					UsedMB:      usage.Used / 1024 / 1024,
+					FreeMB:      usage.Free / 1024 / 1024,
 					UsedPercent: usage.UsedPercent,
 				})
 			}
 		}
+	} else if err != nil {
+		slog.DebugContext(ctx, "Storage detection failed", "error", err)
 	}
 
 	// GPU detection (best-effort, using ghw if available)
 	// Implementation: detectGPU() helper function
-	info.GPU = detectGPU()
+	info.GPU = detectGPU(ctx)
 
 	// NPU detection (best-effort, CPU model-based inference)
 	// Implementation: detectNPU() helper function
-	info.NPU = detectNPU(info.CPU.Model, info.OS)
+	info.NPU = detectNPU(ctx, info.CPU.Model, info.OS)
 
 	return info
 }
 
 // detectGPU attempts to detect GPU information.
 // Returns empty slice if detection fails (graceful degradation).
-func detectGPU() []GPUInfo {
+// Logs detection failures via slog at debug level.
+func detectGPU(ctx context.Context) []GPUInfo {
 	// TODO: Implement using ghw or platform-specific commands
 	// For initial implementation, return empty slice
 	// Future: Use github.com/jaypipes/ghw for cross-platform GPU detection
+	slog.DebugContext(ctx, "GPU detection not implemented (Phase 2)")
 	return []GPUInfo{}
 }
 
 // detectNPU attempts to infer NPU presence from CPU model.
 // Returns nil if NPU not detected (graceful degradation).
-func detectNPU(cpuModel, os string) *NPUInfo {
+// Logs detection failures via slog at debug level.
+func detectNPU(ctx context.Context, cpuModel, os string) *NPUInfo {
 	// Best-effort detection based on CPU model keywords
 	// Apple Silicon: M1, M2, M3, M4 → Apple Neural Engine
 	// Intel Core Ultra: "Ultra" → Intel AI Boost
@@ -523,6 +548,7 @@ func detectNPU(cpuModel, os string) *NPUInfo {
 
 	// TODO: Implement keyword-based detection
 	// For initial implementation, return nil
+	slog.DebugContext(ctx, "NPU detection not implemented (Phase 3)", "cpu_model", cpuModel, "os", os)
 	return nil
 }
 ```
@@ -568,7 +594,8 @@ Examples:
   # Extract specific field with jq
   ado meta system --output json | jq '.memory.used_percent'`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			info := internalmeta.CollectSystemInfo()
+			ctx := cmd.Context()
+			info := internalmeta.CollectSystemInfo(ctx)
 			format, err := ui.ParseOutputFormat(output)
 			if err != nil {
 				return err
@@ -598,7 +625,7 @@ func formatSystemInfo(info internalmeta.SystemInfo) string {
 	fmt.Fprintln(&b, "CPU:")
 	fmt.Fprintf(&b, "  Model: %s\n", info.CPU.Model)
 	fmt.Fprintf(&b, "  Vendor: %s\n", info.CPU.Vendor)
-	fmt.Fprintf(&b, "  Cores: %d (%d physical)\n", info.CPU.Cores, info.CPU.PhysicalCores)
+	fmt.Fprintf(&b, "  Cores: %d\n", info.CPU.Cores)
 	if info.CPU.FrequencyMHz > 0 {
 		fmt.Fprintf(&b, "  Frequency: %.0f MHz\n", info.CPU.FrequencyMHz)
 	} else {
@@ -620,8 +647,8 @@ func formatSystemInfo(info internalmeta.SystemInfo) string {
 	if len(info.Storage) > 0 {
 		fmt.Fprintln(&b, "Storage:")
 		for _, storage := range info.Storage {
-			fmt.Fprintf(&b, "  %s: %d GB total, %d GB used (%.1f%%)\n",
-				storage.Mountpoint, storage.TotalGB, storage.UsedGB, storage.UsedPercent)
+			fmt.Fprintf(&b, "  %s: %d MB total, %d MB used (%.1f%%)\n",
+				storage.Mountpoint, storage.TotalMB, storage.UsedMB, storage.UsedPercent)
 		}
 		fmt.Fprintln(&b)
 	}
@@ -743,6 +770,9 @@ func formatSystemInfo(info internalmeta.SystemInfo) string {
 require (
 	github.com/shirou/gopsutil/v4 v4.24.0 // Cross-platform system info (OS, CPU, Memory, Storage)
 )
+
+// Note: After adding dependency, run:
+// go mod tidy
 ```
 
 ### Optional (Future Enhancement)
