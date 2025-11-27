@@ -56,7 +56,7 @@ The `ado` project has the following ownership structure:
 | **Build System** | `/Makefile`, `/make/`, `/.githooks/` | @anowarislam | Build automation and git hooks |
 | **Release Config** | `/.goreleaser.yaml`, `/release-please-config.json` | @anowarislam | Release automation configuration |
 | **Dependencies** | `go.mod`, `go.sum`, `lab/py/pyproject.toml` | @anowarislam | Dependency management |
-| **Security** | `/SECURITY.md`, `/docs/recipes/03-security-features.md` | @anowarislam | Security policies and features |
+| **Security** | `/SECURITY.md`, `/docs/recipes/04-security-features.md` | @anowarislam | Security policies and features |
 
 ## Code Review Requirements
 

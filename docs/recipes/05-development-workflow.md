@@ -2839,9 +2839,9 @@ This three-phase workflow enables:
 
 ### Related Documentation
 
-- [Chapter 1: Philosophy](01-philosophy.md) - Why this system exists
-- [Chapter 5: Build Automation](05-build-automation.md) - Make, git hooks, local tooling
-- [Chapter 6: Release Automation](06-release-automation.md) - Complete release workflow
+- [Chapter 1: Philosophy](02-philosophy.md) - Why this system exists
+- [Chapter 5: Build Automation](06-build-automation.md) - Make, git hooks, local tooling
+- [Chapter 6: Release Automation](07-release-automation.md) - Complete release workflow
 - `docs/workflow.md` - Quick reference version of this guide
 - `docs/contributing.md` - Contributor guidelines
 

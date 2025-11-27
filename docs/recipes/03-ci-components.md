@@ -2817,7 +2817,7 @@ This chapter covered every component in the CI/CD system:
 - **Reproducible**: CI mirrors local development
 - **Automated**: Minimal manual intervention
 
-**Next Chapter**: [09-implementation-guide.md](09-implementation-guide.md) - Step-by-step setup instructions.
+**Next Chapter**: [10-implementation-guide.md](10-implementation-guide.md) - Step-by-step setup instructions.
 
 ---
 

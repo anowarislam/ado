@@ -1651,5 +1651,5 @@ Congratulations! You've implemented a production-grade CI/CD system.
 
 **Your CI/CD system is now production-ready!** 🎉
 
-For troubleshooting, see [Chapter 8](08-troubleshooting.md).
-For Python-specific patterns, see [Chapter 10](10-python-adaptation.md).
+For troubleshooting, see [Chapter 8](09-troubleshooting.md).
+For Python-specific patterns, see [Chapter 10](11-python-adaptation.md).

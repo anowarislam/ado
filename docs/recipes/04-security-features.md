@@ -1611,7 +1611,7 @@ graph TB
 4. **Supply chain security**: SBOM + scanning + pinning
 5. **Documentation**: Make verification easy for users
 
-**Next Chapter**: [04-development-workflow.md](04-development-workflow.md) - Issues → ADR → Spec → Implementation
+**Next Chapter**: [05-development-workflow.md](05-development-workflow.md) - Issues → ADR → Spec → Implementation
 
 ---
 

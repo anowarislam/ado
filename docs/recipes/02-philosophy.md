@@ -827,7 +827,7 @@ This philosophy translates into practice:
 5. **Security** → SLSA provenance, signing, verification
 6. **Conventional** → Conventional commits, semantic versioning
 
-**Next Chapter**: [02-ci-components.md](02-ci-components.md) - The essential components you'll build.
+**Next Chapter**: [03-ci-components.md](03-ci-components.md) - The essential components you'll build.
 
 ---
 

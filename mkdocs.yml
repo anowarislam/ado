@@ -17,17 +17,15 @@ copyright: Copyright &copy; 2025 Anowar Islam
 theme:
   name: material
   palette:
-    # Light mode
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
+    # Light mode (default)
+    - scheme: default
       primary: indigo
       accent: indigo
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     # Dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
+    - scheme: slate
       primary: indigo
       accent: indigo
       toggle:
@@ -111,21 +109,21 @@ nav:
   - CI/CD Recipe:
       - Overview: recipes/README.md
       - Navigation: recipes/00-overview.md
+      - Principles & Standards: recipes/01-goals.md
       - Foundation:
-          - Philosophy: recipes/01-philosophy.md
-          - CI Components: recipes/02-ci-components.md
-          - Security Features: recipes/03-security-features.md
+          - Philosophy: recipes/02-philosophy.md
+          - CI Components: recipes/03-ci-components.md
+          - Security Features: recipes/04-security-features.md
       - Process:
-          - Development Workflow: recipes/04-development-workflow.md
-          - Build Automation: recipes/05-build-automation.md
-          - Release Automation: recipes/06-release-automation.md
+          - Development Workflow: recipes/05-development-workflow.md
+          - Build Automation: recipes/06-build-automation.md
+          - Release Automation: recipes/07-release-automation.md
       - Integration:
-          - GitHub Integrations: recipes/07-github-integrations.md
-          - Troubleshooting: recipes/08-troubleshooting.md
+          - GitHub Integrations: recipes/08-github-integrations.md
+          - Troubleshooting: recipes/09-troubleshooting.md
       - Implementation:
-          - Implementation Guide: recipes/09-implementation-guide.md
-          - Python Adaptation: recipes/10-python-adaptation.md
-          - Principles & Standards: recipes/11-goals.md
+          - Implementation Guide: recipes/10-implementation-guide.md
+          - Python Adaptation: recipes/11-python-adaptation.md
   - Development:
       - Workflow: workflow.md
       - Code Ownership: code-ownership.md

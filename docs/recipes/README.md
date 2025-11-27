@@ -167,14 +167,14 @@ This comprehensive guide is organized into parts covering philosophy, security, 
 | Chapter | Title | Purpose |
 |---------|-------|---------|
 | [00-overview.md](00-overview.md) | Complete Overview | Navigation, learning paths by role |
-| [11-goals.md](11-goals.md) | System Goals | Goals framework and success indicators |
+| [01-goals.md](01-goals.md) | System Goals | Goals framework and success indicators |
 
 ### 📖 Part 1: Foundation & Philosophy
 
 | Chapter | Title | What You'll Learn |
 |---------|-------|-------------------|
-| [01-philosophy.md](01-philosophy.md) | CI/CD Philosophy | Core principles, design decisions, "why" |
-| [02-ci-components.md](02-ci-components.md) | Essential CI Components | Complete system architecture |
+| [02-philosophy.md](02-philosophy.md) | CI/CD Philosophy | Core principles, design decisions, "why" |
+| [03-ci-components.md](03-ci-components.md) | Essential CI Components | Complete system architecture |
 
 **Start here** if you want to understand the "why" before the "how".
 
@@ -182,8 +182,8 @@ This comprehensive guide is organized into parts covering philosophy, security, 
 
 | Chapter | Title | What You'll Learn |
 |---------|-------|-------------------|
-| [03-security-features.md](03-security-features.md) | Security Implementation | SLSA, signing, verification |
-| [04-development-workflow.md](04-development-workflow.md) | Issues→ADR→Spec→Code | Three-phase workflow, specs, ADRs |
+| [04-security-features.md](04-security-features.md) | Security Implementation | SLSA, signing, verification |
+| [05-development-workflow.md](05-development-workflow.md) | Issues→ADR→Spec→Code | Three-phase workflow, specs, ADRs |
 
 **Critical** for teams with compliance requirements or architecture complexity.
 
@@ -191,8 +191,8 @@ This comprehensive guide is organized into parts covering philosophy, security, 
 
 | Chapter | Title | What You'll Learn |
 |---------|-------|-------------------|
-| [05-build-automation.md](05-build-automation.md) | Make & Git Hooks | Local tooling, modular Makefiles |
-| [06-release-automation.md](06-release-automation.md) | Zero-Touch Releases | release-please, builds, publishing |
+| [06-build-automation.md](06-build-automation.md) | Make & Git Hooks | Local tooling, modular Makefiles |
+| [07-release-automation.md](07-release-automation.md) | Zero-Touch Releases | release-please, builds, publishing |
 
 **Essential** for achieving zero-manual-step releases.
 
@@ -200,8 +200,8 @@ This comprehensive guide is organized into parts covering philosophy, security, 
 
 | Chapter | Title | What You'll Learn |
 |---------|-------|-------------------|
-| [07-github-integrations.md](07-github-integrations.md) | GitHub Apps & Integrations | Complete GitHub ecosystem setup |
-| [08-troubleshooting.md](08-troubleshooting.md) | Problem-Solving | Debug guide, common issues, fixes |
+| [08-github-integrations.md](08-github-integrations.md) | GitHub Apps & Integrations | Complete GitHub ecosystem setup |
+| [09-troubleshooting.md](09-troubleshooting.md) | Problem-Solving | Debug guide, common issues, fixes |
 
 **Bookmark** Chapter 8 for when things go wrong.
 
@@ -209,8 +209,8 @@ This comprehensive guide is organized into parts covering philosophy, security, 
 
 | Chapter | Title | What You'll Learn |
 |---------|-------|-------------------|
-| [09-implementation-guide.md](09-implementation-guide.md) | Step-by-Step Playbook | Phased tasks with validation |
-| [10-python-adaptation.md](10-python-adaptation.md) | Python-Specific Patterns | pyproject.toml, pytest, ruff, PyPI |
+| [10-implementation-guide.md](10-implementation-guide.md) | Step-by-Step Playbook | Phased tasks with validation |
+| [11-python-adaptation.md](11-python-adaptation.md) | Python-Specific Patterns | pyproject.toml, pytest, ruff, PyPI |
 
 **Start here** if you want to implement immediately (Chapter 9).
 
@@ -308,43 +308,43 @@ Choose your adventure based on urgency and completeness:
 ### 🎯 By Role
 
 **Developers** → Start with:
-1. [Philosophy](01-philosophy.md) - Understand the "why"
-2. [Development Workflow](04-development-workflow.md) - Your daily process
-3. [Python Adaptation](10-python-adaptation.md) - Python-specific patterns
+1. [Philosophy](02-philosophy.md) - Understand the "why"
+2. [Development Workflow](05-development-workflow.md) - Your daily process
+3. [Python Adaptation](11-python-adaptation.md) - Python-specific patterns
 
 **DevOps/Platform Engineers** → Start with:
-1. [Philosophy](01-philosophy.md) - Core principles
-2. [CI Components](02-ci-components.md) - System architecture
-3. [Build Automation](05-build-automation.md) - Local tooling
-4. [Release Automation](06-release-automation.md) - Automated releases
-5. [Implementation Guide](09-implementation-guide.md) - Step-by-step execution
+1. [Philosophy](02-philosophy.md) - Core principles
+2. [CI Components](03-ci-components.md) - System architecture
+3. [Build Automation](06-build-automation.md) - Local tooling
+4. [Release Automation](07-release-automation.md) - Automated releases
+5. [Implementation Guide](10-implementation-guide.md) - Step-by-step execution
 
 **Engineering Managers** → Start with:
-1. [Goals](11-goals.md) - What you'll achieve
-2. [Philosophy](01-philosophy.md) - ROI and principles
-3. [Implementation Guide](09-implementation-guide.md) - Overview - Timeline and scope
+1. [Goals](01-goals.md) - What you'll achieve
+2. [Philosophy](02-philosophy.md) - ROI and principles
+3. [Implementation Guide](10-implementation-guide.md) - Overview - Timeline and scope
 
 **Security Engineers** → Start with:
-1. [Philosophy](01-philosophy.md) - Security principles
-2. [Security Features](03-security-features.md) - Complete security guide
-3. [GitHub Integrations](07-github-integrations.md) - Security integrations
+1. [Philosophy](02-philosophy.md) - Security principles
+2. [Security Features](04-security-features.md) - Complete security guide
+3. [GitHub Integrations](08-github-integrations.md) - Security integrations
 
 ### 🎯 By Need
 
 **"I need this working quickly"**
-→ [Implementation Guide](09-implementation-guide.md) Quick Start section
+→ [Implementation Guide](10-implementation-guide.md) Quick Start section
 
 **"Show me what's possible"**
-→ [Goals](11-goals.md) - See the complete goals framework
+→ [Goals](01-goals.md) - See the complete goals framework
 
 **"I need to convince my team"**
-→ This README Executive Summary + [Business Principles](11-goals.md#business-principles)
+→ This README Executive Summary + [Business Principles](01-goals.md#business-principles)
 
 **"I'm stuck on something"**
-→ [Troubleshooting](08-troubleshooting.md) (search for your error)
+→ [Troubleshooting](09-troubleshooting.md) (search for your error)
 
 **"How do I adapt this for Python?"**
-→ [Python Adaptation](10-python-adaptation.md) (complete Python guide)
+→ [Python Adaptation](11-python-adaptation.md) (complete Python guide)
 
 ---
 
@@ -398,7 +398,7 @@ You'll know the system is working when:
 
 ### Tracking Progress
 
-Use the [Goals](11-goals.md) framework to assess:
+Use the [Goals](01-goals.md) framework to assess:
 - System maturity across different areas
 - Team adherence to established patterns
 - Quality gate effectiveness
@@ -550,19 +550,19 @@ Spec-driven development enables LLM-assisted implementation by providing clear, 
 ### Choose Your Starting Point
 
 **Ready to implement?**
-→ [Implementation Guide](09-implementation-guide.md) - Pick your path (Quick/Standard/Comprehensive)
+→ [Implementation Guide](10-implementation-guide.md) - Pick your path (Quick/Standard/Comprehensive)
 
 **Want to understand first?**
-→ [Philosophy](01-philosophy.md) - Learn the "why"
+→ [Philosophy](02-philosophy.md) - Learn the "why"
 
 **Need to see goals?**
-→ [Goals](11-goals.md) - Complete goals framework and success indicators
+→ [Goals](01-goals.md) - Complete goals framework and success indicators
 
 **Have questions?**
-→ [Troubleshooting](08-troubleshooting.md) - Comprehensive Q&A
+→ [Troubleshooting](09-troubleshooting.md) - Comprehensive Q&A
 
 **Python-specific help?**
-→ [Python Adaptation](10-python-adaptation.md) - Complete Python guide
+→ [Python Adaptation](11-python-adaptation.md) - Complete Python guide
 
 **Want navigation help?**
 → [Overview](00-overview.md) - Learning paths by role
@@ -589,11 +589,11 @@ This recipe is part of the `ado` project documentation and follows the same lice
 
 **Ready to transform your CI/CD?**
 
-**Start here**: [Implementation Guide](09-implementation-guide.md)
+**Start here**: [Implementation Guide](10-implementation-guide.md)
 
-**Understand first**: [Philosophy](01-philosophy.md)
+**Understand first**: [Philosophy](02-philosophy.md)
 
-**See what's possible**: [Goals](11-goals.md)
+**See what's possible**: [Goals](01-goals.md)
 
 ---
 

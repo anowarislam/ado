@@ -1059,6 +1059,6 @@ Outcomes will follow naturally from consistent adherence to sound principles.
 
 **Remember**: This framework describes WHAT to enforce, not HOW WELL you'll perform. Focus on implementing the standards, and the results will follow.
 
-Start implementing: [Chapter 9: Implementation Guide](09-implementation-guide.md)
+Start implementing: [Chapter 9: Implementation Guide](10-implementation-guide.md)
 
 ---
