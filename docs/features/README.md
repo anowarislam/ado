@@ -22,6 +22,7 @@ For CLI command specifications, see [`docs/commands/`](../commands/).
 | [01](01-structured-logging.md) | Structured Logging | Implemented | [ADR-0002](../adr/0002-structured-logging.md) |
 | [02](02-homebrew-distribution.md) | Homebrew Distribution | Draft | N/A |
 | [03](03-pr-metrics-dashboard.md) | PR-Level Metrics Dashboard | Draft | [ADR-0005](../adr/0005-pr-metrics-dashboard.md) |
+| [04](04-claude-review-optimization.md) | Claude Code Review Optimization | Draft | N/A |
 
 ## Creating a Feature Spec
 
