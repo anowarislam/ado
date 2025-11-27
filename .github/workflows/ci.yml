@@ -105,17 +105,24 @@ jobs:
           profile: coverage.out
           local-prefix: github.com/anowarislam/ado
 
+      # NEW: Upload Coverage Artifact (required for PR comment action)
+      - name: Upload coverage artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097  # v4.4.2 SHA-pinned
+        with:
+          name: code-coverage
+          path: coverage.out
+          retention-days: 1
+
       # NEW: PR Coverage Comment with Diff Analysis
       - name: Post coverage comment
         if: github.event_name == 'pull_request'
         uses: fgrosse/go-coverage-report@ae3204f4125161ae4a75780bdb57dec472bfd49c  # v1.2.0 SHA-pinned
         with:
-          coverage-artifact-name: coverage.out
+          coverage-artifact-name: code-coverage
           coverage-file-name: coverage.out
           root-package: github.com/anowarislam/ado
-          trim-package-prefix: github.com/anowarislam/ado/
-          threshold-total: 80
-          threshold-file: 70
+          trim: github.com/anowarislam/ado/
 
       # NEW: Calculate Estimated CI Cost
       - name: Calculate estimated cost
