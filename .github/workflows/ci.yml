@@ -13,7 +13,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871  # v6 SHA-pinned
         with:
           fetch-depth: 0
 
@@ -44,12 +44,18 @@ jobs:
   go:
     name: Go
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write      # Required for PR comments
+      checks: write             # Required for status checks
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871  # v6 SHA-pinned
+        with:
+          fetch-depth: 0  # Needed for coverage comparison
 
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@3041bf56c941b39c61721a86cd11f3bb1338122a  # v6 SHA-pinned
         with:
           go-version: "1.24"
           cache: true
@@ -65,9 +71,20 @@ jobs:
       - name: Vet
         run: make go.vet
 
-      - name: Test
-        run: go test -coverprofile=coverage.out -covermode=atomic ./cmd/ado/... ./internal/...
+      # Enhanced test step with JSON output for action parsing
+      - name: Test with coverage
+        run: |
+          go test -v -json -coverprofile=coverage.out -covermode=atomic ./cmd/ado/... ./internal/... 2>&1 | tee test-output.json
 
+      # NEW: Test Reporting Action
+      - name: Report test results
+        if: always()  # Run even if tests fail
+        uses: robherley/go-test-action@9e6c0951ef301d7d16f3a64e0e5868e7e443ec57  # v0.4.1 SHA-pinned
+        with:
+          testJsonPath: test-output.json
+          omitUntestedPackages: true
+
+      # EXISTING: Keep original coverage threshold check as fallback
       - name: Check coverage threshold (80%)
         run: |
           COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | tr -d '%')
@@ -80,11 +97,60 @@ jobs:
           fi
           echo "Coverage meets threshold"
 
+      # NEW: Granular Coverage Enforcement
+      - name: Enforce coverage thresholds
+        uses: vladopajic/go-test-coverage@eaabcafed52c9a343e11fc5ab7e339aec4cd7096  # v2.10.2 SHA-pinned
+        with:
+          config: ./.testcoverage.yml
+          profile: coverage.out
+          local-prefix: github.com/anowarislam/ado
+
+      # NEW: PR Coverage Comment with Diff Analysis
+      - name: Post coverage comment
+        if: github.event_name == 'pull_request'
+        uses: fgrosse/go-coverage-report@e0e4ef8417b14b60e0849b5f16988315c22b6284  # v1.2.0 SHA-pinned
+        with:
+          coverage-artifact-name: coverage.out
+          coverage-file-name: coverage.out
+          root-package: github.com/anowarislam/ado
+          trim-package-prefix: github.com/anowarislam/ado/
+          threshold-total: 80
+          threshold-file: 70
+
+      # NEW: Calculate Estimated CI Cost
+      - name: Calculate estimated cost
+        if: github.event_name == 'pull_request'
+        id: cost
+        run: |
+          # Use built-in $SECONDS (time since shell started)
+          DURATION_SECONDS=$SECONDS
+
+          # Convert to minutes using awk (avoids bc dependency)
+          DURATION_MINUTES=$(awk "BEGIN {printf \"%.2f\", $DURATION_SECONDS / 60}")
+
+          # Ubuntu runner rate (November 2025)
+          RATE=0.008
+
+          # Calculate estimated cost
+          ESTIMATED_COST=$(awk "BEGIN {printf \"%.3f\", $DURATION_MINUTES * $RATE}")
+
+          echo "duration_minutes=$DURATION_MINUTES" >> $GITHUB_OUTPUT
+          echo "estimated_cost=$ESTIMATED_COST" >> $GITHUB_OUTPUT
+
+          # Post as summary
+          echo "### Estimated CI Cost" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Workflow Duration:** ${DURATION_MINUTES}m" >> $GITHUB_STEP_SUMMARY
+          echo "**Estimated Cost:** \$${ESTIMATED_COST} (ubuntu-latest @ \$${RATE}/min)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> **Note:** Estimate based on job duration. Actual billing may differ due to rounding." >> $GITHUB_STEP_SUMMARY
+
       - name: Build
         run: make go.build
 
-      - name: Upload coverage
-        uses: codecov/codecov-action@v5
+      # EXISTING: Keep Codecov for historical trends
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238  # v5 SHA-pinned
         with:
           files: ./coverage.out
           flags: unittests
@@ -96,10 +162,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871  # v6 SHA-pinned
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # v6 SHA-pinned
         with:
           python-version: "3.12"
           cache: pip
@@ -122,10 +188,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871  # v6 SHA-pinned
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # v6 SHA-pinned
         with:
           python-version: "3.12"
           cache: pip
@@ -145,10 +211,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871  # v6 SHA-pinned
 
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@3041bf56c941b39c61721a86cd11f3bb1338122a  # v6 SHA-pinned
         with:
           go-version: "1.24"
           cache: true
