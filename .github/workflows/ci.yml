@@ -99,7 +99,7 @@ jobs:
 
       # NEW: Granular Coverage Enforcement
       - name: Enforce coverage thresholds
-        uses: vladopajic/go-test-coverage@eaabcafed52c9a343e11fc5ab7e339aec4cd7096  # v2.10.2 SHA-pinned
+        uses: vladopajic/go-test-coverage@d9ec07b8799c458a7bc1f9b36d14261746d63529  # v2.18.0 SHA-pinned
         with:
           config: ./.testcoverage.yml
           profile: coverage.out
@@ -108,7 +108,7 @@ jobs:
       # NEW: PR Coverage Comment with Diff Analysis
       - name: Post coverage comment
         if: github.event_name == 'pull_request'
-        uses: fgrosse/go-coverage-report@e0e4ef8417b14b60e0849b5f16988315c22b6284  # v1.2.0 SHA-pinned
+        uses: fgrosse/go-coverage-report@ae3204f4125161ae4a75780bdb57dec472bfd49c  # v1.2.0 SHA-pinned
         with:
           coverage-artifact-name: coverage.out
           coverage-file-name: coverage.out
