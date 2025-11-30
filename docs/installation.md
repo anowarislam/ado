@@ -2,6 +2,52 @@
 
 Multiple installation methods are available for `ado`.
 
+## Homebrew (macOS & Linux)
+
+**Recommended installation method for macOS users.**
+
+Homebrew provides automatic updates, dependency management, and clean uninstallation.
+
+### Installation
+
+```bash
+# First-time setup: add the ado tap
+brew tap anowarislam/ado
+
+# Install ado
+brew install ado
+
+# Verify installation
+ado meta info
+```
+
+### Supported Platforms
+
+- macOS (Intel and Apple Silicon)
+- Linux with Homebrew (Linuxbrew)
+
+### Updating
+
+```bash
+# Check for updates
+brew outdated
+
+# Upgrade ado
+brew upgrade ado
+```
+
+### Uninstalling
+
+```bash
+# Uninstall ado
+brew uninstall ado
+
+# Remove tap (optional)
+brew untap anowarislam/ado
+```
+
+---
+
 ## Binary Download
 
 Download pre-built binaries from the [GitHub Releases](https://github.com/anowarislam/ado/releases) page.

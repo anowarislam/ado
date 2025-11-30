@@ -109,3 +109,49 @@ docker_manifests:
     image_templates:
       - "ghcr.io/anowarislam/ado:latest-amd64"
       - "ghcr.io/anowarislam/ado:latest-arm64"
+
+# Homebrew Formula (in-repository tap)
+# See: https://goreleaser.com/customization/homebrew/
+brews:
+  - # Repository configuration - same repo, no separate token needed
+    repository:
+      owner: anowarislam
+      name: ado  # Same repository
+      branch: main
+      # Note: Uses default GITHUB_TOKEN from workflow (no separate token needed)
+
+    # Formula directory in same repository
+    folder: Formula
+
+    # Formula metadata
+    name: ado
+    homepage: https://github.com/anowarislam/ado
+    description: "Composable command-line binary to replace ad-hoc shell scripts"
+    license: MIT
+
+    # Post-installation message
+    caveats: |
+      Get started with ado by running:
+        ado meta info
+
+      Configuration: ~/.config/ado/config.yaml
+      Documentation: https://github.com/anowarislam/ado
+
+    # Git commit configuration
+    commit_author:
+      name: ado-releaser
+      email: noreply@github.com
+
+    commit_msg_template: "chore(brew): update formula to {{ .Tag }}"
+
+    # Skip upload for snapshot builds (local testing only)
+    skip_upload: auto
+
+    # Test block (Homebrew requirement)
+    test: |
+      system "#{bin}/ado", "meta", "info"
+      assert_match version.to_s, shell_output("#{bin}/ado meta info")
+
+    # Installation from bottle (precompiled binary)
+    install: |
+      bin.install "ado"

@@ -27,6 +27,26 @@ The project is built around two ideas:
 
 ## Installation
 
+### Homebrew (macOS & Linux)
+
+**Recommended for macOS users**
+
+```bash
+# Add the tap (one-time setup)
+brew tap anowarislam/ado
+
+# Install ado
+brew install ado
+
+# Verify installation
+ado meta info
+```
+
+**Updating:**
+```bash
+brew upgrade ado
+```
+
 ### Binary Download
 
 Download pre-built binaries from the [GitHub Releases](https://github.com/anowarislam/ado/releases) page.
