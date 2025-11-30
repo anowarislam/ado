@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/anowarislam/ado/compare/v1.5.0...v1.6.0) (2025-11-30)
+
+
+### Features
+
+* **dist:** add Homebrew distribution via in-repo tap ([#67](https://github.com/anowarislam/ado/issues/67)) ([3776644](https://github.com/anowarislam/ado/commit/37766448959c7828146a3a180667dfd26fc1aacb))
+
 ## [1.5.0](https://github.com/anowarislam/ado/compare/v1.4.1...v1.5.0) (2025-11-27)
 
 
