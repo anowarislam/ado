@@ -207,3 +207,5 @@ Built with:
 - [Cobra](https://github.com/spf13/cobra) - CLI framework
 - [GoReleaser](https://goreleaser.com/) - Release automation
 - [Release Please](https://github.com/googleapis/release-please) - Version management
+
+<!-- PR Metrics Dashboard verification test -->
