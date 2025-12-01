@@ -192,3 +192,7 @@ func TestDetectNPU(t *testing.T) {
 		})
 	}
 }
+
+func TestVerifyAnnotations(t *testing.T) {
+	t.Fatal("Intentional failure - testing annotation display")
+}
