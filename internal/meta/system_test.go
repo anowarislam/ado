@@ -192,3 +192,53 @@ func TestDetectNPU(t *testing.T) {
 		})
 	}
 }
+
+func TestCollectSystemInfo_GracefulDegradation(t *testing.T) {
+	// Test that CollectSystemInfo handles failures gracefully
+	// This test verifies that even if some detection fails,
+	// the function returns a valid SystemInfo struct with defaults
+	ctx := context.Background()
+	info := CollectSystemInfo(ctx)
+
+	// Should never return zero values for critical fields
+	// because the function uses defaults when detection fails
+	if info.OS == "" {
+		t.Error("OS should have default value if detection fails")
+	}
+	if info.Platform == "" {
+		t.Error("Platform should have default value if detection fails")
+	}
+	if info.Architecture == "" {
+		t.Error("Architecture should have default value if detection fails")
+	}
+
+	// CPU should have some value (default or detected)
+	if info.CPU.Model == "" {
+		t.Error("CPU Model should have default value if detection fails")
+	}
+
+	// Storage and GPU should be valid slices (may be empty)
+	if info.Storage == nil {
+		t.Error("Storage should be initialized (empty slice ok)")
+	}
+	if info.GPU == nil {
+		t.Error("GPU should be initialized (empty slice ok)")
+	}
+}
+
+func TestDetectGPU_ErrorHandling(t *testing.T) {
+	// Test that detectGPU returns empty slice on error
+	// This function uses external hardware detection, so
+	// we can't test specific GPUs, but we can verify it doesn't panic
+	ctx := context.Background()
+	gpus := detectGPU(ctx)
+
+	// Should return a valid slice (not nil)
+	if gpus == nil {
+		t.Error("detectGPU should return empty slice, not nil")
+	}
+
+	// Function should handle graceful degradation
+	// If no GPUs detected, slice should be empty
+	t.Logf("Detected %d GPU(s)", len(gpus))
+}

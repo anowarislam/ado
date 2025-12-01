@@ -9,23 +9,25 @@ threshold:
 
 # Per-package overrides (array of path regex patterns with thresholds)
 override:
-  # Lower thresholds for packages below 80% (to be improved incrementally)
-  - path: ^cmd/ado/config$
-    threshold: 65       # Current: 66%, target: 80%
+  # Main package (just imports)
   - path: ^cmd/ado$
-    threshold: 0        # Main package (just imports)
-  - path: ^cmd/ado/root$
-    threshold: 75       # Current: 77.8%, target: 80%
-  - path: ^internal/meta$
-    threshold: 60       # Current: 62.4%, target: 80%
+    threshold: 0
 
-  # Higher thresholds for well-tested packages
+  # Packages meeting 80%+ threshold
+  - path: ^cmd/ado/config$
+    threshold: 80       # Current: 83.0%
+  - path: ^cmd/ado/root$
+    threshold: 80       # Current: 83.3%
   - path: ^internal/config$
-    threshold: 85       # Already exceeds 80%
+    threshold: 85       # Current: 91.4%
   - path: ^internal/logging$
-    threshold: 85       # Already exceeds 80%
+    threshold: 85       # Current: 96.4%
   - path: ^internal/ui$
-    threshold: 90       # Already exceeds 80%
+    threshold: 90       # Current: 93.3%
+
+  # Special case: Hardware-dependent package with realistic threshold
+  - path: ^internal/meta$
+    threshold: 60       # Current: 60.2% (hardware detection limits testability)
 
 # Exclusions (object with paths array of regex patterns)
 exclude:

@@ -3,7 +3,7 @@
 | Metadata | Value |
 |----------|-------|
 | **ADR** | [ADR-0005](../adr/0005-pr-metrics-dashboard.md) |
-| **Status** | Draft |
+| **Status** | Implemented |
 | **Issue** | #50 |
 | **Author(s)** | @anowarislam |
 

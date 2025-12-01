@@ -36,3 +36,4 @@ docs/changelog.md
 # Local config (keep templates)
 config.yaml
 !config/*.yaml
+coverage-*.out

@@ -2,7 +2,7 @@
 
 | Metadata | Value |
 |----------|-------|
-| **Status** | Proposed |
+| **Status** | Accepted |
 | **Date** | 2025-11-26 |
 | **Author(s)** | @anowarislam |
 | **Issue** | #50 |
